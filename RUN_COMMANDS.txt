@@ -1,0 +1,99 @@
+VITTA MANTRI - HOW TO RUN
+=========================
+
+Project folder:
+C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri
+
+
+BEST WAY: RUN CONTINUOUSLY WITH WATCHDOG
+----------------------------------------
+
+The watchdog keeps these processes running:
+1. Flask backend
+2. Telegram bot
+3. React dashboard
+
+If any process crashes, the watchdog starts it again.
+
+Start watchdog:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\start_vittamantri_watchdog.ps1
+
+Stop everything:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop_vittamantri_watchdog.ps1
+
+Check logs:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri
+Get-Content .\logs\watchdog.log -Tail 30
+Get-Content .\logs\flask.err.log -Tail 30
+Get-Content .\logs\bot.err.log -Tail 30
+Get-Content .\logs\vite.err.log -Tail 30
+
+Open dashboard:
+
+http://127.0.0.1:5173
+
+Backend health check:
+
+http://127.0.0.1:8000
+
+
+MANUAL WAY: RUN IN 3 TERMINALS
+------------------------------
+
+Terminal 1 - Flask backend:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri\backend
+python main.py
+
+Terminal 2 - Telegram bot:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri\backend
+python bot.py
+
+Terminal 3 - React dashboard:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri\frontend
+npm run dev
+
+
+FIRST TIME INSTALL COMMANDS
+---------------------------
+
+Python dependencies:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri\backend
+python -m pip install -r requirements.txt
+
+Frontend dependencies:
+
+cd C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri\frontend
+npm install
+
+
+IMPORTANT NOTES
+---------------
+
+For Telegram bot only, backend and bot must run.
+For dashboard, backend and frontend must run.
+The watchdog works only while your laptop is on and Windows is running.
+If laptop is off or internet is disconnected, Telegram bot cannot work.
+
+
+AUTO START AFTER WINDOWS LOGIN
+------------------------------
+
+This file has been created:
+
+C:\Users\Sanket Waghmare\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Start VittaMantri Watchdog.cmd
+
+When you log in to Windows, it starts the watchdog automatically.
+The watchdog then starts Flask backend, Telegram bot, and React dashboard.
+
+If you do not want auto-start later, delete this file:
+
+C:\Users\Sanket Waghmare\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Start VittaMantri Watchdog.cmd

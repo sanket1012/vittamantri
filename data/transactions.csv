@@ -1,0 +1,23 @@
+id,date,time,amount,type,category,subcategory,description,source,logged_by,logged_by_id,input_method,raw_input
+7fbbd875-4738-44ff-a211-d2b7e80592a1,2026-05-22,10:04:38,24500.00,income,Salary & Income,,Monthly Salary,,Vaishnavi,5997163595,text,Salary 24500 per month
+7752e831-fc84-404b-92fb-ecaf24b22806,2026-05-22,10:14:33,21.75,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+8d801d54-8dcf-4e21-b65f-2cf7c7b78de6,2026-05-22,10:15:12,9.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+7295a967-e511-4ecb-b245-781b3e3f7f1d,2026-05-22,10:16:09,18.00,expense,Food & Dining,,Hungerbox Order VALMZE488132,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+1cfd0fab-2bdb-4892-a723-89e9c09d6587,2026-05-22,10:17:51,60.00,expense,Food & Dining,,Hungerbox Order AMBZFR177765,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+de2ee7f8-bad1-4330-aa2a-c980abe5afe1,2026-05-22,10:18:05,35.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+750443ec-2ed3-4a11-a462-e86d335c7bd3,2026-05-22,10:18:48,90.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+809a953f-b662-4625-bd79-5a516e9711fb,2026-05-22,10:19:41,15.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+0909fbbe-7af9-42ad-8b68-de92d1c91d16,2026-05-22,10:20:04,13.00,expense,Food & Dining,,Hungerbox Order - TEAKEN87729,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+8de7c0b3-fdc2-4c0e-8601-9d20464a7a58,2026-05-22,10:20:19,20.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+afa39a97-7cdf-4411-8e21-2ca43c39b4dc,2026-05-22,10:21:48,100.00,expense,Gifts & Misc,,Payment to Mithvassaa Venture,Mithvassaa Venture Private Limited,Vaishnavi,5997163595,image,image/pdf upload
+32589251-83cc-490e-aba5-d63132d39391,2026-05-22,10:22:14,20.00,expense,Entertainment,,Payment to Vallies Park,VALLIES PARK,Vaishnavi,5997163595,image,image/pdf upload
+d87825f4-b983-41c3-b802-4c33f8bc1184,2026-05-22,10:23:10,180.00,expense,Gifts & Misc,,Payment to YANAMADALA SRINIVASU,YANAMADALA SRINIVASU,Vaishnavi,5997163595,image,image/pdf upload
+469cbf05-d873-4071-b9b5-eff97f4f304e,2026-05-22,10:37:32,35.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+8f835ff2-72b5-4edf-b2ba-2c5142341023,2026-05-22,10:38:59,1000.00,expense,Gifts & Misc,,Payment to Vaishnavi Sanjay Mane,VAISHNAVI SANJAY MANE,Vaishnavi,5997163595,image,image/pdf upload
+6269f7ca-b594-48da-a7fe-ddc15e0d2f1d,2026-05-22,10:42:44,368.00,expense,Groceries,,Zepto grocery payment,zepto,Vaishnavi,5997163595,image,image/pdf upload
+e699f823-54f6-4d84-bc67-59c2f04b1198,2026-05-22,10:43:01,100.00,expense,Gifts & Misc,,UPI payment,MANIKYALA RAMYA,Vaishnavi,5997163595,image,image/pdf upload
+503b9d0e-cf9a-4559-be21-25b5fce3d90d,2026-05-22,10:44:02,80.00,expense,Gifts & Misc,,Paid to SYED UMAR BABA,SYED UMAR BABA,Vaishnavi,5997163595,image,image/pdf upload
+e13b3c2f-23dd-4207-bbef-aeda70c08298,2026-05-22,10:44:18,103.00,expense,Groceries,,Groceries purchase,Zepto,Vaishnavi,5997163595,image,image/pdf upload
+a266aeeb-173d-4478-a70b-04656560de2f,2026-05-22,10:44:36,119.00,expense,Gifts & Misc,,UPI payment,DURGA RAM,Vaishnavi,5997163595,image,image/pdf upload
+6ede7edc-2839-4b7d-b181-834e15f93c62,2026-05-22,10:44:51,15.00,expense,Gifts & Misc,,Payment,Mrs ChittamPALLY Ramulamma,Vaishnavi,5997163595,image,image/pdf upload
+d9994ccf-cf5d-47c6-96ff-7ec3dbff97d6,2026-05-22,10:45:08,221.80,expense,Transport,,IRCTC eticketing payment,IRCTC ETICKETING,Vaishnavi,5997163595,image,image/pdf upload

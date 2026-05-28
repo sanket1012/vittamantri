@@ -1,0 +1,73 @@
+
+> vittamantri-frontend@1.0.0 dev
+> vite --host 127.0.0.1
+
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m552[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5173[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m6:46:59 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m6:46:59 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m6:47:00 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
+[2m6:47:00 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles.css[22m
+[2m6:47:00 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.jsx[22m
+[2m6:47:00 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.jsx[22m
+[2m6:47:40 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m6:47:40 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/App.jsx[22m
+[2m6:47:48 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/App.jsx[22m
+[2m6:47:48 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/App.jsx[22m
+[2m6:48:15 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/StatsCards.jsx[22m
+[2m6:48:15 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/StatsCards.jsx[22m
+[2m6:49:00 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FilterBar.jsx[22m
+[2m6:49:00 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/FilterBar.jsx[22m
+[2m6:49:01 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AddTransaction.jsx[22m
+[2m6:49:01 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/AddTransaction.jsx[22m
+[2m6:49:44 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SpendingPieChart.jsx[22m
+[2m6:49:44 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/SpendingPieChart.jsx[22m
+[2m6:49:44 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MonthlyBarChart.jsx[22m
+[2m6:49:44 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/MonthlyBarChart.jsx[22m
+[2m6:50:37 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionTable.jsx[22m
+[2m6:50:37 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionTable.jsx[22m
+[2m6:51:24 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/pages/Dashboard.jsx[22m
+[2m6:51:24 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Dashboard.jsx[22m
+[2m6:51:32 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mtailwind.config.js[22m
+[2m6:52:36 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mvite.config.js.timestamp-1779196955998-bbf62e7d72978.mjs[22m
+[2m6:52:50 pm[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33m@mui/material/CssBaseline, @mui/material/styles, @mui/material, @mui/icons-material/Close, @mui/icons-material/AccountBalanceWallet, @mui/icons-material/BarChart, @mui/icons-material/Dashboard, @mui/icons-material/Download, @mui/icons-material/ReceiptLong, @mui/icons-material/Search, @mui/icons-material/TrendingDown, @mui/icons-material/TrendingUp, @mui/icons-material/DeleteOutline, @mui/icons-material/KeyboardArrowDown, @mui/icons-material/KeyboardArrowUp, @mui/icons-material/Add, @mui/icons-material/DeleteSweep, @mui/icons-material/Menu[32m[39m
+[2m6:52:50 pm[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m7:05:44 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Dashboard.jsx, /src/pages/Dashboard.jsx, /src/components/AddTransaction.jsx[22m
+[2m7:05:44 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/pages/Dashboard.jsx[22m Could not Fast Refresh ("SUBCATEGORY_OPTIONS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m7:05:44 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m7:07:03 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.jsx[22m
+[2m7:07:15 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m7:07:54 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m7:39:06 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m7:39:11 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Dashboard.jsx, /src/pages/Dashboard.jsx, /src/components/AddTransaction.jsx[22m
+[2m7:43:19 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Dashboard.jsx, /src/pages/Dashboard.jsx, /src/components/AddTransaction.jsx[22m
+[2m7:43:19 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.jsx[22m
+[2m7:43:58 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m8:27:51 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx[22m
+[2m8:28:05 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m8:28:05 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/pages/Dashboard.jsx[22m Could not Fast Refresh ("SUBCATEGORY_OPTIONS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m8:28:05 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:32:39 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m8:32:39 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/pages/Dashboard.jsx[22m Could not Fast Refresh ("SUBCATEGORY_OPTIONS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m8:32:39 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:32:54 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m8:32:54 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/pages/Dashboard.jsx[22m Could not Fast Refresh ("SUBCATEGORY_OPTIONS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m8:32:54 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:37:00 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.jsx[22m
+[2m8:37:25 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx[22m
+[2m8:37:25 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx[22m
+[2m8:37:51 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FilterBar.jsx[22m
+[2m8:37:51 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FilterBar.jsx[22m
+[2m8:38:12 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m8:38:13 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/pages/Dashboard.jsx[22m Could not Fast Refresh ("SUBCATEGORY_OPTIONS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m8:38:13 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:38:25 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx[22m
+[2m8:38:25 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/pages/Dashboard.jsx[22m Could not Fast Refresh ("SUBCATEGORY_OPTIONS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m8:38:25 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:39:11 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/StatsCards.jsx[22m
+[2m8:39:12 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SpendingPieChart.jsx[22m
+[2m8:39:12 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/MonthlyBarChart.jsx[22m
+[2m8:39:12 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionTable.jsx[22m

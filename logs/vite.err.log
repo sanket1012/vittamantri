@@ -1,0 +1,241 @@
+[2m6:47:00 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:47:00 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:47:00 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:47:00 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/Add" from "src/components/Header.jsx". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/AccountBalanceWallet" from "src/components/Sidebar.jsx". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/AccountBalanceWallet" from "src/components/Sidebar.jsx". Does the file exist?
+[2m6:47:41 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/Add" from "src/components/Header.jsx". Does the file exist?
+[2m6:47:49 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:47:49 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:47:49 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:47:49 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:47:49 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:47:49 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:48:15 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:48:15 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:48:15 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:48:15 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:48:15 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:48:15 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:49:01 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:49:44 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:49:44 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:49:44 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:49:44 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:49:44 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:49:44 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:50:37 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./pages/Dashboard.jsx" from "src/App.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material" from "src/pages/Dashboard.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/Search" from "src/components/FilterBar.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/AccountBalanceWallet" from "src/components/Sidebar.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material" from "src/components/SpendingPieChart.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/Add" from "src/components/Header.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/Close" from "src/components/AddTransaction.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material" from "src/components/MonthlyBarChart.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/AccountBalanceWallet" from "src/components/StatsCards.jsx". Does the file exist?
+[2m6:51:24 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/icons-material/DeleteOutline" from "src/components/TransactionTable.jsx". Does the file exist?
+[2m6:51:33 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?
+[2m6:51:33 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+
+[1m[33mwarn[39m[22m - The `content` option in your Tailwind CSS configuration is missing or empty.
+[1m[33mwarn[39m[22m - Configure your content sources or your generated CSS will be missing styles.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/content-configuration
+[2m6:51:33 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@mui/material/CssBaseline" from "src/main.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sanket Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/src/main.jsx[39m:3:24
+[33m  2  |  import React from "react";
+  3  |  import ReactDOM from "react-dom/client";
+  4  |  import CssBaseline from "@mui/material/CssBaseline";
+     |                           ^
+  5  |  import { ThemeProvider } from "@mui/material/styles";
+  6  |  import { Toaster } from "react-hot-toast";[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m6:51:33 pm[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@mui/material/styles" from "src/theme/theme.js". Does the file exist?
+[2m7:07:04 pm[22m [31m[1m[vite][22m[39m [31merror while updating dependencies:
+Error: ENOENT: no such file or directory, open 'C:\Users\Sanket Waghmare\Desktop\Vittamantri_Bot\vittamantri\frontend\node_modules\lucide-react\dist\esm\lucide-react.js'
+    at async open (node:internal/fs/promises:633:25)
+    at async Object.readFile (node:internal/fs/promises:1237:14)
+    at async extractExportsData (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51156:24)
+    at async file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:50904:27
+    at async Promise.all (index 5)
+    at async prepareEsbuildOptimizerRun (file:///C:/Users/Sanket%20Waghmare/Desktop/Vittamantri_Bot/vittamantri/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:50901:3)[39m

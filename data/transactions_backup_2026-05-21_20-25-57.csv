@@ -1,0 +1,67 @@
+id,date,time,amount,type,category,subcategory,description,source,logged_by,logged_by_id,input_method,raw_input
+98280a4c-4254-4df6-9aed-edeab91b1b3a,2026-05-17,16:06:00,280.00,expense,Food & Dining,,Zomato lunch,Zomato,,,text,Zomato 280 lunch
+3639e2ca-2994-45fe-a2a5-7ddd57ffa3a9,2026-05-17,16:06:01,45000.00,income,Salary & Income,,Salary received,,,,text,Salary 45000 received
+797e1362-0357-41dc-a33d-0fc7304d53e5,2026-05-17,16:40:45,100.00,expense,Shopping,,Flower pot,,,,text,Flower pot 100
+d3e2c064-d41c-48cf-a63b-fe73280f6665,2026-05-17,18:06:51,100.00,income,Groceries,,Flower pot,,,,text,"Flower pot 100
+Fish 400 
+Bikewash 200
+500 petrol
+350 auto
+Receive 10"
+1292e83b-03b2-4b97-a1dd-bdbc7878930b,2026-05-17,18:06:55,24500.00,income,Salary & Income,,Monthly Salary,Sanket,,,text,"000 from Sanket
+35 hunger box
+90 hunger box
+Salary :- 24500 monthly
+i spend Hridu 760 on makeup kit 
+i bought dresses  500
+i buy dresses 1600
+i bought dresses 1100 for sister"
+d5f8fe66-af07-478d-be6f-b00c317b04c1,2026-05-17,18:19:25,100.00,expense,Gifts & Misc,,Flower pot,,,,text,Flower pot 100
+83aa0448-1917-4811-b384-6d5a3de45ddc,2026-05-17,18:19:30,400.00,expense,Groceries,,Fish,,,,text,Fish 400
+e753af71-0043-438b-a5f0-b0f4af9f0cf9,2026-05-17,18:19:34,200.00,expense,Transport,,Bikewash,,,,text,Bikewash 200
+1653d4c6-b16b-4536-ab20-d58d891443ba,2026-05-17,18:19:39,500.00,expense,Transport,,Petrol,,,,text,500 petrol
+e8cf9582-81a8-46de-9db5-ced66bdc48ad,2026-05-17,18:19:43,350.00,expense,Transport,,auto fare,,,,text,350 auto
+713c040e-6123-4fd9-9874-a048597cad30,2026-05-17,18:19:48,10000.00,income,Gifts & Misc,,Received 10000,Sanket,,,text,"Receive 10,000 from Sanket"
+a43b9084-8098-43cf-8a42-11ef9b95decd,2026-05-17,18:19:52,35.00,expense,Food & Dining,,hunger box,Hunger Box,,,text,35 hunger box
+e2d00cc9-f6e2-4c64-ad8f-2074b8b36531,2026-05-17,18:19:57,90.00,expense,Food & Dining,,hunger box,Hunger Box,,,text,90 hunger box
+818fed61-ab12-4054-a152-50b6759226dd,2026-05-17,18:20:01,24500.00,income,Salary & Income,,Monthly salary,,,,text,Salary :- 24500 monthly
+10bac463-11d4-41a9-938f-295f2ff26628,2026-05-17,18:20:06,760.00,expense,Shopping,,makeup kit,Hridu,,,text,i spend Hridu 760 on makeup kit
+230a76f0-5b94-48f7-a168-79d80663ad58,2026-05-17,18:20:10,500.00,expense,Shopping,,bought dresses,,,,text,i bought dresses  500
+f613b61b-3320-43c5-aa11-a7b9c71fd055,2026-05-17,18:20:15,1600.00,expense,Shopping,,buy dresses,,,,text,i buy dresses 1600
+9d457d78-ac6d-478b-b157-c253db031cec,2026-05-17,18:20:20,1100.00,expense,Shopping,,dresses for sister,,,,text,i bought dresses 1100 for sister
+070b5032-ff95-475a-bc89-fcd4bcbaaf75,2026-05-17,18:21:19,100.00,expense,Gifts & Misc,,Flower pot,,,,text,Flower pot 100
+07782090-bd13-47b0-82e8-5d49322febdc,2026-05-17,18:21:24,400.00,expense,Groceries,,Fish,,,,text,Fish 400
+0b12075b-2425-4373-b17d-54ac67202bfe,2026-05-17,18:21:29,200.00,expense,Transport,,Bikewash,,,,text,Bikewash 200
+28fd3c67-4f8c-4b71-bbe2-55d3963b08ea,2026-05-17,18:21:33,500.00,expense,Transport,,Petrol,,,,text,500 petrol
+64e94f13-b47e-4fe3-8a48-0fc9123b30b6,2026-05-17,18:21:38,350.00,expense,Transport,,auto fare,,,,text,350 auto
+0aa1f0b0-92b1-47c0-af16-21ba7abacf2d,2026-05-17,18:21:42,10000.00,income,Gifts & Misc,,Received cash,Sanket,,,text,"Receive 10,000 from Sanket"
+8534b056-6e3c-4a93-b341-85d97b9e22c1,2026-05-17,18:21:47,35.00,expense,Food & Dining,,hunger box,Hunger Box,,,text,35 hunger box
+4ddf4548-f9b7-4c3b-bfe5-105327589f55,2026-05-17,18:21:51,90.00,expense,Food & Dining,,hunger box,Hunger Box,,,text,90 hunger box
+4dc11f5c-3238-47b8-a3b0-c7b7b94fd32f,2026-05-17,18:21:56,24500.00,income,Salary & Income,,Monthly salary,,,,text,Salary :- 24500 monthly
+5bc6cb0b-5919-479b-b377-957afb09f884,2026-05-17,18:22:01,760.00,expense,Shopping,,makeup kit,Hridu,,,text,i spend Hridu 760 on makeup kit
+5f9cea66-4057-4e71-b0e1-77f65bf07475,2026-05-17,18:22:06,500.00,expense,Shopping,,bought dresses,,,,text,i bought dresses  500
+aecc0609-0759-4886-a38b-ae973e5088fe,2026-05-17,18:22:10,1600.00,expense,Shopping,,buy dresses,,,,text,i buy dresses 1600
+d7469cbc-e004-4923-ac68-a6525ea7acc2,2026-05-17,18:22:15,1100.00,expense,Shopping,,dresses for sister,,,,text,i bought dresses 1100 for sister
+81e71f9b-3f7e-4dfc-a3d9-7143ee9867a0,2026-05-17,18:43:10,100.00,expense,Gifts & Misc,,Flower pot,,,,text,Flower pot 100
+c4c95b76-9914-48e5-a691-51a99163b0b0,2026-05-17,18:43:14,400.00,expense,Groceries,,Fish,,,,text,Fish 400
+f21f6f01-07c5-43ac-98bc-824ce46267c5,2026-05-17,18:43:18,200.00,expense,Transport,,Bikewash,,,,text,Bikewash 200
+2a32e8e6-3c7a-46b1-b8e0-335843482f8f,2026-05-17,18:43:23,500.00,expense,Transport,,petrol,,,,text,500 petrol
+56658a60-ccd0-4b85-89c8-33857e566a2d,2026-05-17,18:43:27,350.00,expense,Transport,,auto,,,,text,350 auto
+160a8b49-6432-4f72-ac89-7d3e1481693f,2026-05-17,18:43:31,10000.00,income,Gifts & Misc,,Received 10000,Sanket,,,text,"Receive 10,000 from Sanket"
+6b126274-9529-4b58-8062-154a60c88614,2026-05-17,18:43:36,35.00,expense,Food & Dining,,hunger box,Hunger Box,,,text,35 hunger box
+e25d2a33-4cdf-4a7a-ada3-c679b007c224,2026-05-17,18:43:40,90.00,expense,Food & Dining,,hunger box,Hunger Box,,,text,90 hunger box
+134aba77-9c96-46ac-9299-3d7bb3439845,2026-05-17,18:43:45,24500.00,income,Salary & Income,,Monthly salary,,,,text,Salary :- 24500 monthly
+59ccafae-a396-4bce-9128-2c7abeb8b9cf,2026-05-17,18:43:54,500.00,expense,Shopping,,bought dresses,,,,text,i bought dresses  500
+ae4a04e5-90c2-498b-87bc-6905d7b4a46c,2026-05-17,18:43:58,1600.00,expense,Shopping,,buy dresses,,,,text,i buy dresses 1600
+c7a12b18-ff64-436d-b798-8b07537e2f2b,2026-05-17,18:47:18,40.00,expense,Gifts & Misc,,Ball,,,,text,Ball 40
+f08b120a-59c5-41cf-a08c-b00845c827e2,2026-05-18,21:06:58,2000.00,expense,Transport,Fuel,diesel,,,,text,2000 diesel
+e1959151-3271-48e2-a71c-342bc92b9f50,2026-05-18,21:08:02,2500.00,expense,Shopping,Home Decor,table buy,,,,text,i bought table of rupees 2500
+59f0b8e5-64be-46a3-9e0e-14de3ddc695d,2026-05-18,21:08:20,7000.00,expense,Shopping,Clothes,buy cloths,,,,text,i buy cloths of rupees 7000
+fa42b49a-9d5d-4268-9c81-fc2cb05efca1,2026-05-18,21:37:04,3500.00,expense,Transport,Fuel,Petrol,,Sanket,8547667663,text,3500 petrol
+4d6e803e-128c-423f-af11-c26db751b1af,2026-05-18,21:38:23,160.00,expense,Gifts & Misc,,flowers,,Pack protector,8547667663,text,160 flowers
+6fcefc72-1d8c-4191-8013-4ea8e548f2cd,2026-05-19,18:34:25,20.00,expense,Gifts & Misc,,Chay,,Vaishnavi,5997163595,text,Chay 20
+57eddf38-399a-470d-a1f4-a5cda9c80d76,2026-05-19,18:34:34,8.00,expense,Groceries,Snacks,Biscuit,,Vaishnavi,5997163595,text,Biscuit 8
+3c8f1424-935c-4919-a1a9-c1cc0bdfd4eb,2026-05-19,18:35:01,60.00,expense,Food & Dining,,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+ef275d8c-c344-4b21-b6c7-940aab77de8e,2026-05-19,19:36:39,24500.00,income,Salary & Income,,Salary,,Vaishnavi,5997163595,text,salary 24500
+c430ac5a-ec09-42a8-ba48-567a97649c78,2026-05-19,20:46:45,170.00,expense,Shopping,Baby Products,baby kit,,Sanket,8547667663,text,170 babykit
+12cffb18-0a0f-4eab-b145-4a7e9848abeb,2026-05-19,20:57:20,7839383872626227.00,expense,Gifts & Misc,,Transaction,,Sanket,8547667663,text,7839383872626227
