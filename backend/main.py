@@ -39,7 +39,7 @@ if _DEBUG:
     _ALLOWED_ORIGINS += ["http://localhost:5173", "http://localhost:3000"]
 
 app = Flask(__name__)
-CORS(app, origins=_ALLOWED_ORIGINS)
+CORS(app, origins=_ALLOWED_ORIGINS, allow_headers=["Content-Type", "X-Api-Key"], supports_credentials=False)
 
 _MAX_IMAGE_BYTES = 10 * 1024 * 1024   # 10 MB
 _MAX_PDF_BYTES = 20 * 1024 * 1024     # 20 MB
