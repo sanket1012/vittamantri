@@ -1,0 +1,29 @@
+{
+  "last_updated": "2026-05-27T09:51:09+05:30",
+  "total_income": 24500.0,
+  "total_expense": 2623.55,
+  "net_savings": 21876.45,
+  "transaction_count": 22,
+  "category_totals": {
+    "EMI & Loans": 0.0,
+    "Education": 0.0,
+    "Entertainment": 20.0,
+    "Food & Dining": 316.75,
+    "Gifts & Misc": 1594.0,
+    "Groceries": 471.0,
+    "Health & Medical": 0.0,
+    "Investment & SIP": 0.0,
+    "Rent & Housing": 0.0,
+    "Salary & Income": 0.0,
+    "Shopping": 0.0,
+    "Subscriptions": 0.0,
+    "Transport": 221.8,
+    "Utilities & Bills": 0.0
+  },
+  "monthly_totals": {
+    "2026-05": {
+      "income": 24500.0,
+      "expense": 2623.55
+    }
+  }
+}
