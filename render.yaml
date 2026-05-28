@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: vittamantri-api
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: bash scripts/render-start.sh
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DASHBOARD_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: DEBUG
+        value: "false"
