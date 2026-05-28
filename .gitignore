@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.log
+
+# Environment secrets — NEVER commit these
+backend/.env
+.env
+.env.local
+.env.*.local
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Data files (contain personal financial records)
+data/transactions.csv
+data/summary.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Fly.io
+fly.toml
