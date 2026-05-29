@@ -1,0 +1,16 @@
+[Unit]
+Description=VittaMantri Telegram Bot
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/vittamantri/backend
+EnvironmentFile=/home/ubuntu/vittamantri/backend/.env
+ExecStart=/home/ubuntu/vittamantri/.venv/bin/python bot.py
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/vittamantri/bot.log
+StandardError=append:/var/log/vittamantri/bot-error.log
+
+[Install]
+WantedBy=multi-user.target
