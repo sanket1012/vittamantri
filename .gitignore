@@ -24,5 +24,9 @@ data/summary.json
 .DS_Store
 Thumbs.db
 
-# Fly.io
+# Fly.io / Render (not used)
 fly.toml
+render.yaml
+
+# EC2 deploy — virtual env lives on the server, not in repo
+.venv/
