@@ -335,7 +335,7 @@ async def categories(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def export(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
     try:
-        response = requests.get(f"{API_BASE}/api/export/csv", timeout=20)
+        response = requests.get(f"{API_BASE}/api/export/csv", headers=_API_HEADERS, timeout=20)
         response.raise_for_status()
         with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as temp:
             temp.write(response.content)
