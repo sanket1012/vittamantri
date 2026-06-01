@@ -27,9 +27,82 @@ logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", le
 logger = logging.getLogger("vittamantri.bot")
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
-GREETING_REPLY = "👋 Hi! Tell me what you spent or earned.\nEg: Zomato 280 · Petrol 500 · Salary 45000"
+GREETING_REPLY = (
+    "👋 Hi! Here's what I can do:\n\n"
+    "💸 Log a transaction\n"
+    "   Zomato 280  ·  Petrol 500  ·  Salary 45000\n\n"
+    "📊 Check your finances\n"
+    "   my balance  ·  today's spending  ·  this month\n\n"
+    "✏️ Fix a category\n"
+    "   update last to Food  ·  reply to any transaction"
+)
 AMOUNT_NOT_FOUND_REPLY = "❓ No amount found.\nTry: Petrol 500  or  Salary 45000"
-GROQ_FAILED_REPLY = "⚠️ Could not process your message.\nTry: Swiggy 350 dinner"
+GROQ_FAILED_REPLY = (
+    "⚠️ I couldn't understand that.\n\n"
+    "• Log:    Zomato 280  ·  Petrol 500\n"
+    "• Check:  my balance  ·  today  ·  this month\n"
+    "• Update: update last to Food"
+)
+
+# ── Intent classification ──────────────────────────────────────────────────────
+
+
+class Intent(str, Enum):
+    ADD = "add"          # log a new expense / income
+    UPDATE = "update"    # change category of last/recent transaction
+    SUMMARY = "summary"  # overall balance or all-time totals
+    TODAY = "today"      # today's activity
+    WEEK = "week"        # last-7-days activity
+    MONTH = "month"      # this-month's activity
+    GREET = "greet"      # greeting / small talk
+    PARSE = "parse"      # unclear — forward to Groq and let it decide
+
+
+_QUERY_WORDS = frozenset([
+    "balance", "summary", "total", "how much", "spent", "spend",
+    "earned", "earn", "saved", "save", "overview", "report",
+    "expenses", "expense", "income", "spending", "show", "list",
+    "tell me", "what did", "how are", "where did",
+])
+
+_TEMPORAL_TODAY = re.compile(r"\btoday\b|\bright now\b")
+_TEMPORAL_WEEK  = re.compile(r"\b(this\s+)?week\b|\blast\s+7\s+days?\b")
+_TEMPORAL_MONTH = re.compile(r"\b(this\s+)?month\b|\bmonthly\b|\blast\s+30\s+days?\b")
+_HAS_AMOUNT     = re.compile(r"(?:₹|rs\.?\s*)?\b\d{2,}(?:[,\d]*)?(?:\.\d+)?\b")
+
+
+def detect_intent(text: str) -> Intent:
+    """Classify the intent of an incoming message before any processing."""
+    lower = text.lower().strip()
+
+    # Greeting — short, no digits, no finance vocabulary
+    if is_greeting_message(text):
+        return Intent.GREET
+
+    # Explicit update-last command ("update/change last transaction to X")
+    if _is_update_last_request(text):
+        return Intent.UPDATE
+
+    # Messages with a plausible amount → treat as a transaction to log
+    if _HAS_AMOUNT.search(lower):
+        return Intent.ADD
+
+    # No amount → look for query / question signals
+    has_query   = any(kw in lower for kw in _QUERY_WORDS)
+    has_q_word  = bool(re.search(r"\b(what|how|when|where|show|tell|list|give|my)\b", lower))
+    has_qmark   = "?" in text
+
+    if has_query or has_q_word or has_qmark:
+        if _TEMPORAL_TODAY.search(lower):
+            return Intent.TODAY
+        if _TEMPORAL_WEEK.search(lower):
+            return Intent.WEEK
+        if _TEMPORAL_MONTH.search(lower):
+            return Intent.MONTH
+        if has_query:
+            return Intent.SUMMARY
+
+    return Intent.PARSE
 
 # Maps (chat_id, bot_message_id) → transaction_id for category-change-via-reply
 _msg_transaction_map: dict[tuple[int, int], str] = {}
