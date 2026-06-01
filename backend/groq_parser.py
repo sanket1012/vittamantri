@@ -36,6 +36,68 @@ def safe_json_parse(text: str) -> dict:
     raise ValueError(f"No valid JSON found in: {text}")
 
 
+_IST = pytz.timezone("Asia/Kolkata")
+
+_MONTH_MAP = {
+    "jan": 1, "january": 1, "feb": 2, "february": 2,
+    "mar": 3, "march": 3, "apr": 4, "april": 4,
+    "may": 5, "jun": 6, "june": 6, "jul": 7, "july": 7,
+    "aug": 8, "august": 8, "sep": 9, "sept": 9, "september": 9,
+    "oct": 10, "october": 10, "nov": 11, "november": 11,
+    "dec": 12, "december": 12,
+}
+
+
+def _today_ist() -> datetime:
+    return datetime.now(_IST)
+
+
+def _extract_date(message: str) -> str | None:
+    lower = message.lower()
+    today = _today_ist()
+
+    if "last month" in lower or "previous month" in lower:
+        first = today.replace(day=1)
+        last_month = (first - timedelta(days=1)).replace(day=1)
+        return last_month.strftime("%Y-%m-%d")
+
+    if "yesterday" in lower:
+        return (today - timedelta(days=1)).strftime("%Y-%m-%d")
+
+    if "today" in lower:
+        return today.strftime("%Y-%m-%d")
+
+    # "15th May", "May 15", "15 May" with optional year
+    day_month = re.search(
+        r"\b(\d{1,2})(?:st|nd|rd|th)?\s+(" + "|".join(_MONTH_MAP) + r")\b",
+        lower,
+    )
+    month_day = re.search(
+        r"\b(" + "|".join(_MONTH_MAP) + r")\s+(\d{1,2})(?:st|nd|rd|th)?\b",
+        lower,
+    )
+    match = day_month or month_day
+    if match:
+        if day_month:
+            day, month_name = int(match.group(1)), match.group(2)
+        else:
+            month_name, day = match.group(1), int(match.group(2))
+        month_num = _MONTH_MAP[month_name]
+        year = today.year if month_num <= today.month else today.year - 1
+        try:
+            return datetime(year, month_num, day).strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+
+    # Plain month name: "May month", "in March", etc.
+    for name, month_num in _MONTH_MAP.items():
+        if re.search(rf"\b{name}\b", lower):
+            year = today.year if month_num <= today.month else today.year - 1
+            return f"{year}-{month_num:02d}-01"
+
+    return None
+
+
 def _extract_amount(message: str) -> float | None:
     matches = re.findall(r"(?<![\w.])(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.\d+)?)", message, flags=re.IGNORECASE)
     if not matches:
