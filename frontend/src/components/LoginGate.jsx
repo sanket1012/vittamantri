@@ -1,40 +1,60 @@
 import { useState } from 'react';
-import { Box, Button, TextField, Typography, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Paper, CircularProgress } from '@mui/material';
+import api from '../api/client.js';
 
 export default function LoginGate({ onUnlock }) {
-  const [key, setKey] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError]       = useState('');
+  const [loading, setLoading]   = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!key.trim()) {
-      setError('API key is required.');
+    if (!username.trim() || !password.trim()) {
+      setError('Username and password are required.');
       return;
     }
-    localStorage.setItem('api_key', key.trim());
-    onUnlock(key.trim());
+    setLoading(true);
+    setError('');
+    try {
+      const { data } = await api.post('/login', { username: username.trim(), password });
+      localStorage.setItem('api_key', data.token);
+      api.defaults.headers.common['X-Api-Key'] = data.token;
+      onUnlock();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed. Check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f5f5f5">
       <Paper elevation={3} sx={{ p: 4, maxWidth: 380, width: '100%' }}>
-        <Typography variant="h5" fontWeight={600} mb={1}>वित्तमंत्री</Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          Enter your dashboard API key to continue.
-        </Typography>
+        <Typography variant="h5" fontWeight={600} mb={0.5}>वित्तमंत्री</Typography>
+        <Typography variant="body2" color="text.secondary" mb={3}>Sign in to your dashboard</Typography>
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            type="password"
-            label="API Key"
-            value={key}
-            onChange={(e) => { setKey(e.target.value); setError(''); }}
-            error={!!error}
-            helperText={error}
+            label="Username"
+            value={username}
+            onChange={(e) => { setUsername(e.target.value); setError(''); }}
             autoFocus
             sx={{ mb: 2 }}
           />
-          <Button type="submit" variant="contained" fullWidth>Unlock</Button>
+          <TextField
+            fullWidth
+            type="password"
+            label="Password"
+            value={password}
+            onChange={(e) => { setPassword(e.target.value); setError(''); }}
+            error={!!error}
+            helperText={error}
+            sx={{ mb: 2 }}
+          />
+          <Button type="submit" variant="contained" fullWidth disabled={loading}>
+            {loading ? <CircularProgress size={22} color="inherit" /> : 'Sign in'}
+          </Button>
         </Box>
       </Paper>
     </Box>
