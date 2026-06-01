@@ -97,6 +97,12 @@ def api_delete(path: str):
     return response.json()
 
 
+def api_patch(path: str, payload: dict):
+    response = requests.patch(f"{API_BASE}{path}", json=payload, headers=_API_HEADERS, timeout=20)
+    _raise_for_status(response)
+    return response.json()
+
+
 def api_upload(path: str, field_name: str, filename: str, content: bytes, mime_type: str):
     response = requests.post(
         f"{API_BASE}{path}",
