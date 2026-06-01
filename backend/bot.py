@@ -19,6 +19,7 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 API_BASE = os.getenv("BACKEND_URL", "http://localhost:8000")
+_API_HEADERS = {"X-Api-Key": os.getenv("DASHBOARD_API_KEY", "")}
 IST = pytz.timezone("Asia/Kolkata")
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
