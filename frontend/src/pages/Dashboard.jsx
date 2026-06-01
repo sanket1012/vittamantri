@@ -32,6 +32,7 @@ const PAGE_TITLES = {
   dashboard: 'Dashboard',
   transactions: 'Transactions',
   analytics: 'Analytics',
+  categories: 'Categories',
   export: 'Export',
 };
 
@@ -39,6 +40,7 @@ const PAGE_CAPTIONS = {
   dashboard: 'Quick view of income, expense, balance, and recent patterns.',
   transactions: 'Review, filter, and manage every logged transaction.',
   analytics: 'Study category mix, monthly movement, and recent money trends.',
+  categories: 'Manage expense categories and subcategories.',
   export: 'Download a clean CSV copy of your finance records.',
 };
 
