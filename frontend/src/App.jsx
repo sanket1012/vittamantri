@@ -10,8 +10,7 @@ function getStoredKey() {
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => !!getStoredKey());
 
-  const handleUnlock = (key) => {
-    api.defaults.headers.common['X-Api-Key'] = key;
+  const handleUnlock = () => {
     setUnlocked(true);
   };
 
