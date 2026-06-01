@@ -311,12 +311,22 @@ def rebuild_summary() -> dict[str, Any]:
 
 
 def update_transaction_category(id: str, category: str) -> bool:
+    return update_transaction_fields(id, {"category": category})
+
+
+_MUTABLE_FIELDS = {"category", "subcategory", "description", "source", "type"}
+
+
+def update_transaction_fields(id: str, fields: dict[str, Any]) -> bool:
+    allowed = {k: str(v).strip() for k, v in fields.items() if k in _MUTABLE_FIELDS}
+    if not allowed:
+        return False
     try:
         with _lock:
             rows = _read_rows_unlocked()
             for row in rows:
                 if row.get("id") == id:
-                    row["category"] = category
+                    row.update(allowed)
                     _write_rows_unlocked(rows)
                     _recalculate_summary_unlocked(rows)
                     return True
