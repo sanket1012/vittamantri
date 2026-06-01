@@ -285,6 +285,30 @@ def create_subcategory(category_name):
         return _internal_error()
 
 
+@app.route("/api/categories/<path:category_name>/subcategories/<path:subcategory_name>", methods=["DELETE"])
+@require_api_key
+def remove_subcategory(category_name, subcategory_name):
+    try:
+        if not delete_custom_subcategory(category_name, subcategory_name):
+            return error_response("Subcategory not found or is a built-in subcategory.", 404)
+        return jsonify({"message": f"Subcategory '{subcategory_name}' deleted."})
+    except Exception:
+        logger.exception("remove_subcategory failed")
+        return _internal_error()
+
+
+@app.route("/api/categories/<path:category_name>", methods=["DELETE"])
+@require_api_key
+def remove_category(category_name):
+    try:
+        if not delete_custom_category(category_name):
+            return error_response("Category not found or is a built-in category.", 404)
+        return jsonify({"message": f"Category '{category_name}' deleted."})
+    except Exception:
+        logger.exception("remove_category failed")
+        return _internal_error()
+
+
 @app.route("/api/users", methods=["GET"])
 @require_api_key
 def users():
