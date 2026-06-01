@@ -526,6 +526,7 @@ def main():
     application = Application.builder().token(BOT_TOKEN).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("me", me))
     application.add_handler(CommandHandler("summary", summary))
     application.add_handler(CommandHandler("today", today))
     application.add_handler(CommandHandler("week", week))
