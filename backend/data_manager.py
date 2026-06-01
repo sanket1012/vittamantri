@@ -13,13 +13,14 @@ from uuid import uuid4
 
 import pytz
 
-from categories import CATEGORIES, CATEGORY_NAMES, DEFAULT_CATEGORY, infer_category
+from categories import CATEGORIES, CATEGORY_NAMES, DEFAULT_CATEGORY, SUBCATEGORY_MAP, infer_category
 
 IST = pytz.timezone("Asia/Kolkata")
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 TRANSACTIONS_FILE = DATA_DIR / "transactions.csv"
 SUMMARY_FILE = DATA_DIR / "summary.json"
+CATEGORIES_EXTRA_FILE = DATA_DIR / "categories_extra.json"
 CSV_COLUMNS = [
     "id",
     "date",
