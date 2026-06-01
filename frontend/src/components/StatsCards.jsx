@@ -11,9 +11,12 @@ const formatINR = (amount = 0) =>
     maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2,
   }).format(Number(amount || 0));
 
-function buildStats(summary, transactions, selectedUserId) {
-  if (selectedUserId !== 'All') {
-    const rows = transactions.filter((item) => String(item.logged_by_id || '0') === String(selectedUserId));
+function buildStats(summary, transactions, selectedUserId, activeMonth) {
+  const rows = selectedUserId !== 'All'
+    ? transactions.filter((item) => String(item.logged_by_id || '0') === String(selectedUserId))
+    : transactions;
+
+  if (selectedUserId !== 'All' || activeMonth) {
     const income = rows.filter((item) => item.type === 'income').reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const expense = rows.filter((item) => item.type === 'expense').reduce((sum, item) => sum + Number(item.amount || 0), 0);
     return { income, expense, balance: income - expense, count: rows.length };
