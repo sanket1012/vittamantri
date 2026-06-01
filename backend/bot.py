@@ -80,19 +80,19 @@ def telegram_user_info(update: Update) -> dict:
 
 
 def api_get(path: str):
-    response = requests.get(f"{API_BASE}{path}", timeout=20)
+    response = requests.get(f"{API_BASE}{path}", headers=_API_HEADERS, timeout=20)
     _raise_for_status(response)
     return response.json()
 
 
 def api_post(path: str, payload: dict):
-    response = requests.post(f"{API_BASE}{path}", json=payload, timeout=20)
+    response = requests.post(f"{API_BASE}{path}", json=payload, headers=_API_HEADERS, timeout=20)
     _raise_for_status(response)
     return response.json()
 
 
 def api_delete(path: str):
-    response = requests.delete(f"{API_BASE}{path}", timeout=20)
+    response = requests.delete(f"{API_BASE}{path}", headers=_API_HEADERS, timeout=20)
     _raise_for_status(response)
     return response.json()
 
@@ -101,6 +101,7 @@ def api_upload(path: str, field_name: str, filename: str, content: bytes, mime_t
     response = requests.post(
         f"{API_BASE}{path}",
         files={field_name: (filename, content, mime_type)},
+        headers=_API_HEADERS,
         timeout=60,
     )
     _raise_for_status(response)
