@@ -32,6 +32,8 @@ logger = logging.getLogger("vittamantri.api")
 
 _DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 _DASHBOARD_API_KEY = os.getenv("DASHBOARD_API_KEY", "")
+_DASHBOARD_USERNAME = os.getenv("DASHBOARD_USERNAME", "")
+_DASHBOARD_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")
 _STATIC_DIR = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
 _ALLOWED_ORIGINS = [os.getenv("FRONTEND_URL", "http://localhost:5173")]
