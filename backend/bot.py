@@ -72,36 +72,55 @@ _HAS_AMOUNT     = re.compile(r"(?:₹|rs\.?\s*)?\b\d{2,}(?:[,\d]*)?(?:\.\d+)?\b"
 
 
 def detect_intent(text: str) -> Intent:
-    """Classify the intent of an incoming message before any processing."""
+    """Classify the intent of an incoming message before any processing.
+
+    Priority order:
+    1. Explicit update-last command
+    2. Temporal shortcuts without amounts  (today / week / month)
+    3. Query / question signals without amounts  → summary or temporal
+    4. Greeting  (checked AFTER specific signals to avoid swallowing "show today")
+    5. Message with an amount  → add transaction
+    6. Everything else  → forward to Groq parser
+    """
     lower = text.lower().strip()
+    has_amount = bool(_HAS_AMOUNT.search(lower))
 
-    # Greeting — short, no digits, no finance vocabulary
-    if is_greeting_message(text):
-        return Intent.GREET
-
-    # Explicit update-last command ("update/change last transaction to X")
+    # 1. Explicit update command — must come before amount check
     if _is_update_last_request(text):
         return Intent.UPDATE
 
-    # Messages with a plausible amount → treat as a transaction to log
-    if _HAS_AMOUNT.search(lower):
-        return Intent.ADD
-
-    # No amount → look for query / question signals
-    has_query   = any(kw in lower for kw in _QUERY_WORDS)
-    has_q_word  = bool(re.search(r"\b(what|how|when|where|show|tell|list|give|my)\b", lower))
-    has_qmark   = "?" in text
-
-    if has_query or has_q_word or has_qmark:
+    # 2. Temporal shortcuts — no amount required, just the time word
+    if not has_amount:
         if _TEMPORAL_TODAY.search(lower):
             return Intent.TODAY
         if _TEMPORAL_WEEK.search(lower):
             return Intent.WEEK
         if _TEMPORAL_MONTH.search(lower):
             return Intent.MONTH
-        if has_query:
+
+    # 3. Query / question signals (no amount)
+    if not has_amount:
+        has_query  = any(kw in lower for kw in _QUERY_WORDS)
+        has_q_word = bool(re.search(r"\b(what|how|when|where|show|tell|list|give|my)\b", lower))
+        has_qmark  = "?" in text
+        if has_query or has_q_word or has_qmark:
+            if _TEMPORAL_TODAY.search(lower):
+                return Intent.TODAY
+            if _TEMPORAL_WEEK.search(lower):
+                return Intent.WEEK
+            if _TEMPORAL_MONTH.search(lower):
+                return Intent.MONTH
             return Intent.SUMMARY
 
+    # 4. Greeting — checked after specific signals
+    if is_greeting_message(text):
+        return Intent.GREET
+
+    # 5. Has a transaction amount
+    if has_amount:
+        return Intent.ADD
+
+    # 6. Forward to Groq
     return Intent.PARSE
 
 # Maps (chat_id, bot_message_id) → transaction_id for category-change-via-reply
