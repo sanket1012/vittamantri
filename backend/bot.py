@@ -34,11 +34,20 @@ GROQ_FAILED_REPLY = "⚠️ Could not process your message.\nTry: Swiggy 350 din
 _msg_transaction_map: dict[tuple[int, int], str] = {}
 _MAP_MAX_SIZE = 200
 
+# Maps chat_id → last saved transaction_id (powers "update last transaction" requests)
+_last_transaction_map: dict[int, str] = {}
+
 
 def _store_msg_transaction(chat_id: int, message_id: int, transaction_id: str) -> None:
     _msg_transaction_map[(chat_id, message_id)] = transaction_id
+    _last_transaction_map[chat_id] = transaction_id      # always track last
     if len(_msg_transaction_map) > _MAP_MAX_SIZE:
         del _msg_transaction_map[next(iter(_msg_transaction_map))]
+
+
+def _track_last(chat_id: int, transaction_id: str) -> None:
+    """Track last saved transaction without a message mapping (multi-transaction / media)."""
+    _last_transaction_map[chat_id] = transaction_id
 
 
 def _to_new_category(text: str) -> str:
