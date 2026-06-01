@@ -2,6 +2,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DownloadIcon from '@mui/icons-material/Download';
+import LabelIcon from '@mui/icons-material/Label';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { Box, Drawer, Typography } from '@mui/material';
 
@@ -9,6 +10,7 @@ const navItems = [
   { label: 'Dashboard', icon: DashboardIcon, target: 'dashboard' },
   { label: 'Transactions', icon: ReceiptLongIcon, target: 'transactions' },
   { label: 'Analytics', icon: BarChartIcon, target: 'analytics' },
+  { label: 'Categories', icon: LabelIcon, target: 'categories' },
   { label: 'Export', icon: DownloadIcon, target: 'export' },
 ];
 
