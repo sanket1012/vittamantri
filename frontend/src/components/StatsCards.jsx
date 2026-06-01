@@ -64,15 +64,16 @@ function StatCard({ title, value, helper, color, icon, loading }) {
   );
 }
 
-export default function StatsCards({ summary, transactions = [], selectedUserId = 'All', loading }) {
-  const stats = buildStats(summary, transactions, selectedUserId);
+export default function StatsCards({ summary, transactions = [], selectedUserId = 'All', activeMonth = '', loading }) {
+  const stats = buildStats(summary, transactions, selectedUserId, activeMonth);
   const balanceColor = stats.balance >= 0 ? '#004EEB' : '#DC2626';
+  const scope = activeMonth ? `${activeMonth}` : 'All time';
 
   const cards = [
-    { title: 'Total Income', value: formatINR(stats.income), helper: 'All time earnings', color: '#059669', icon: <TrendingUpIcon /> },
-    { title: 'Total Expense', value: formatINR(stats.expense), helper: 'All time spending', color: '#DC2626', icon: <TrendingDownIcon /> },
+    { title: 'Total Income', value: formatINR(stats.income), helper: `${scope} earnings`, color: '#059669', icon: <TrendingUpIcon /> },
+    { title: 'Total Expense', value: formatINR(stats.expense), helper: `${scope} spending`, color: '#DC2626', icon: <TrendingDownIcon /> },
     { title: 'Net Balance', value: formatINR(stats.balance), helper: 'Income minus expense', color: balanceColor, icon: <AccountBalanceWalletIcon /> },
-    { title: 'Transactions', value: String(stats.count), helper: 'Total records', color: '#7C3AED', icon: <ReceiptLongIcon /> },
+    { title: 'Transactions', value: String(stats.count), helper: `${scope} records`, color: '#7C3AED', icon: <ReceiptLongIcon /> },
   ];
 
   return (
