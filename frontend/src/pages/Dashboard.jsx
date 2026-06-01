@@ -355,9 +355,17 @@ export default function Dashboard({ onLogout }) {
           {activeSection === 'transactions' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <FilterBar filters={filters} setFilters={setFilters} categories={categories} users={users} subcategoryOptions={SUBCATEGORY_OPTIONS} transactions={transactions} />
-              <TransactionTable transactions={filteredTransactions} loading={loading} onDelete={handleDelete} />
+              <TransactionTable
+                transactions={filteredTransactions}
+                loading={loading}
+                onDelete={handleDelete}
+                onUpdated={loadData}
+                categoriesFull={categoriesFull}
+              />
             </Box>
           )}
+
+          {activeSection === 'categories' && <CategoriesPage />}
 
           {activeSection === 'analytics' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
