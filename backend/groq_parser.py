@@ -197,8 +197,10 @@ def _normalize_result(parsed: dict, message: str) -> dict:
     parsed["description"] = " ".join(str(parsed.get("description") or fallback.get("description") or "Transaction").split()[:8])
     parsed["subcategory"] = parsed.get("subcategory") or fallback.get("subcategory")
     parsed["source"] = parsed.get("source") or fallback.get("source")
-    # Use LLM-extracted date first, then regex-extracted date, then None (data_manager defaults to now)
-    date = parsed.get("date") or fallback.get("date") or _extract_date(message)
+    # Regex extraction is authoritative for relative dates (yesterday, last month, in May) because the
+    # LLM doesn't know the actual current date and can't resolve them reliably.
+    # Fall back to LLM's literal date only when the regex finds nothing (e.g. "15/06/2026 petrol 500").
+    date = _extract_date(message) or parsed.get("date") or fallback.get("date")
     return {
         "amount": parsed.get("amount"),
         "type": parsed.get("type"),
