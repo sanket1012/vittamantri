@@ -157,6 +157,23 @@ def add_transaction():
         return _internal_error()
 
 
+@app.route("/api/transactions/<id>", methods=["PATCH"])
+@require_api_key
+def patch_transaction(id):
+    try:
+        payload = request.get_json(silent=True) or {}
+        category = payload.get("category", "").strip()
+        if not category:
+            return error_response("category is required.", 400)
+        if not update_transaction_category(id, category):
+            return error_response("Transaction not found.", 404)
+        transaction = next((t for t in get_all_transactions() if t.get("id") == id), None)
+        return jsonify({"id": id, "transaction": transaction, "message": "Category updated."})
+    except Exception:
+        logger.exception("patch_transaction failed")
+        return _internal_error()
+
+
 @app.route("/api/transactions/<id>", methods=["DELETE"])
 @require_api_key
 def remove_transaction(id):
