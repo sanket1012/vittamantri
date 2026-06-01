@@ -260,13 +260,34 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "/summary - totals\n"
+        "/summary - combined + per-user totals\n"
+        "/me - your personal summary\n"
         "/today - today's list\n"
         "/week - last 7 days\n"
         "/month - this month\n"
         "/export - CSV\n"
-        "/delete <id> - delete"
+        "/delete <id> - delete\n\n"
+        "💡 Reply to any logged transaction to change its category.\n"
+        "   Eg: reply with 'Food' or 'Transport'"
     )
+
+
+async def me(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.chat.send_action(ChatAction.TYPING)
+    user_info = telegram_user_info(update)
+    user_id = user_info.get("logged_by_id", 0)
+    data = await with_retry(update, api_get, f"/api/summary/user/{user_id}")
+    if not data:
+        return
+    name = user_info.get("logged_by", "You")
+    lines = [
+        f"👤 {name}'s Summary\n",
+        f"💰 Income:  {indian_format(data.get('total_income'))}",
+        f"💸 Expense: {indian_format(data.get('total_expense'))}",
+        f"🏦 Balance: {indian_format(data.get('net_savings'))}",
+        f"📋 Transactions: {data.get('transaction_count', 0)}",
+    ]
+    await update.message.reply_text("\n".join(lines))
 
 
 async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
