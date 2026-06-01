@@ -101,6 +101,67 @@ function TrendPlot({ transactions, loading, selectedUser }) {
   );
 }
 
+const USER_COLORS = ['#004EEB', '#7C3AED', '#059669', '#DC2626', '#D97706', '#0891B2'];
+
+function UserBreakdownSection({ transactions, users, loading }) {
+  if (!users || users.length < 2) return null;
+
+  return (
+    <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #EAECF0' }}>
+        <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#101828' }}>Per User Breakdown</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#667085' }}>Income, expense, and balance per member</Typography>
+      </Box>
+      <CardContent sx={{ p: 3 }}>
+        {loading ? (
+          <Skeleton variant="rounded" height={120} />
+        ) : (
+          <Grid container spacing={2}>
+            {users.map((user, index) => {
+              const userTxns = transactions.filter((t) => String(t.logged_by_id) === String(user.logged_by_id));
+              const income = userTxns.filter((t) => t.type === 'income').reduce((s, t) => s + Number(t.amount || 0), 0);
+              const expense = userTxns.filter((t) => t.type === 'expense').reduce((s, t) => s + Number(t.amount || 0), 0);
+              const balance = income - expense;
+              const color = USER_COLORS[index % USER_COLORS.length];
+              const initials = user.logged_by.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
+
+              return (
+                <Grid item xs={12} sm={6} md={4} key={user.logged_by_id}>
+                  <Card variant="outlined" sx={{ borderRadius: '0.75rem', borderTop: `3px solid ${color}` }}>
+                    <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Avatar sx={{ width: 32, height: 32, bgcolor: color, fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
+                          <Typography sx={{ fontWeight: 600, color: '#101828' }}>{user.logged_by}</Typography>
+                        </Box>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#667085' }}>{userTxns.length} txns</Typography>
+                      </Box>
+                      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1 }}>
+                        <Box>
+                          <Typography sx={{ fontSize: '0.71rem', color: '#667085', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Income</Typography>
+                          <Typography sx={{ fontWeight: 600, color: '#059669', fontSize: '0.875rem' }}>{formatINR(income)}</Typography>
+                        </Box>
+                        <Box>
+                          <Typography sx={{ fontSize: '0.71rem', color: '#667085', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Expense</Typography>
+                          <Typography sx={{ fontWeight: 600, color: '#DC2626', fontSize: '0.875rem' }}>{formatINR(expense)}</Typography>
+                        </Box>
+                        <Box>
+                          <Typography sx={{ fontSize: '0.71rem', color: '#667085', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Balance</Typography>
+                          <Typography sx={{ fontWeight: 600, color: balance >= 0 ? '#004EEB' : '#DC2626', fontSize: '0.875rem' }}>{formatINR(balance)}</Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function ExportView({ onExport, transactions, selectedUser }) {
   const income = transactions.filter((item) => item.type === 'income').reduce((sum, item) => sum + Number(item.amount || 0), 0);
   const expense = transactions.filter((item) => item.type === 'expense').reduce((sum, item) => sum + Number(item.amount || 0), 0);
