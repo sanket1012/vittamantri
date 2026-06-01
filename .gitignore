@@ -18,6 +18,7 @@ frontend/dist/
 
 # Data files (contain personal financial records)
 data/transactions.csv
+data/transactions_old.csv
 data/summary.json
 
 # OS
