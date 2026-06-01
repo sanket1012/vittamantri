@@ -161,17 +161,33 @@ def add_transaction():
         return _internal_error()
 
 
+@app.route("/api/transactions/batch", methods=["PATCH"])
+@require_api_key
+def batch_patch_transactions():
+    try:
+        payload = request.get_json(silent=True) or {}
+        ids = payload.get("ids", [])
+        fields = payload.get("fields", {})
+        if not ids:
+            return error_response("ids is required.", 400)
+        if not fields:
+            return error_response("fields is required.", 400)
+        count = bulk_update_transactions(ids, fields)
+        return jsonify({"updated_count": count, "message": f"Updated {count} transactions."})
+    except Exception:
+        logger.exception("batch_patch_transactions failed")
+        return _internal_error()
+
+
 @app.route("/api/transactions/<id>", methods=["PATCH"])
 @require_api_key
 def patch_transaction(id):
     try:
         payload = request.get_json(silent=True) or {}
-        category = payload.get("category", "").strip()
-        if not category:
-            return error_response("category is required.", 400)
-        fields = {"category": category}
-        if "subcategory" in payload:
-            fields["subcategory"] = str(payload.get("subcategory") or "").strip()
+        mutable = {"category", "subcategory", "description", "source", "type", "amount", "date"}
+        fields = {k: v for k, v in payload.items() if k in mutable and v is not None}
+        if not fields:
+            return error_response("At least one editable field is required.", 400)
         if not update_transaction_fields(id, fields):
             return error_response("Transaction not found.", 404)
         transaction = next((t for t in get_all_transactions() if t.get("id") == id), None)
