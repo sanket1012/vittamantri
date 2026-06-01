@@ -9,17 +9,21 @@ from flask import Flask, Response, jsonify, request, send_file, send_from_direct
 from flask_cors import CORS
 
 from data_manager import (
+    bulk_update_transactions,
     clean_garbage,
     delete_transaction,
     export_monthly_report,
     get_all_transactions,
     get_all_users,
     get_categories,
+    get_categories_with_subcategories,
     get_summary,
     get_transactions_by_month,
     get_transactions_by_user,
     get_user_summary,
     rebuild_summary,
+    save_custom_category,
+    save_custom_subcategory,
     save_transaction,
     transaction_csv_path,
     update_transaction_fields,
