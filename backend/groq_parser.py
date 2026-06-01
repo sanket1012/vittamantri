@@ -185,7 +185,13 @@ def _normalize_result(parsed: dict, message: str) -> dict:
         parsed["source"] = fallback.get("source") or parsed.get("source")
     else:
         parsed["type"] = parsed.get("type") if parsed.get("type") in {"expense", "income", None} else fallback.get("type")
-        parsed["category"] = parsed.get("category") if parsed.get("category") in CATEGORY_NAMES or parsed.get("category") is None else fallback.get("category")
+        llm_cat = parsed.get("category")
+        if llm_cat:
+            # Fuzzy-map to a known category if the LLM returned a close variant (e.g. "Health" → "Health & Medical")
+            # Keep the original if it's genuinely new (e.g. "Pet Care", "Electronics")
+            parsed["category"] = fuzzy_match_category(llm_cat) or llm_cat
+        else:
+            parsed["category"] = fallback.get("category")
 
     parsed["description"] = " ".join(str(parsed.get("description") or fallback.get("description") or "Transaction").split()[:8])
     parsed["subcategory"] = parsed.get("subcategory") or fallback.get("subcategory")
