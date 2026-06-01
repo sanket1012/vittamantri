@@ -242,6 +242,47 @@ def categories():
         return _internal_error()
 
 
+@app.route("/api/categories/full", methods=["GET"])
+@require_api_key
+def categories_full():
+    try:
+        return jsonify(get_categories_with_subcategories())
+    except Exception:
+        logger.exception("categories_full failed")
+        return _internal_error()
+
+
+@app.route("/api/categories", methods=["POST"])
+@require_api_key
+def create_category():
+    try:
+        payload = request.get_json(silent=True) or {}
+        name = payload.get("name", "").strip()
+        emoji = payload.get("emoji", "🏷️").strip() or "🏷️"
+        if not name:
+            return error_response("name is required.", 400)
+        save_custom_category(name, emoji)
+        return jsonify({"name": name, "emoji": emoji, "message": "Category saved."}), 201
+    except Exception:
+        logger.exception("create_category failed")
+        return _internal_error()
+
+
+@app.route("/api/categories/<path:category_name>/subcategories", methods=["POST"])
+@require_api_key
+def create_subcategory(category_name):
+    try:
+        payload = request.get_json(silent=True) or {}
+        subcategory = payload.get("name", "").strip()
+        if not subcategory:
+            return error_response("name is required.", 400)
+        save_custom_subcategory(category_name, subcategory)
+        return jsonify({"category": category_name, "subcategory": subcategory, "message": "Subcategory saved."}), 201
+    except Exception:
+        logger.exception("create_subcategory failed")
+        return _internal_error()
+
+
 @app.route("/api/users", methods=["GET"])
 @require_api_key
 def users():
