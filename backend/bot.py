@@ -459,18 +459,13 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         patch_payload["subcategory"] = new_subcategory
                     result = await with_retry(update, api_patch, f"/api/transactions/{transaction_id}", patch_payload)
                     if result:
+                        is_new = new_category not in CATEGORY_NAMES
                         emoji = category_emoji(new_category)
-                        confirm = f"✅ Category → {new_category} {emoji}"
+                        tag = " ✨ new" if is_new else ""
+                        confirm = f"✅ Category → {new_category} {emoji}{tag}"
                         if new_subcategory:
                             confirm += f"\n   Subcategory → {new_subcategory}"
                         await update.message.reply_text(confirm)
-                else:
-                    cat_list = "\n".join(f"• {name}" for name in CATEGORY_NAMES)
-                    await update.message.reply_text(
-                        f"❓ Unknown category. Available:\n{cat_list}\n\n"
-                        "💡 Tip: Use 'Category > Subcategory' to set both.\n"
-                        "   Eg: Food > Delivery  or  Transport > Fuel"
-                    )
                 return
 
     if is_greeting_message(text):
