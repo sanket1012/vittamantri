@@ -1,10 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import DownloadIcon from '@mui/icons-material/Download';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Button, IconButton, MenuItem, TextField, Tooltip, Typography } from '@mui/material';
 
-export default function Header({ title, caption, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu }) {
+export default function Header({ title, caption, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu, onLogout }) {
   return (
     <Box sx={{ minHeight: 72, bgcolor: '#FAFBFF', borderBottom: '1px solid #EAECF0', px: 2.5, py: 1.25, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
