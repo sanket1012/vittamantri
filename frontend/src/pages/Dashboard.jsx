@@ -334,6 +334,7 @@ export default function Dashboard({ onLogout }) {
           {activeSection === 'dashboard' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <StatsCards summary={summary} transactions={transactions} selectedUserId={filters.user} activeMonth={filters.month} loading={loading} />
+              {filters.user === 'All' && <UserBreakdownSection transactions={transactions} users={users} loading={loading} />}
               <Grid container spacing={2}>
                 <Grid item xs={12} md={5}>
                   <SpendingPieChart transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} />
