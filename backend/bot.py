@@ -41,48 +41,46 @@ def _store_msg_transaction(chat_id: int, message_id: int, transaction_id: str) -
         del _msg_transaction_map[next(iter(_msg_transaction_map))]
 
 
-def _match_category(text: str) -> str | None:
-    lower = text.strip().lower()
-    for name in CATEGORY_NAMES:
-        if name.lower() == lower:
-            return name
-    for name in CATEGORY_NAMES:
-        if name.lower().startswith(lower):
-            return name
-    for name in CATEGORY_NAMES:
-        if lower in name.lower():
-            return name
-    return None
+def _to_new_category(text: str) -> str:
+    """Title-case and trim a user-supplied string for use as a new category name."""
+    return " ".join(text.strip().title().split())[:40]
 
 
 def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
     """Parse (category, subcategory) from a reply message.
 
-    Supported formats:
-    - "Food > Delivery"       → (Food & Dining, Delivery)
-    - "Transport > Fuel"      → (Transport, Fuel)
-    - "food"                  → (Food & Dining, None)
-    - "fuel"                  → (Transport, Fuel)  ← matched as subcategory
+    Matching order:
+    1. "Food > Delivery"  → fuzzy-map left → (Food & Dining, Delivery)
+    2. Known subcategory  → "fuel" → (Transport, Fuel)
+    3. Fuzzy category     → "health" → (Health & Medical, None)
+    4. New category       → "Pet Care" → ("Pet Care", None)  ← created on the fly
+
+    Returns (None, None) only when the input is blank.
     """
     cleaned = re.sub(r"^(change|cat|category|update|set)\s*[:\-]?\s*", "", (text or "").strip(), flags=re.IGNORECASE).strip()
     if not cleaned:
         return None, None
 
+    # "Category > Subcategory" — left side mapped, right side kept as-is
     if ">" in cleaned:
         cat_part, sub_part = (p.strip() for p in cleaned.split(">", 1))
-        return _match_category(cat_part), sub_part or None
+        category = fuzzy_match_category(cat_part) or _to_new_category(cat_part)
+        return category, sub_part or None
 
-    category = _match_category(cleaned)
+    # Try fuzzy match against known categories first
+    category = fuzzy_match_category(cleaned)
     if category:
         return category, None
 
+    # Try matching as a known subcategory
     lower = cleaned.lower()
     for cat, subs in SUBCATEGORY_MAP.items():
         for sub in subs:
             if sub.lower() == lower or sub.lower().startswith(lower) or lower in sub.lower():
                 return cat, sub
 
-    return None, None
+    # Nothing matched → treat the reply as a brand-new category name
+    return _to_new_category(cleaned), None
 
 
 def indian_format(amount: float) -> str:
