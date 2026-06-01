@@ -41,12 +41,8 @@ def _store_msg_transaction(chat_id: int, message_id: int, transaction_id: str) -
         del _msg_transaction_map[next(iter(_msg_transaction_map))]
 
 
-def _parse_category_from_reply(text: str) -> str | None:
-    """Match a user's reply text to a known category name."""
-    cleaned = re.sub(r"^(change|cat|category|update|set)\s*[:\-]?\s*", "", (text or "").strip(), flags=re.IGNORECASE).strip()
-    if not cleaned:
-        return None
-    lower = cleaned.lower()
+def _match_category(text: str) -> str | None:
+    lower = text.strip().lower()
     for name in CATEGORY_NAMES:
         if name.lower() == lower:
             return name
@@ -57,6 +53,36 @@ def _parse_category_from_reply(text: str) -> str | None:
         if lower in name.lower():
             return name
     return None
+
+
+def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
+    """Parse (category, subcategory) from a reply message.
+
+    Supported formats:
+    - "Food > Delivery"       → (Food & Dining, Delivery)
+    - "Transport > Fuel"      → (Transport, Fuel)
+    - "food"                  → (Food & Dining, None)
+    - "fuel"                  → (Transport, Fuel)  ← matched as subcategory
+    """
+    cleaned = re.sub(r"^(change|cat|category|update|set)\s*[:\-]?\s*", "", (text or "").strip(), flags=re.IGNORECASE).strip()
+    if not cleaned:
+        return None, None
+
+    if ">" in cleaned:
+        cat_part, sub_part = (p.strip() for p in cleaned.split(">", 1))
+        return _match_category(cat_part), sub_part or None
+
+    category = _match_category(cleaned)
+    if category:
+        return category, None
+
+    lower = cleaned.lower()
+    for cat, subs in SUBCATEGORY_MAP.items():
+        for sub in subs:
+            if sub.lower() == lower or sub.lower().startswith(lower) or lower in sub.lower():
+                return cat, sub
+
+    return None, None
 
 
 def indian_format(amount: float) -> str:
