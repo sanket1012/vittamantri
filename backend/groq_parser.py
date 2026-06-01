@@ -7,25 +7,10 @@ import pytz
 from dotenv import load_dotenv
 from groq import Groq
 
+from categories import CATEGORY_NAMES, fuzzy_match_category
+
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-CATEGORY_NAMES = {
-    "Food & Dining",
-    "Groceries",
-    "Transport",
-    "Rent & Housing",
-    "Health & Medical",
-    "Entertainment",
-    "Shopping",
-    "Subscriptions",
-    "Education",
-    "EMI & Loans",
-    "Investment & SIP",
-    "Salary & Income",
-    "Gifts & Misc",
-    "Utilities & Bills",
-}
 
 
 def safe_json_parse(text: str) -> dict:
