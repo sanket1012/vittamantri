@@ -454,15 +454,25 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             key = (update.message.chat_id, replied.message_id)
             transaction_id = _msg_transaction_map.get(key)
             if transaction_id:
-                new_category = _parse_category_from_reply(text)
+                new_category, new_subcategory = _parse_category_from_reply(text)
                 if new_category:
-                    result = await with_retry(update, api_patch, f"/api/transactions/{transaction_id}", {"category": new_category})
+                    patch_payload: dict = {"category": new_category}
+                    if new_subcategory is not None:
+                        patch_payload["subcategory"] = new_subcategory
+                    result = await with_retry(update, api_patch, f"/api/transactions/{transaction_id}", patch_payload)
                     if result:
                         emoji = category_emoji(new_category)
-                        await update.message.reply_text(f"✅ Category → {new_category} {emoji}")
+                        confirm = f"✅ Category → {new_category} {emoji}"
+                        if new_subcategory:
+                            confirm += f"\n   Subcategory → {new_subcategory}"
+                        await update.message.reply_text(confirm)
                 else:
                     cat_list = "\n".join(f"• {name}" for name in CATEGORY_NAMES)
-                    await update.message.reply_text(f"❓ Unknown category. Available:\n{cat_list}")
+                    await update.message.reply_text(
+                        f"❓ Unknown category. Available:\n{cat_list}\n\n"
+                        "💡 Tip: Use 'Category > Subcategory' to set both.\n"
+                        "   Eg: Food > Delivery  or  Transport > Fuel"
+                    )
                 return
 
     if is_greeting_message(text):
