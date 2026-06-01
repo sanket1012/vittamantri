@@ -235,6 +235,9 @@ RULES:
 - "hunger box" = food delivery app = Food & Dining category
 - "bikewash" = Transport category
 - If the message has NO amount at all (like "hi", "hello", "how are you") → return amount as null
+- For date: extract ONLY if explicitly mentioned (yesterday, today, May 15, last month, in March, etc.)
+  Format as YYYY-MM-DD. Use current year unless a different year is stated.
+  If no date is mentioned → return null.
 
 Return ONLY a single raw JSON object, nothing else, no explanation, no extra text:
 {
@@ -243,7 +246,8 @@ Return ONLY a single raw JSON object, nothing else, no explanation, no extra tex
   "category": <one of the 14 categories or null>,
   "subcategory": <more specific label or null>,
   "description": <max 8 words>,
-  "source": <name of app/shop/person or null>
+  "source": <name of app/shop/person or null>,
+  "date": <"YYYY-MM-DD" or null>
 }
 
 Subcategory examples:
