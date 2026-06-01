@@ -76,6 +76,16 @@ export const addSubcategory = async (categoryName, subcategoryName) => {
   return data;
 };
 
+export const deleteCategory = async (categoryName) => {
+  const { data } = await api.delete(`/categories/${encodeURIComponent(categoryName)}`);
+  return data;
+};
+
+export const deleteSubcategory = async (categoryName, subcategoryName) => {
+  const { data } = await api.delete(`/categories/${encodeURIComponent(categoryName)}/subcategories/${encodeURIComponent(subcategoryName)}`);
+  return data;
+};
+
 export const csvExportUrl = '/api/export/csv';
 
 export default api;
