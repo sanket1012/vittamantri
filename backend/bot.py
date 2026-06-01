@@ -13,7 +13,7 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
-from categories import CATEGORIES, CATEGORY_NAMES, SUBCATEGORY_MAP, category_emoji
+from categories import CATEGORIES, CATEGORY_NAMES, SUBCATEGORY_MAP, category_emoji, fuzzy_match_category
 
 load_dotenv()
 
