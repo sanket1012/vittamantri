@@ -119,7 +119,7 @@ def _fallback_extract(message: str) -> dict:
     amount = _extract_amount(message)
     lower = message.lower()
     if amount is None:
-        return {"amount": None, "type": None, "category": None, "subcategory": None, "description": _compact_description(message), "source": None}
+        return {"amount": None, "type": None, "category": None, "subcategory": None, "description": _compact_description(message), "source": None, "date": _extract_date(message)}
 
     transaction_type = "income" if re.search(r"\b(receive|received|got|salary|income|credited)\b", lower) else "expense"
 
