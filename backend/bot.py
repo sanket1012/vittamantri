@@ -349,8 +349,11 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/month - this month\n"
         "/export - CSV\n"
         "/delete <id> - delete\n\n"
-        "💡 Reply to any logged transaction to change its category.\n"
-        "   Eg: 'Food', 'Transport', or 'Food > Delivery'"
+        "📂 Category tips:\n"
+        "• Reply to any logged transaction with a category to update it\n"
+        "  Eg: Food  ·  Transport  ·  Food > Delivery\n"
+        "• Or just say: update last to Food  ·  change last to Transport > Fuel\n"
+        "• Unknown categories are created on the fly ✨"
     )
 
 
