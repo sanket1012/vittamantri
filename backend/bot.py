@@ -92,6 +92,47 @@ def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
     return _to_new_category(cleaned), None
 
 
+def _is_update_last_request(text: str) -> bool:
+    """True when the message is a command to update the last transaction's category.
+
+    Detects patterns like:
+    - "update last transaction's category to Food"
+    - "change the last one to Transport"
+    - "set last transaction as Groceries"
+    Excludes messages that look like new transactions (contain amounts ≥ 10).
+    """
+    lower = (text or "").lower().strip()
+    has_verb = bool(re.search(r"\b(?:update|change|set|edit|modify)\b", lower))
+    has_last = bool(re.search(r"\b(?:last|latest|prev(?:ious)?|recent)\b", lower))
+    # If the message contains a plausible transaction amount it's likely a new entry, not a command
+    has_amount = bool(re.search(r"(?:₹|rs\.?\s*)?\b\d{2,}\b", lower))
+    return has_verb and has_last and not has_amount
+
+
+def _extract_update_value(text: str) -> str | None:
+    """Extract the new category value from an update command.
+
+    Handles: "... to Food", "... as Transport", "... : Groceries", "... = Shopping"
+    """
+    match = re.search(r"\b(?:to|as)\s+[\"']?(.+?)[\"']?\s*$", text, re.IGNORECASE)
+    if match:
+        value = re.sub(r"[.,!?]+$", "", match.group(1).strip().strip("\"'"))
+        return value or None
+    match = re.search(r"[:\=]\s*[\"']?(.+?)[\"']?\s*$", text)
+    if match:
+        value = re.sub(r"[.,!?]+$", "", match.group(1).strip().strip("\"'"))
+        return value or None
+    return None
+
+
+def _is_category_uncertain(category: str, raw_message: str) -> bool:
+    """True when category landed on the generic default with no clear justification."""
+    if category != "Gifts & Misc":
+        return False
+    lower = (raw_message or "").lower()
+    return not any(kw in lower for kw in ["gift", "gifted", "donation", "donate", "misc", "other", "random"])
+
+
 def indian_format(amount: float) -> str:
     try:
         amount = float(amount or 0)
