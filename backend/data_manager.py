@@ -315,25 +315,133 @@ def update_transaction_category(id: str, category: str) -> bool:
     return update_transaction_fields(id, {"category": category})
 
 
-_MUTABLE_FIELDS = {"category", "subcategory", "description", "source", "type"}
+_MUTABLE_FIELDS = {"category", "subcategory", "description", "source", "type", "amount", "date"}
+
+
+def _normalize_field(key: str, value: Any) -> str | None:
+    """Normalize and validate a single mutable field value. Returns None to skip."""
+    if key == "amount":
+        amount = _as_float(value)
+        return f"{amount:.2f}" if amount > 0 else None
+    if key == "date":
+        return _normalize_date(value)
+    if key == "type":
+        val = str(value).lower().strip()
+        return val if val in {"income", "expense"} else None
+    return str(value).strip()
 
 
 def update_transaction_fields(id: str, fields: dict[str, Any]) -> bool:
-    allowed = {k: str(v).strip() for k, v in fields.items() if k in _MUTABLE_FIELDS}
-    if not allowed:
+    normalized = {k: _normalize_field(k, v) for k, v in fields.items() if k in _MUTABLE_FIELDS}
+    normalized = {k: v for k, v in normalized.items() if v is not None}
+    if not normalized:
         return False
     try:
         with _lock:
             rows = _read_rows_unlocked()
             for row in rows:
                 if row.get("id") == id:
-                    row.update(allowed)
+                    row.update(normalized)
                     _write_rows_unlocked(rows)
                     _recalculate_summary_unlocked(rows)
                     return True
             return False
     except Exception as exc:
         raise RuntimeError(f"Unable to update transaction: {exc}") from exc
+
+
+def bulk_update_transactions(ids: list[str], fields: dict[str, Any]) -> int:
+    """Apply *fields* to every transaction whose id is in *ids*. Returns updated count."""
+    normalized = {k: _normalize_field(k, v) for k, v in fields.items() if k in _MUTABLE_FIELDS}
+    normalized = {k: v for k, v in normalized.items() if v is not None}
+    if not normalized or not ids:
+        return 0
+    id_set = set(ids)
+    try:
+        with _lock:
+            rows = _read_rows_unlocked()
+            count = sum(1 for row in rows if row.get("id") in id_set)
+            if not count:
+                return 0
+            for row in rows:
+                if row.get("id") in id_set:
+                    row.update(normalized)
+            _write_rows_unlocked(rows)
+            _recalculate_summary_unlocked(rows)
+            return count
+    except Exception as exc:
+        raise RuntimeError(f"Unable to bulk update transactions: {exc}") from exc
+
+
+# ── Custom categories ─────────────────────────────────────────────────────────
+
+def _read_extra_categories() -> dict[str, Any]:
+    if not CATEGORIES_EXTRA_FILE.exists():
+        return {"categories": [], "subcategories": {}}
+    try:
+        with CATEGORIES_EXTRA_FILE.open("r", encoding="utf-8") as file:
+            return json.load(file)
+    except (OSError, json.JSONDecodeError):
+        return {"categories": [], "subcategories": {}}
+
+
+def _write_extra_categories(data: dict[str, Any]) -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with CATEGORIES_EXTRA_FILE.open("w", encoding="utf-8") as file:
+        json.dump(data, file, indent=2, ensure_ascii=False)
+
+
+def get_categories_with_subcategories() -> list[dict[str, Any]]:
+    """Return all categories with their subcategories (built-in + custom)."""
+    extra = _read_extra_categories()
+    result: list[dict[str, Any]] = []
+    known: set[str] = set()
+
+    for name in CATEGORY_NAMES:
+        meta = CATEGORIES.get(name, {})
+        subs = list(SUBCATEGORY_MAP.get(name, []))
+        for extra_sub in extra.get("subcategories", {}).get(name, []):
+            if extra_sub not in subs:
+                subs.append(extra_sub)
+        result.append({"name": name, "emoji": meta.get("emoji", "🏷️"), "subcategories": subs, "is_custom": False})
+        known.add(name)
+
+    for custom in extra.get("categories", []):
+        name = custom["name"]
+        if name in known:
+            continue
+        subs = []
+        for extra_sub in extra.get("subcategories", {}).get(name, []):
+            if extra_sub not in subs:
+                subs.append(extra_sub)
+        result.append({"name": name, "emoji": custom.get("emoji", "🏷️"), "subcategories": subs, "is_custom": True})
+        known.add(name)
+
+    for row in get_all_transactions():
+        cat = str(row.get("category") or "").strip()
+        if cat and cat not in known:
+            subs = list(extra.get("subcategories", {}).get(cat, []))
+            result.append({"name": cat, "emoji": "🏷️", "subcategories": subs, "is_custom": True})
+            known.add(cat)
+
+    return result
+
+
+def save_custom_category(name: str, emoji: str = "🏷️") -> None:
+    extra = _read_extra_categories()
+    cats: list[dict] = extra.setdefault("categories", [])
+    if not any(c["name"] == name for c in cats):
+        cats.append({"name": name, "emoji": emoji})
+        _write_extra_categories(extra)
+
+
+def save_custom_subcategory(category_name: str, subcategory: str) -> None:
+    extra = _read_extra_categories()
+    subs: dict = extra.setdefault("subcategories", {})
+    cat_subs: list = subs.setdefault(category_name, [])
+    if subcategory not in cat_subs:
+        cat_subs.append(subcategory)
+        _write_extra_categories(extra)
 
 
 def delete_transaction(id: str) -> bool:
