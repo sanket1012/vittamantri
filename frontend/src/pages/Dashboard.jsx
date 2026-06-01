@@ -271,7 +271,7 @@ export default function Dashboard() {
         <Box sx={{ flex: 1, p: '20px', overflow: 'auto' }}>
           {activeSection === 'dashboard' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
-              <StatsCards summary={summary} transactions={transactions} selectedUserId={filters.user} loading={loading} />
+              <StatsCards summary={summary} transactions={transactions} selectedUserId={filters.user} activeMonth={filters.month} loading={loading} />
               <Grid container spacing={2}>
                 <Grid item xs={12} md={5}>
                   <SpendingPieChart transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} />
