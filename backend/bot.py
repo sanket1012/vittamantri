@@ -287,28 +287,36 @@ def summary_balance() -> float:
         return 0.0
 
 
+def _cat_display(category: str, subcategory: str | None = None) -> str:
+    emoji = category_emoji(category)
+    display = f"{category} {emoji}"
+    if subcategory:
+        display += f" › {subcategory}"
+    return display
+
+
 def single_transaction_reply(item: dict) -> str:
     transaction = item.get("transaction") or item
     category = clean_text(transaction.get("category"))
-    emoji = category_emoji(category)
+    subcategory = clean_text(transaction.get("subcategory")) or None
     amount = indian_format(transaction.get("amount"))
     icon = transaction_icon(transaction.get("type"))
     description = clean_text(transaction.get("description")) or "Transaction"
     source = clean_text(transaction.get("source"))
     note = f"{description} · {source}" if source else description
     balance = indian_format(summary_balance())
-    return f"{icon} {amount} · {category} {emoji}\n📝 {note}\n🏦 Balance: {balance}"
+    return f"{icon} {amount} · {_cat_display(category, subcategory)}\n📝 {note}\n🏦 Balance: {balance}"
 
 
 def transaction_line(transaction: dict) -> str:
     category = clean_text(transaction.get("category"))
-    emoji = category_emoji(category)
+    subcategory = clean_text(transaction.get("subcategory")) or None
     icon = transaction_icon(transaction.get("type"))
     amount = indian_format(transaction.get("amount"))
     description = clean_text(transaction.get("description")) or "Transaction"
     source = clean_text(transaction.get("source"))
     tail = f"{description} · {source}" if source else description
-    return f"{icon} {amount} · {category} {emoji} · {tail}"
+    return f"{icon} {amount} · {_cat_display(category, subcategory)} · {tail}"
 
 
 def multi_transaction_reply(saved_items: list[dict], total: float) -> str:
