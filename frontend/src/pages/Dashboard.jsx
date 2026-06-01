@@ -224,6 +224,7 @@ export default function Dashboard({ onLogout }) {
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [categoriesFull, setCategoriesFull] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addOpen, setAddOpen] = useState(false);
