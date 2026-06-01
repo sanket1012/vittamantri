@@ -165,10 +165,13 @@ def patch_transaction(id):
         category = payload.get("category", "").strip()
         if not category:
             return error_response("category is required.", 400)
-        if not update_transaction_category(id, category):
+        fields = {"category": category}
+        if "subcategory" in payload:
+            fields["subcategory"] = str(payload.get("subcategory") or "").strip()
+        if not update_transaction_fields(id, fields):
             return error_response("Transaction not found.", 404)
         transaction = next((t for t in get_all_transactions() if t.get("id") == id), None)
-        return jsonify({"id": id, "transaction": transaction, "message": "Category updated."})
+        return jsonify({"id": id, "transaction": transaction, "message": "Transaction updated."})
     except Exception:
         logger.exception("patch_transaction failed")
         return _internal_error()
