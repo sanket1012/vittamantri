@@ -51,6 +51,31 @@ export const cleanGarbage = async () => {
   return data;
 };
 
+export const updateTransaction = async (id, fields) => {
+  const { data } = await api.patch(`/transactions/${id}`, fields);
+  return data;
+};
+
+export const bulkUpdateTransactions = async (ids, fields) => {
+  const { data } = await api.patch('/transactions/batch', { ids, fields });
+  return data;
+};
+
+export const fetchCategoriesFull = async () => {
+  const { data } = await api.get('/categories/full');
+  return data;
+};
+
+export const addCategory = async (payload) => {
+  const { data } = await api.post('/categories', payload);
+  return data;
+};
+
+export const addSubcategory = async (categoryName, subcategoryName) => {
+  const { data } = await api.post(`/categories/${encodeURIComponent(categoryName)}/subcategories`, { name: subcategoryName });
+  return data;
+};
+
 export const csvExportUrl = '/api/export/csv';
 
 export default api;
