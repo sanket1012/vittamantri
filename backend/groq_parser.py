@@ -205,6 +205,8 @@ def _normalize_result(parsed: dict, message: str) -> dict:
     parsed["description"] = " ".join(str(parsed.get("description") or fallback.get("description") or "Transaction").split()[:8])
     parsed["subcategory"] = parsed.get("subcategory") or fallback.get("subcategory")
     parsed["source"] = parsed.get("source") or fallback.get("source")
+    # Use LLM-extracted date first, then regex-extracted date, then None (data_manager defaults to now)
+    date = parsed.get("date") or fallback.get("date") or _extract_date(message)
     return {
         "amount": parsed.get("amount"),
         "type": parsed.get("type"),
@@ -212,6 +214,7 @@ def _normalize_result(parsed: dict, message: str) -> dict:
         "subcategory": parsed.get("subcategory"),
         "description": parsed.get("description"),
         "source": parsed.get("source"),
+        "date": date,
     }
 
 
