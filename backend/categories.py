@@ -20,6 +20,18 @@ CATEGORIES = {
 CATEGORY_NAMES = list(CATEGORIES.keys())
 DEFAULT_CATEGORY = "Gifts & Misc"
 
+SUBCATEGORY_MAP: dict[str, list[str]] = {
+    "Food & Dining": ["Delivery", "Dining Out", "Snacks", "Beverages"],
+    "Groceries": ["Vegetables", "Dairy", "Household", "Fruits"],
+    "Transport": ["Fuel", "Cab", "Auto", "Public Transport", "Parking"],
+    "Shopping": ["Clothes", "Electronics", "Home Decor", "Beauty", "Accessories"],
+    "Health & Medical": ["Medicine", "Doctor Visit", "Lab Test", "Insurance"],
+    "Entertainment": ["OTT", "Movies", "Events", "Games"],
+    "Utilities & Bills": ["Electricity", "Internet", "Gas", "Water"],
+    "Investment & SIP": ["Mutual Fund", "Stocks", "Gold", "FD", "PPF"],
+    "EMI & Loans": ["Home Loan", "Personal Loan", "Credit Card", "Vehicle Loan"],
+}
+
 
 def category_emoji(category: str) -> str:
     return CATEGORIES.get(category, CATEGORIES[DEFAULT_CATEGORY])["emoji"]
