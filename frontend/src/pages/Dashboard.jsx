@@ -153,7 +153,7 @@ function ExportView({ onExport, transactions, selectedUser }) {
   );
 }
 
-export default function Dashboard() {
+export default function Dashboard({ onLogout }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
