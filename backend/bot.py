@@ -593,57 +593,33 @@ async def _apply_category_update(update: Update, transaction_id: str, text: str)
     return True
 
 
-async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.chat.send_action(ChatAction.TYPING)
-    text = (update.message.text or "").strip()
+async def _handle_update_last(update: Update, text: str) -> None:
+    """Handle 'update last transaction to X' commands."""
     chat_id = update.message.chat_id
-
-    # ── 1. Natural-language "update last transaction" command ────────────────
-    if _is_update_last_request(text):
-        transaction_id = _last_transaction_map.get(chat_id)
-        if not transaction_id:
-            await update.message.reply_text(
-                "❓ No recent transaction found in this chat to update.\n"
-                "Log a transaction first, then ask to update it."
-            )
-            return
-        value_text = _extract_update_value(text)
-        if not value_text:
-            await update.message.reply_text(
-                "❓ Could not find the new category in your message.\n"
-                "Try: update last to Food  ·  change last to Transport > Fuel"
-            )
-            return
-        await _apply_category_update(update, transaction_id, value_text)
+    transaction_id = _last_transaction_map.get(chat_id)
+    if not transaction_id:
+        await update.message.reply_text(
+            "❓ No recent transaction found in this chat to update.\n"
+            "Log a transaction first, then ask to update it."
+        )
         return
-
-    # ── 2. Category change via reply to a previously logged bot message ──────
-    if update.message.reply_to_message:
-        replied = update.message.reply_to_message
-        if replied.from_user and replied.from_user.is_bot:
-            key = (chat_id, replied.message_id)
-            transaction_id = _msg_transaction_map.get(key)
-            if transaction_id:
-                await _apply_category_update(update, transaction_id, text)
-                return
-            # Bot message found but no mapping (e.g. after restart) — still try if it looks like a category
-            if not re.search(r"\b\d{2,}\b", text):
-                cat, sub = _parse_category_from_reply(text)
-                if cat:
-                    last_id = _last_transaction_map.get(chat_id)
-                    if last_id:
-                        await _apply_category_update(update, last_id, text)
-                        return
-
-    # ── 3. Greeting ──────────────────────────────────────────────────────────
-    if is_greeting_message(text):
-        await update.message.reply_text(GREETING_REPLY)
+    value_text = _extract_update_value(text)
+    if not value_text:
+        await update.message.reply_text(
+            "❓ Could not find the new category in your message.\n"
+            "Try: update last to Food  ·  change last to Transport > Fuel"
+        )
         return
+    await _apply_category_update(update, transaction_id, value_text)
 
-    # ── 4. Parse and save transaction(s) ────────────────────────────────────
+
+async def _handle_add_transaction(update: Update, text: str) -> None:
+    """Parse and save one or more transactions from a free-text message."""
+    chat_id = update.message.chat_id
     parts = split_transaction_message(text)
-    saved_items = []
+    saved_items: list[dict] = []
     skipped_no_amount = False
+
     for part in parts:
         parsed = await parse_text_with_retry(part)
         if not parsed:
@@ -665,7 +641,6 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         item = saved_items[0]
         txn = item.get("transaction") or item
         reply_text = single_transaction_reply(item)
-        # Ask for clarity when category fell through to the generic default
         if _is_category_uncertain(txn.get("category", ""), parts[0] if parts else text):
             reply_text += "\n\n❓ Category unclear — reply with the right one (e.g. Food, Transport, Shopping)"
         sent = await update.message.reply_text(reply_text)
@@ -674,6 +649,48 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         total = sum(float((item.get("transaction") or {}).get("amount", 0)) for item in saved_items)
         await update.message.reply_text(multi_transaction_reply(saved_items, total))
+
+
+async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.chat.send_action(ChatAction.TYPING)
+    text = (update.message.text or "").strip()
+    chat_id = update.message.chat_id
+
+    # ── 0. Reply to a bot message always triggers a category update ──────────
+    if update.message.reply_to_message:
+        replied = update.message.reply_to_message
+        if replied.from_user and replied.from_user.is_bot:
+            key = (chat_id, replied.message_id)
+            txn_id = _msg_transaction_map.get(key) or _last_transaction_map.get(chat_id)
+            if txn_id:
+                await _apply_category_update(update, txn_id, text)
+                return
+
+    # ── 1. Classify intent ────────────────────────────────────────────────────
+    intent = detect_intent(text)
+    logger.info("intent=%s  msg=%r", intent, text[:60])
+
+    # ── 2. Route ──────────────────────────────────────────────────────────────
+    if intent == Intent.GREET:
+        await update.message.reply_text(GREETING_REPLY)
+
+    elif intent == Intent.UPDATE:
+        await _handle_update_last(update, text)
+
+    elif intent == Intent.SUMMARY:
+        await summary(update, context)
+
+    elif intent == Intent.TODAY:
+        await today(update, context)
+
+    elif intent == Intent.WEEK:
+        await week(update, context)
+
+    elif intent == Intent.MONTH:
+        await month(update, context)
+
+    else:  # Intent.ADD or Intent.PARSE — let Groq sort it out
+        await _handle_add_transaction(update, text)
 
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
