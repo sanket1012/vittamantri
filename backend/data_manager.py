@@ -392,36 +392,55 @@ def _write_extra_categories(data: dict[str, Any]) -> None:
 
 
 def get_categories_with_subcategories() -> list[dict[str, Any]]:
-    """Return all categories with their subcategories (built-in + custom)."""
+    """Return all categories with subcategories.
+
+    Each entry includes:
+    - subcategories: all subs (built-in + custom)
+    - custom_subcategories: only user-added subs (these can be deleted)
+    - is_custom: True for categories not in the built-in CATEGORY_NAMES list
+    """
     extra = _read_extra_categories()
     result: list[dict[str, Any]] = []
     known: set[str] = set()
 
     for name in CATEGORY_NAMES:
         meta = CATEGORIES.get(name, {})
-        subs = list(SUBCATEGORY_MAP.get(name, []))
-        for extra_sub in extra.get("subcategories", {}).get(name, []):
-            if extra_sub not in subs:
-                subs.append(extra_sub)
-        result.append({"name": name, "emoji": meta.get("emoji", "🏷️"), "subcategories": subs, "is_custom": False})
+        builtin_subs = list(SUBCATEGORY_MAP.get(name, []))
+        custom_subs = [s for s in extra.get("subcategories", {}).get(name, []) if s not in builtin_subs]
+        result.append({
+            "name": name,
+            "emoji": meta.get("emoji", "🏷️"),
+            "subcategories": builtin_subs + custom_subs,
+            "custom_subcategories": custom_subs,
+            "is_custom": False,
+        })
         known.add(name)
 
     for custom in extra.get("categories", []):
         name = custom["name"]
         if name in known:
             continue
-        subs = []
-        for extra_sub in extra.get("subcategories", {}).get(name, []):
-            if extra_sub not in subs:
-                subs.append(extra_sub)
-        result.append({"name": name, "emoji": custom.get("emoji", "🏷️"), "subcategories": subs, "is_custom": True})
+        custom_subs = list(extra.get("subcategories", {}).get(name, []))
+        result.append({
+            "name": name,
+            "emoji": custom.get("emoji", "🏷️"),
+            "subcategories": custom_subs,
+            "custom_subcategories": custom_subs,
+            "is_custom": True,
+        })
         known.add(name)
 
     for row in get_all_transactions():
         cat = str(row.get("category") or "").strip()
         if cat and cat not in known:
-            subs = list(extra.get("subcategories", {}).get(cat, []))
-            result.append({"name": cat, "emoji": "🏷️", "subcategories": subs, "is_custom": True})
+            custom_subs = list(extra.get("subcategories", {}).get(cat, []))
+            result.append({
+                "name": cat,
+                "emoji": "🏷️",
+                "subcategories": custom_subs,
+                "custom_subcategories": custom_subs,
+                "is_custom": True,
+            })
             known.add(cat)
 
     return result
@@ -442,6 +461,31 @@ def save_custom_subcategory(category_name: str, subcategory: str) -> None:
     if subcategory not in cat_subs:
         cat_subs.append(subcategory)
         _write_extra_categories(extra)
+
+
+def delete_custom_category(name: str) -> bool:
+    """Delete a user-created category. Built-in categories cannot be deleted this way."""
+    extra = _read_extra_categories()
+    cats = extra.get("categories", [])
+    updated = [c for c in cats if c["name"] != name]
+    if len(updated) == len(cats):
+        return False
+    extra["categories"] = updated
+    extra.get("subcategories", {}).pop(name, None)
+    _write_extra_categories(extra)
+    return True
+
+
+def delete_custom_subcategory(category_name: str, subcategory: str) -> bool:
+    """Delete a user-added subcategory. Returns False if not found in the custom list."""
+    extra = _read_extra_categories()
+    cat_subs: list = extra.get("subcategories", {}).get(category_name, [])
+    if subcategory not in cat_subs:
+        return False
+    cat_subs.remove(subcategory)
+    extra.setdefault("subcategories", {})[category_name] = cat_subs
+    _write_extra_categories(extra)
+    return True
 
 
 def delete_transaction(id: str) -> bool:
