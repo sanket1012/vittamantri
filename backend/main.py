@@ -11,6 +11,8 @@ from flask_cors import CORS
 from data_manager import (
     bulk_update_transactions,
     clean_garbage,
+    delete_custom_category,
+    delete_custom_subcategory,
     delete_transaction,
     export_monthly_report,
     get_all_transactions,
