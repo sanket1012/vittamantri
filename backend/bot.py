@@ -294,7 +294,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/export - CSV\n"
         "/delete <id> - delete\n\n"
         "💡 Reply to any logged transaction to change its category.\n"
-        "   Eg: reply with 'Food' or 'Transport'"
+        "   Eg: 'Food', 'Transport', or 'Food > Delivery'"
     )
 
 
