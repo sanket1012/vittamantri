@@ -632,6 +632,7 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def save_media_transactions(update: Update, transactions: list[dict], input_method: str, user_info: dict):
+    chat_id = update.message.chat_id
     saved_items = []
     total = 0.0
     for item in transactions:
@@ -639,6 +640,9 @@ async def save_media_transactions(update: Update, transactions: list[dict], inpu
         if saved:
             saved_items.append(saved)
             total += float(saved.get("transaction", {}).get("amount", 0))
+            txn_id = (saved.get("transaction") or saved).get("id")
+            if txn_id:
+                _track_last(chat_id, txn_id)
     if saved_items:
         await update.message.reply_text(multi_transaction_reply(saved_items, total))
     else:
