@@ -286,12 +286,18 @@ async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🏦 Balance: {indian_format(data.get('net_savings'))}\n"
         f"📋 Total: {data.get('transaction_count', 0)} transactions"
     ]
-    if len(users) > 1:
+    if len(users) >= 1:
         lines.append("\n👥 By User:")
         transactions = api_get("/api/transactions").get("transactions", [])
         for user in users[:5]:
-            spent = sum(float(row.get("amount", 0)) for row in transactions if str(row.get("logged_by_id")) == str(user.get("logged_by_id")) and row.get("type") == "expense")
-            lines.append(f"- {user.get('logged_by')}: {user.get('count')} transactions · {indian_format(spent)} spent")
+            uid = str(user.get("logged_by_id"))
+            user_rows = [row for row in transactions if str(row.get("logged_by_id")) == uid]
+            spent = sum(float(row.get("amount", 0)) for row in user_rows if row.get("type") == "expense")
+            earned = sum(float(row.get("amount", 0)) for row in user_rows if row.get("type") == "income")
+            lines.append(
+                f"- {user.get('logged_by')}: "
+                f"💰 {indian_format(earned)} in · 💸 {indian_format(spent)} out"
+            )
     await update.message.reply_text("\n".join(lines))
 
 
