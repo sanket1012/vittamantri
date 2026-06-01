@@ -310,6 +310,21 @@ def rebuild_summary() -> dict[str, Any]:
         return _recalculate_summary_unlocked(_read_rows_unlocked())
 
 
+def update_transaction_category(id: str, category: str) -> bool:
+    try:
+        with _lock:
+            rows = _read_rows_unlocked()
+            for row in rows:
+                if row.get("id") == id:
+                    row["category"] = category
+                    _write_rows_unlocked(rows)
+                    _recalculate_summary_unlocked(rows)
+                    return True
+            return False
+    except Exception as exc:
+        raise RuntimeError(f"Unable to update transaction: {exc}") from exc
+
+
 def delete_transaction(id: str) -> bool:
     try:
         with _lock:
