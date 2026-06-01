@@ -4,6 +4,7 @@ import os
 import re
 import tempfile
 from datetime import datetime, timedelta
+from enum import Enum
 from pathlib import Path
 
 import pytz
