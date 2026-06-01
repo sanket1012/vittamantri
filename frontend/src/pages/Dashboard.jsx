@@ -235,15 +235,17 @@ export default function Dashboard({ onLogout }) {
   const loadData = async ({ quiet = false } = {}) => {
     if (!quiet) setLoading(true);
     try {
-      const [transactionRows, summaryData, categoryRows, userRows] = await Promise.all([
+      const [transactionRows, summaryData, categoryRows, categoriesFullRows, userRows] = await Promise.all([
         fetchTransactions(filters.month),
         fetchSummary(),
         fetchCategories(),
+        fetchCategoriesFull(),
         getUsers(),
       ]);
       setTransactions(transactionRows);
       setSummary(summaryData);
       setCategories(categoryRows);
+      setCategoriesFull(categoriesFullRows);
       setUsers(userRows);
     } catch (error) {
       toast.error(error.response?.data?.error || 'Could not load dashboard data');
