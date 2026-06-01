@@ -231,7 +231,7 @@ Return ONLY a single raw JSON object, nothing else, no explanation, no extra tex
 {
   "amount": <float or null>,
   "type": <"expense" or "income" or null>,
-  "category": <one of the 14 categories or null>,
+  "category": <best-matching category — use a preferred category when it fits, or invent a short new name (2-4 words, Title Case) when none fit>,
   "subcategory": <more specific label or null>,
   "description": <max 8 words>,
   "source": <name of app/shop/person or null>,
@@ -249,10 +249,12 @@ Utilities & Bills → Electricity, Internet, Gas, Water
 Investment & SIP → Mutual Fund, Stocks, Gold, FD, PPF
 EMI & Loans → Home Loan, Personal Loan, Credit Card, Vehicle Loan
 
-Categories: "Food & Dining", "Groceries", "Transport", "Rent & Housing",
+Preferred categories (use these when they match):
+"Food & Dining", "Groceries", "Transport", "Rent & Housing",
 "Health & Medical", "Entertainment", "Shopping", "Subscriptions",
 "Education", "EMI & Loans", "Investment & SIP", "Salary & Income",
 "Gifts & Misc", "Utilities & Bills"
+If none of the above fit, create a short descriptive category name (2-4 words, Title Case, e.g. "Pet Care", "Electronics", "Travel").
 
 IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra lines. Just one JSON."""
 
