@@ -8,14 +8,14 @@ echo "Setting up VittaMantri from: $APP_DIR"
 
 # ── System packages ───────────────────────────────────────────────────────────
 sudo apt-get update -qq
-sudo apt-get install -y nginx python3 python3-pip python3-venv nodejs npm
+sudo apt-get install -y nginx python3.11 python3.11-venv python3-pip nodejs npm
 
 # ── Log directory ─────────────────────────────────────────────────────────────
 sudo mkdir -p /var/log/vittamantri
 sudo chown ubuntu:ubuntu /var/log/vittamantri
 
-# ── Python virtual environment ────────────────────────────────────────────────
-python3 -m venv "$APP_DIR/.venv"
+# ── Python virtual environment (3.11 — stable wheel support) ─────────────────
+python3.11 -m venv "$APP_DIR/.venv"
 "$APP_DIR/.venv/bin/pip" install --quiet --upgrade pip
 "$APP_DIR/.venv/bin/pip" install --quiet -r "$APP_DIR/backend/requirements.txt"
 
