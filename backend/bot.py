@@ -30,6 +30,34 @@ GREETING_REPLY = "👋 Hi! Tell me what you spent or earned.\nEg: Zomato 280 · 
 AMOUNT_NOT_FOUND_REPLY = "❓ No amount found.\nTry: Petrol 500  or  Salary 45000"
 GROQ_FAILED_REPLY = "⚠️ Could not process your message.\nTry: Swiggy 350 dinner"
 
+# Maps (chat_id, bot_message_id) → transaction_id for category-change-via-reply
+_msg_transaction_map: dict[tuple[int, int], str] = {}
+_MAP_MAX_SIZE = 200
+
+
+def _store_msg_transaction(chat_id: int, message_id: int, transaction_id: str) -> None:
+    _msg_transaction_map[(chat_id, message_id)] = transaction_id
+    if len(_msg_transaction_map) > _MAP_MAX_SIZE:
+        del _msg_transaction_map[next(iter(_msg_transaction_map))]
+
+
+def _parse_category_from_reply(text: str) -> str | None:
+    """Match a user's reply text to a known category name."""
+    cleaned = re.sub(r"^(change|cat|category|update|set)\s*[:\-]?\s*", "", (text or "").strip(), flags=re.IGNORECASE).strip()
+    if not cleaned:
+        return None
+    lower = cleaned.lower()
+    for name in CATEGORY_NAMES:
+        if name.lower() == lower:
+            return name
+    for name in CATEGORY_NAMES:
+        if name.lower().startswith(lower):
+            return name
+    for name in CATEGORY_NAMES:
+        if lower in name.lower():
+            return name
+    return None
+
 
 def indian_format(amount: float) -> str:
     try:
