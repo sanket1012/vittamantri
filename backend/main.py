@@ -102,6 +102,18 @@ def health_check():
     return jsonify({"status": "वित्तमंत्री is running"})
 
 
+@app.route("/api/login", methods=["POST"])
+def login():
+    payload = request.get_json(silent=True) or {}
+    username = payload.get("username", "")
+    password = payload.get("password", "")
+    if not _DASHBOARD_USERNAME or not _DASHBOARD_PASSWORD:
+        return error_response("Login not configured on server.", 500)
+    if username == _DASHBOARD_USERNAME and password == _DASHBOARD_PASSWORD:
+        return jsonify({"token": _DASHBOARD_API_KEY})
+    return jsonify({"error": "Invalid username or password"}), 401
+
+
 # ── Transactions ──────────────────────────────────────────────────────────────
 
 @app.route("/api/transactions", methods=["GET"])
