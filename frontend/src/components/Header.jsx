@@ -40,6 +40,11 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
         <Button variant="contained" startIcon={<AddIcon />} onClick={onAdd}>
           Add
         </Button>
+        <Tooltip title="Logout">
+          <IconButton onClick={onLogout} sx={{ color: '#667085' }}>
+            <LogoutIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );
