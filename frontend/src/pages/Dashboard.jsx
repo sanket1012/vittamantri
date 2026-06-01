@@ -264,6 +264,7 @@ export default function Dashboard({ onLogout }) {
           onExport={handleExport}
           onClean={() => setCleanOpen(true)}
           onAdd={() => setAddOpen(true)}
+          onLogout={onLogout}
           invalidCount={invalidCount}
           showMenu={isMobile}
         />
