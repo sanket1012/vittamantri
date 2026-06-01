@@ -147,6 +147,7 @@ def _fallback_extract(message: str) -> dict:
         "subcategory": subcategory,
         "description": _compact_description(message),
         "source": source,
+        "date": _extract_date(message),
     }
 
 
