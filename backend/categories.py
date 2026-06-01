@@ -37,6 +37,33 @@ def category_emoji(category: str) -> str:
     return CATEGORIES.get(category, CATEGORIES[DEFAULT_CATEGORY])["emoji"]
 
 
+def fuzzy_match_category(text: str) -> str | None:
+    """Return the closest known category name for *text*, or None if no clear match.
+
+    Matching priority (stops at first hit):
+    1. Exact match (case-insensitive)
+    2. Known category starts with the input
+    3. Input is contained within a known category name
+    4. Known category name is contained within the input
+    """
+    if not text:
+        return None
+    lower = text.strip().lower()
+    for name in CATEGORY_NAMES:
+        if name.lower() == lower:
+            return name
+    for name in CATEGORY_NAMES:
+        if name.lower().startswith(lower):
+            return name
+    for name in CATEGORY_NAMES:
+        if lower in name.lower():
+            return name
+    for name in CATEGORY_NAMES:
+        if name.lower() in lower:
+            return name
+    return None
+
+
 def infer_category(text: str, transaction_type: str = "expense") -> str:
     lower_text = (text or "").lower()
     if transaction_type == "income":
