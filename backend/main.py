@@ -22,6 +22,7 @@ from data_manager import (
     rebuild_summary,
     save_transaction,
     transaction_csv_path,
+    update_transaction_category,
 )
 from gemini_parser import extract_from_image, extract_from_pdf
 from groq_parser import extract_from_text
