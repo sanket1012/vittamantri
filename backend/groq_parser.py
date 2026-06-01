@@ -275,7 +275,7 @@ IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra li
                 {"role": "user", "content": user_message},
             ],
             temperature=0.1,
-            max_tokens=200,
+            max_tokens=300,
         )
         text = response.choices[0].message.content.strip()
         return _normalize_result(safe_json_parse(text), user_message)
