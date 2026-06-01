@@ -420,6 +420,25 @@ async def delete(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
     text = update.message.text or ""
+
+    # Category change: reply to a previously logged transaction message
+    if update.message.reply_to_message:
+        replied = update.message.reply_to_message
+        if replied.from_user and replied.from_user.is_bot:
+            key = (update.message.chat_id, replied.message_id)
+            transaction_id = _msg_transaction_map.get(key)
+            if transaction_id:
+                new_category = _parse_category_from_reply(text)
+                if new_category:
+                    result = await with_retry(update, api_patch, f"/api/transactions/{transaction_id}", {"category": new_category})
+                    if result:
+                        emoji = category_emoji(new_category)
+                        await update.message.reply_text(f"✅ Category → {new_category} {emoji}")
+                else:
+                    cat_list = "\n".join(f"• {name}" for name in CATEGORY_NAMES)
+                    await update.message.reply_text(f"❓ Unknown category. Available:\n{cat_list}")
+                return
+
     if is_greeting_message(text):
         await update.message.reply_text(GREETING_REPLY)
         return
@@ -442,7 +461,10 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not saved_items:
         await update.message.reply_text(AMOUNT_NOT_FOUND_REPLY if skipped_no_amount else GROQ_FAILED_REPLY)
     elif len(saved_items) == 1:
-        await update.message.reply_text(single_transaction_reply(saved_items[0]))
+        transaction_id = (saved_items[0].get("transaction") or saved_items[0]).get("id")
+        sent = await update.message.reply_text(single_transaction_reply(saved_items[0]))
+        if transaction_id:
+            _store_msg_transaction(update.message.chat_id, sent.message_id, transaction_id)
     else:
         total = sum(float((item.get("transaction") or {}).get("amount", 0)) for item in saved_items)
         await update.message.reply_text(multi_transaction_reply(saved_items, total))
