@@ -469,17 +469,32 @@ def save_custom_subcategory(category_name: str, subcategory: str) -> None:
         _write_extra_categories(extra)
 
 
-def delete_custom_category(name: str) -> bool:
-    """Delete a user-created category. Built-in categories cannot be deleted this way."""
-    extra = _read_extra_categories()
-    cats = extra.get("categories", [])
-    updated = [c for c in cats if c["name"] != name]
-    if len(updated) == len(cats):
+def delete_category(name: str) -> bool:
+    """Delete any category — built-in or custom.
+
+    Built-in categories are added to deleted_categories (hidden from UI).
+    Custom categories are removed from the categories list entirely.
+    Always returns True unless the name is blank.
+    """
+    if not name:
         return False
-    extra["categories"] = updated
-    extra.get("subcategories", {}).pop(name, None)
+    extra = _read_extra_categories()
+    if name in CATEGORY_NAMES:
+        # Mark built-in as deleted rather than removing from code
+        deleted: list = extra.setdefault("deleted_categories", [])
+        if name not in deleted:
+            deleted.append(name)
+        extra.get("subcategories", {}).pop(name, None)
+    else:
+        cats = extra.get("categories", [])
+        extra["categories"] = [c for c in cats if c["name"] != name]
+        extra.get("subcategories", {}).pop(name, None)
     _write_extra_categories(extra)
     return True
+
+
+# Keep old name as alias so existing callers don't break
+delete_custom_category = delete_category
 
 
 def delete_custom_subcategory(category_name: str, subcategory: str) -> bool:
