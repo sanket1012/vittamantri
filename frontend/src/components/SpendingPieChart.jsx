@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Box, Button, ButtonGroup, Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-
-const COLORS = ['#004EEB', '#059669', '#DC2626', '#F59E0B', '#7C3AED', '#0891B2', '#DB2777', '#65A30D', '#EA580C', '#4F46E5', '#0D9488', '#9333EA', '#BE123C', '#2563EB'];
+import { getCategoryColor } from '../utils/categoryColors.js';
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
