@@ -153,7 +153,8 @@ def _fallback_extract(message: str) -> dict:
 
 def _normalize_result(parsed: dict, message: str, all_category_names: list[str] | None = None) -> dict:
     fallback = _fallback_extract(message)
-    lower = message.lower()
+
+    # If the LLM returned no amount, fall back to regex extraction entirely
     if parsed.get("amount") is None and fallback.get("amount") is not None:
         parsed = fallback
 
@@ -163,23 +164,9 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
         except (TypeError, ValueError):
             parsed["amount"] = fallback.get("amount")
 
-    trust_fallback = any(
-        phrase in lower
-        for phrase in [
-            "flower pot",
-            "fish",
-            "bikewash",
-            "bike wash",
-            "petrol",
-            "auto",
-            "hunger box",
-            "makeup",
-            "dress",
-            "dresses",
-        ]
-    ) or (re.search(r"\b(receive|received|got|credited)\b", lower) and "salary" not in lower)
-
-    if trust_fallback and fallback.get("amount") is not None:
+    # If the LLM flagged itself as low confidence, defer category/type to the regex fallback
+    low_confidence = parsed.get("confidence") == "low"
+    if low_confidence and fallback.get("amount") is not None:
         parsed["type"] = fallback.get("type")
         parsed["category"] = fallback.get("category")
         parsed["subcategory"] = fallback.get("subcategory") or parsed.get("subcategory")
@@ -188,7 +175,7 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
         parsed["type"] = parsed.get("type") if parsed.get("type") in {"expense", "income", None} else fallback.get("type")
         llm_cat = parsed.get("category")
         if llm_cat:
-            # Fuzzy-map to a known/custom category; keep original only if it's genuinely new
+            # Fuzzy-map to a known/custom category; keep the LLM's name if it's genuinely new
             parsed["category"] = fuzzy_match_category(llm_cat, extra_names=all_category_names) or llm_cat
         else:
             parsed["category"] = fallback.get("category")
@@ -196,9 +183,7 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
     parsed["description"] = " ".join(str(parsed.get("description") or fallback.get("description") or "Transaction").split()[:8])
     parsed["subcategory"] = parsed.get("subcategory") or fallback.get("subcategory")
     parsed["source"] = parsed.get("source") or fallback.get("source")
-    # Regex extraction is authoritative for relative dates (yesterday, last month, in May) because the
-    # LLM doesn't know the actual current date and can't resolve them reliably.
-    # Fall back to LLM's literal date only when the regex finds nothing (e.g. "15/06/2026 petrol 500").
+    # Regex is still authoritative for relative dates as a safety override.
     date = _extract_date(message) or parsed.get("date") or fallback.get("date")
     return {
         "amount": parsed.get("amount"),
@@ -208,6 +193,7 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
         "description": parsed.get("description"),
         "source": parsed.get("source"),
         "date": date,
+        "confidence": parsed.get("confidence"),
     }
 
 
