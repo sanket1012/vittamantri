@@ -242,8 +242,8 @@ export default function CategoriesPage() {
         <DialogTitle sx={{ fontWeight: 700, color: '#101828' }}>Delete category?</DialogTitle>
         <DialogContent>
           <Typography sx={{ color: '#344054' }}>
-            Delete <strong>"{confirmDeleteCat}"</strong>? Existing transactions that use this category will keep their
-            value — you can reassign them via bulk edit.
+            Delete <strong>"{confirmDeleteCat}"</strong>? It will be removed from all dropdowns and the categories
+            list. Existing transactions that use this category keep their value — you can reassign them via bulk edit.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2.5 }}>
