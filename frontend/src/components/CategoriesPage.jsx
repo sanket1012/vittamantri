@@ -151,25 +151,14 @@ export default function CategoriesPage() {
                           </IconButton>
                         </Tooltip>
 
-                        {cat.is_custom ? (
-                          <Tooltip title="Delete category">
-                            <IconButton size="small"
-                              onClick={() => setConfirmDeleteCat(cat.name)}
-                              sx={{ color: '#98A2B3', border: '1px solid #EAECF0', borderRadius: '6px', p: '3px',
-                                '&:hover': { color: '#DC2626', bgcolor: '#FEF2F2', borderColor: '#FCA5A5' } }}>
-                              <DeleteOutlineIcon sx={{ fontSize: 16 }} />
-                            </IconButton>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip title="Built-in — cannot be deleted">
-                            <span>
-                              <IconButton size="small" disabled
-                                sx={{ border: '1px solid #EAECF0', borderRadius: '6px', p: '3px' }}>
-                                <DeleteOutlineIcon sx={{ fontSize: 16 }} />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                        )}
+                        <Tooltip title="Delete category">
+                          <IconButton size="small"
+                            onClick={() => setConfirmDeleteCat(cat.name)}
+                            sx={{ color: '#98A2B3', border: '1px solid #EAECF0', borderRadius: '6px', p: '3px',
+                              '&:hover': { color: '#DC2626', bgcolor: '#FEF2F2', borderColor: '#FCA5A5' } }}>
+                            <DeleteOutlineIcon sx={{ fontSize: 16 }} />
+                          </IconButton>
+                        </Tooltip>
                       </Box>
                     </Box>
 
