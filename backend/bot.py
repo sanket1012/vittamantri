@@ -149,9 +149,9 @@ def _to_new_category(text: str) -> str:
 
 
 def _get_all_categories_from_api() -> list[dict]:
-    """Fetch live categories (built-in + custom) from the backend. Returns [] on failure."""
+    """Fetch live categories with subcategories (built-in + custom) from the backend. Returns [] on failure."""
     try:
-        return api_get("/api/categories")
+        return api_get("/api/categories/full")
     except Exception as exc:
         logger.warning("Could not load categories from API: %s", exc)
         return []
