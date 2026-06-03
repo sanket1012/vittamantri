@@ -211,13 +211,58 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
     }
 
 
-def extract_from_text(user_message: str) -> dict:
+def _build_categories_section(all_categories: list[dict]) -> str:
+    """Build the category+subcategory block injected into the system prompt."""
+    lines = []
+    for cat in all_categories:
+        name = cat["name"]
+        subs = cat.get("subcategories", [])
+        if subs:
+            lines.append(f'  "{name}" → {", ".join(subs)}')
+        else:
+            lines.append(f'  "{name}"')
+    return "\n".join(lines)
+
+
+def extract_from_text(user_message: str, all_categories: list[dict] | None = None) -> dict:
     if not os.getenv("GROQ_API_KEY"):
         raise RuntimeError("GROQ_API_KEY is not configured.")
     if not user_message or not user_message.strip():
         raise ValueError("Message is empty.")
 
-    system_prompt = """You are a smart finance assistant for an Indian user.
+    all_category_names: list[str] = [c["name"] for c in (all_categories or [])]
+
+    if all_categories:
+        categories_block = _build_categories_section(all_categories)
+        category_instructions = f"""Available categories and subcategories (ALWAYS prefer exact matches from this list):
+{categories_block}
+
+Category matching rules:
+1. ALWAYS try to match the transaction to an existing category above — match by meaning, not just exact words
+2. If a subcategory from the list fits the transaction, use that exact subcategory name
+3. Only create a new category name if truly nothing in the list fits (use 2-4 words, Title Case)
+4. Only create a new subcategory if no existing subcategory fits"""
+    else:
+        category_instructions = """Preferred categories (use these when they match):
+"Food & Dining", "Groceries", "Transport", "Rent & Housing",
+"Health & Medical", "Entertainment", "Shopping", "Subscriptions",
+"Education", "EMI & Loans", "Investment & SIP", "Salary & Income",
+"Gifts & Misc", "Utilities & Bills"
+
+Subcategory examples:
+Food & Dining → Delivery, Dining Out, Snacks, Beverages
+Groceries → Vegetables, Dairy, Household, Fruits
+Transport → Fuel, Cab, Auto, Public Transport, Parking
+Shopping → Clothes, Electronics, Home Decor, Beauty, Accessories
+Health & Medical → Medicine, Doctor Visit, Lab Test, Insurance
+Entertainment → OTT, Movies, Events, Games
+Utilities & Bills → Electricity, Internet, Gas, Water
+Investment & SIP → Mutual Fund, Stocks, Gold, FD, PPF
+EMI & Loans → Home Loan, Personal Loan, Credit Card, Vehicle Loan
+
+If none of the above fit, create a short descriptive category name (2-4 words, Title Case, e.g. "Pet Care", "Electronics", "Travel")."""
+
+    system_prompt = f"""You are a smart finance assistant for an Indian user.
 Your job is to extract transaction details from casual, informal messages in English or Hindi-English mix.
 
 RULES:
@@ -235,34 +280,18 @@ RULES:
   Format as YYYY-MM-DD. Use current year unless a different year is stated.
   If no date is mentioned → return null.
 
+{category_instructions}
+
 Return ONLY a single raw JSON object, nothing else, no explanation, no extra text:
-{
+{{
   "amount": <float or null>,
   "type": <"expense" or "income" or null>,
-  "category": <best-matching category — use a preferred category when it fits, or invent a short new name (2-4 words, Title Case) when none fit>,
-  "subcategory": <more specific label or null>,
+  "category": <best-matching category from the list above, or a new name if nothing fits>,
+  "subcategory": <best-matching subcategory from the list above, or a new specific label, or null>,
   "description": <max 8 words>,
   "source": <name of app/shop/person or null>,
   "date": <"YYYY-MM-DD" or null>
-}
-
-Subcategory examples:
-Food & Dining → Delivery, Dining Out, Snacks, Beverages
-Groceries → Vegetables, Dairy, Household, Fruits
-Transport → Fuel, Cab, Auto, Public Transport, Parking
-Shopping → Clothes, Electronics, Home Decor, Beauty, Accessories
-Health & Medical → Medicine, Doctor Visit, Lab Test, Insurance
-Entertainment → OTT, Movies, Events, Games
-Utilities & Bills → Electricity, Internet, Gas, Water
-Investment & SIP → Mutual Fund, Stocks, Gold, FD, PPF
-EMI & Loans → Home Loan, Personal Loan, Credit Card, Vehicle Loan
-
-Preferred categories (use these when they match):
-"Food & Dining", "Groceries", "Transport", "Rent & Housing",
-"Health & Medical", "Entertainment", "Shopping", "Subscriptions",
-"Education", "EMI & Loans", "Investment & SIP", "Salary & Income",
-"Gifts & Misc", "Utilities & Bills"
-If none of the above fit, create a short descriptive category name (2-4 words, Title Case, e.g. "Pet Care", "Electronics", "Travel").
+}}
 
 IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra lines. Just one JSON."""
 
@@ -277,7 +306,7 @@ IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra li
             max_tokens=300,
         )
         text = response.choices[0].message.content.strip()
-        return _normalize_result(safe_json_parse(text), user_message)
+        return _normalize_result(safe_json_parse(text), user_message, all_category_names=all_category_names)
     except Exception as exc:
         fallback = _fallback_extract(user_message)
         if fallback.get("amount") is not None:
