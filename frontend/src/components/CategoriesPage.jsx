@@ -186,7 +186,7 @@ export default function CategoriesPage() {
                     {/* Legend for custom subcategories */}
                     {cat.custom_subcategories?.length > 0 && (
                       <Typography sx={{ mt: 1, fontSize: '0.7rem', color: '#98A2B3' }}>
-                        Blue = custom (click × to remove)
+                        Darker border = custom (click × to remove)
                       </Typography>
                     )}
                   </CardContent>
