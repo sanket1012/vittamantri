@@ -151,7 +151,7 @@ def _fallback_extract(message: str) -> dict:
     }
 
 
-def _normalize_result(parsed: dict, message: str) -> dict:
+def _normalize_result(parsed: dict, message: str, all_category_names: list[str] | None = None) -> dict:
     fallback = _fallback_extract(message)
     lower = message.lower()
     if parsed.get("amount") is None and fallback.get("amount") is not None:
@@ -188,9 +188,8 @@ def _normalize_result(parsed: dict, message: str) -> dict:
         parsed["type"] = parsed.get("type") if parsed.get("type") in {"expense", "income", None} else fallback.get("type")
         llm_cat = parsed.get("category")
         if llm_cat:
-            # Fuzzy-map to a known category if the LLM returned a close variant (e.g. "Health" → "Health & Medical")
-            # Keep the original if it's genuinely new (e.g. "Pet Care", "Electronics")
-            parsed["category"] = fuzzy_match_category(llm_cat) or llm_cat
+            # Fuzzy-map to a known/custom category; keep original only if it's genuinely new
+            parsed["category"] = fuzzy_match_category(llm_cat, extra_names=all_category_names) or llm_cat
         else:
             parsed["category"] = fallback.get("category")
 
