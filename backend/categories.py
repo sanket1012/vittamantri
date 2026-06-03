@@ -37,9 +37,10 @@ def category_emoji(category: str) -> str:
     return CATEGORIES.get(category, CATEGORIES[DEFAULT_CATEGORY])["emoji"]
 
 
-def fuzzy_match_category(text: str) -> str | None:
+def fuzzy_match_category(text: str, extra_names: list[str] | None = None) -> str | None:
     """Return the closest known category name for *text*, or None if no clear match.
 
+    Checks built-in categories first, then any extra (custom) names passed in.
     Matching priority (stops at first hit):
     1. Exact match (case-insensitive)
     2. Known category starts with the input
@@ -49,16 +50,17 @@ def fuzzy_match_category(text: str) -> str | None:
     if not text:
         return None
     lower = text.strip().lower()
-    for name in CATEGORY_NAMES:
+    all_names = CATEGORY_NAMES + [n for n in (extra_names or []) if n not in CATEGORY_NAMES]
+    for name in all_names:
         if name.lower() == lower:
             return name
-    for name in CATEGORY_NAMES:
+    for name in all_names:
         if name.lower().startswith(lower):
             return name
-    for name in CATEGORY_NAMES:
+    for name in all_names:
         if lower in name.lower():
             return name
-    for name in CATEGORY_NAMES:
+    for name in all_names:
         if name.lower() in lower:
             return name
     return None
