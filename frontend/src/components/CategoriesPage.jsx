@@ -7,8 +7,7 @@ import {
 } from '@mui/material';
 import toast from 'react-hot-toast';
 import { addCategory, addSubcategory, deleteCategory, deleteSubcategory, fetchCategoriesFull } from '../api/client.js';
-
-const ACCENT_COLORS = ['#004EEB', '#7C3AED', '#059669', '#DC2626', '#D97706', '#0891B2'];
+import { getCategoryColor } from '../utils/categoryColors.js';
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
