@@ -285,10 +285,11 @@ def get_user_summary(logged_by_id: int) -> dict[str, Any]:
 
 
 def get_categories() -> list[dict[str, str]]:
-    names = set(CATEGORY_NAMES)
+    deleted: set[str] = set(_read_extra_categories().get("deleted_categories", []))
+    names: set[str] = {n for n in CATEGORY_NAMES if n not in deleted}
     for row in get_all_transactions():
         category = str(row.get("category") or "").strip()
-        if category:
+        if category and category not in deleted:
             names.add(category)
     return [
         {"name": name, "emoji": CATEGORIES.get(name, {}).get("emoji", "🏷️")}
