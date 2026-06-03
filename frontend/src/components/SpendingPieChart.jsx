@@ -53,7 +53,7 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
               </ResponsiveContainer>
             </Box>
             <Box sx={{ display: 'grid', gap: 1, mt: 1 }}>
-              {data.slice(0, 8).map((item, index) => (
+              {data.slice(0, 8).map((item) => (
                 <Box key={item.name} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
                     <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: getCategoryColor(item.name), flexShrink: 0 }} />
