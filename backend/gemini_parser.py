@@ -6,9 +6,16 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from categories import build_categories_prompt_str, CATEGORY_NAMES, SUBCATEGORY_MAP
+
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
+_DEFAULT_CATS = build_categories_prompt_str([
+    {"name": name, "subcategories": SUBCATEGORY_MAP.get(name, [])}
+    for name in CATEGORY_NAMES
+])
 
 
 def _parse_json_array(text: str) -> list:
