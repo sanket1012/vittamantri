@@ -121,8 +121,8 @@ export default function CategoriesPage() {
         </Grid>
       ) : (
         <Grid container spacing={2}>
-          {categories.map((cat, index) => {
-            const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
+          {categories.map((cat) => {
+            const accent = getCategoryColor(cat.name);
             return (
               <Grid item xs={12} sm={6} md={4} key={cat.name}>
                 <Card variant="outlined" sx={{ borderRadius: '0.75rem', borderTop: `3px solid ${accent}`, height: '100%' }}>
