@@ -148,12 +148,21 @@ def _to_new_category(text: str) -> str:
     return " ".join(text.strip().title().split())[:40]
 
 
+def _get_all_categories_from_api() -> list[dict]:
+    """Fetch live categories (built-in + custom) from the backend. Returns [] on failure."""
+    try:
+        return api_get("/api/categories")
+    except Exception as exc:
+        logger.warning("Could not load categories from API: %s", exc)
+        return []
+
+
 def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
     """Parse (category, subcategory) from a reply message.
 
     Matching order:
     1. "Food > Delivery"  → fuzzy-map left → (Food & Dining, Delivery)
-    2. Known subcategory  → "fuel" → (Transport, Fuel)
+    2. Known subcategory  → "fuel" → (Transport, Fuel)  — checks built-in + custom
     3. Fuzzy category     → "health" → (Health & Medical, None)
     4. New category       → "Pet Care" → ("Pet Care", None)  ← created on the fly
 
@@ -163,23 +172,27 @@ def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
     if not cleaned:
         return None, None
 
+    all_cats = _get_all_categories_from_api()
+    all_cat_names = [c["name"] for c in all_cats]
+
     # "Category > Subcategory" — left side mapped, right side kept as-is
     if ">" in cleaned:
         cat_part, sub_part = (p.strip() for p in cleaned.split(">", 1))
-        category = fuzzy_match_category(cat_part) or _to_new_category(cat_part)
+        category = fuzzy_match_category(cat_part, extra_names=all_cat_names) or _to_new_category(cat_part)
         return category, sub_part or None
 
-    # Try fuzzy match against known categories first
-    category = fuzzy_match_category(cleaned)
+    # Try fuzzy match against all categories (built-in + custom)
+    category = fuzzy_match_category(cleaned, extra_names=all_cat_names)
     if category:
         return category, None
 
-    # Try matching as a known subcategory
+    # Try matching as a subcategory — check built-in and custom subcategories
     lower = cleaned.lower()
-    for cat, subs in SUBCATEGORY_MAP.items():
-        for sub in subs:
+    for cat_dict in all_cats:
+        cat_name = cat_dict["name"]
+        for sub in cat_dict.get("subcategories", []):
             if sub.lower() == lower or sub.lower().startswith(lower) or lower in sub.lower():
-                return cat, sub
+                return cat_name, sub
 
     # Nothing matched → treat the reply as a brand-new category name
     return _to_new_category(cleaned), None
