@@ -197,19 +197,6 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
     }
 
 
-def _build_categories_section(all_categories: list[dict]) -> str:
-    """Build the category+subcategory block injected into the system prompt."""
-    lines = []
-    for cat in all_categories:
-        name = cat["name"]
-        subs = cat.get("subcategories", [])
-        if subs:
-            lines.append(f'  "{name}" → {", ".join(subs)}')
-        else:
-            lines.append(f'  "{name}"')
-    return "\n".join(lines)
-
-
 def extract_from_text(user_message: str, all_categories: list[dict] | None = None) -> dict:
     if not os.getenv("GROQ_API_KEY"):
         raise RuntimeError("GROQ_API_KEY is not configured.")
@@ -217,69 +204,53 @@ def extract_from_text(user_message: str, all_categories: list[dict] | None = Non
         raise ValueError("Message is empty.")
 
     all_category_names: list[str] = [c["name"] for c in (all_categories or [])]
+    today = _today_ist().strftime("%Y-%m-%d")
 
     if all_categories:
-        categories_block = _build_categories_section(all_categories)
-        category_instructions = f"""Available categories and subcategories (ALWAYS prefer exact matches from this list):
-{categories_block}
-
-Category matching rules:
-1. ALWAYS try to match the transaction to an existing category above — match by meaning, not just exact words
-2. If a subcategory from the list fits the transaction, use that exact subcategory name
-3. Only create a new category name if truly nothing in the list fits (use 2-4 words, Title Case)
-4. Only create a new subcategory if no existing subcategory fits"""
+        cats_str = build_categories_prompt_str(all_categories)
+        category_instructions = (
+            f"Existing categories and subcategories: {cats_str}\n"
+            "Reuse an existing category/subcategory when it fits; create a new one (2-4 words, Title Case) only when nothing matches."
+        )
     else:
-        category_instructions = """Preferred categories (use these when they match):
-"Food & Dining", "Groceries", "Transport", "Rent & Housing",
-"Health & Medical", "Entertainment", "Shopping", "Subscriptions",
-"Education", "EMI & Loans", "Investment & SIP", "Salary & Income",
-"Gifts & Misc", "Utilities & Bills"
-
-Subcategory examples:
-Food & Dining → Delivery, Dining Out, Snacks, Beverages
-Groceries → Vegetables, Dairy, Household, Fruits
-Transport → Fuel, Cab, Auto, Public Transport, Parking
-Shopping → Clothes, Electronics, Home Decor, Beauty, Accessories
-Health & Medical → Medicine, Doctor Visit, Lab Test, Insurance
-Entertainment → OTT, Movies, Events, Games
-Utilities & Bills → Electricity, Internet, Gas, Water
-Investment & SIP → Mutual Fund, Stocks, Gold, FD, PPF
-EMI & Loans → Home Loan, Personal Loan, Credit Card, Vehicle Loan
-
-If none of the above fit, create a short descriptive category name (2-4 words, Title Case, e.g. "Pet Care", "Electronics", "Travel")."""
+        category_instructions = (
+            'Preferred categories: "Food & Dining", "Groceries", "Transport", "Rent & Housing", '
+            '"Health & Medical", "Entertainment", "Shopping", "Subscriptions", "Education", '
+            '"EMI & Loans", "Investment & SIP", "Salary & Income", "Gifts & Misc", "Utilities & Bills". '
+            "If none fit, create a short descriptive category name (2-4 words, Title Case)."
+        )
 
     system_prompt = f"""You are a smart finance assistant for an Indian user.
 Your job is to extract transaction details from casual, informal messages in English or Hindi-English mix.
+
+Today is {today}. Use this to resolve relative dates like "yesterday", "last month", "in May".
 
 RULES:
 - Amount can appear ANYWHERE in the message (before or after description)
 - Amounts may have commas like 10,000 — treat as 10000
 - Amounts may have :- or = before them like "Salary :- 24500"
-- "receive", "received", "got", "salary", "income", "credited" = income
-- Everything else = expense
+- "receive", "received", "got", "salary", "income", "credited" = income; everything else = expense
 - Casual phrases like "i spend X on Y", "i bought X", "i buy X" are valid expenses
 - Person names (Sanket, Hridu) = source field, not category
-- "hunger box" = food delivery app = Food & Dining category
-- "bikewash" = Transport category
-- If the message has NO amount at all (like "hi", "hello", "how are you") → return amount as null
-- For date: extract ONLY if explicitly mentioned (yesterday, today, May 15, last month, in March, etc.)
-  Format as YYYY-MM-DD. Use current year unless a different year is stated.
-  If no date is mentioned → return null.
+- If the message has NO amount at all → return amount as null
+- For date: if explicitly mentioned format as YYYY-MM-DD; if not mentioned → return null
+- confidence: "high" if amount and category are clear; "medium" if either is inferred; "low" if very uncertain
 
 {category_instructions}
 
-Return ONLY a single raw JSON object, nothing else, no explanation, no extra text:
+Return ONLY a single raw JSON object:
 {{
   "amount": <float or null>,
   "type": <"expense" or "income" or null>,
-  "category": <best-matching category from the list above, or a new name if nothing fits>,
-  "subcategory": <best-matching subcategory from the list above, or a new specific label, or null>,
+  "category": <reuse an existing name when it fits, else create a new one>,
+  "subcategory": <reuse an existing subcategory when it fits, else create one, or null>,
   "description": <max 8 words>,
   "source": <name of app/shop/person or null>,
-  "date": <"YYYY-MM-DD" or null>
+  "date": <"YYYY-MM-DD" or null>,
+  "confidence": <"high" or "medium" or "low">
 }}
 
-IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra lines. Just one JSON."""
+IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra lines."""
 
     try:
         response = client.chat.completions.create(
