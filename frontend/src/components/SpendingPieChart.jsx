@@ -56,7 +56,7 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
               {data.slice(0, 8).map((item, index) => (
                 <Box key={item.name} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: COLORS[index % COLORS.length], flexShrink: 0 }} />
+                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: getCategoryColor(item.name), flexShrink: 0 }} />
                     <Typography sx={{ fontSize: '0.875rem', color: '#344054', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</Typography>
                   </Box>
                   <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#101828' }}>{formatINR(item.value)}</Typography>
