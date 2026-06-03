@@ -416,7 +416,8 @@ def parse_image():
         if not file:
             return error_response("image file is required.", 400)
         image_bytes, mime_type = _validate_image_file(file)
-        transactions = extract_from_image(image_bytes, mime_type)
+        all_categories = get_categories_with_subcategories()
+        transactions = extract_from_image(image_bytes, mime_type, all_categories=all_categories)
         return jsonify({"transactions": transactions})
     except ValueError as exc:
         return error_response(str(exc), 400)
@@ -433,7 +434,8 @@ def parse_pdf():
         if not file:
             return error_response("pdf file is required.", 400)
         pdf_bytes = _validate_pdf_file(file)
-        transactions = extract_from_pdf(pdf_bytes)
+        all_categories = get_categories_with_subcategories()
+        transactions = extract_from_pdf(pdf_bytes, all_categories=all_categories)
         return jsonify({"transactions": transactions})
     except ValueError as exc:
         return error_response(str(exc), 400)
