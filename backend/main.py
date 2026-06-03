@@ -400,7 +400,8 @@ def parse_text():
         message = payload.get("message", "")
         if not message:
             return error_response("message is required.", 400)
-        extracted = extract_from_text(message)
+        all_categories = get_categories_with_subcategories()
+        extracted = extract_from_text(message, all_categories=all_categories)
         return jsonify({"transaction": extracted})
     except Exception:
         logger.exception("parse_text failed")
