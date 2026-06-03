@@ -220,10 +220,18 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
                         sx={{ bgcolor: `${color}18`, color, border: `1px solid ${color}30` }} />
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#101828' }}>{row.category || '-'}</Typography>
+                      {row.category ? (
+                        <Chip label={row.category} size="small"
+                          sx={{ bgcolor: `${getCategoryColor(row.category)}18`, color: getCategoryColor(row.category),
+                                border: `1px solid ${getCategoryColor(row.category)}40`, fontWeight: 600, fontSize: '0.78rem' }} />
+                      ) : (
+                        <Typography sx={{ fontSize: '0.875rem', color: '#98A2B3' }}>-</Typography>
+                      )}
                       {row.subcategory && (
                         <Chip label={row.subcategory} size="small"
-                          sx={{ mt: 0.5, height: 20, bgcolor: '#F2F4F7', color: '#475467', fontSize: 11 }} />
+                          sx={{ mt: 0.5, height: 20, bgcolor: `${getCategoryColor(row.category)}10`,
+                                color: getCategoryColor(row.category), border: `1px solid ${getCategoryColor(row.category)}28`,
+                                fontSize: 11 }} />
                       )}
                     </TableCell>
                     <TableCell>
