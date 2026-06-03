@@ -168,11 +168,13 @@ export default function CategoriesPage() {
                         return isCustomSub ? (
                           <Chip key={sub} label={sub} size="small"
                             onDelete={() => setConfirmDeleteSub({ category: cat.name, subcategory: sub })}
-                            sx={{ bgcolor: '#EFF6FF', color: '#004EEB', fontSize: '0.72rem', height: 22,
-                              '& .MuiChip-deleteIcon': { fontSize: 14, color: '#93C5FD', '&:hover': { color: '#DC2626' } } }} />
+                            sx={{ bgcolor: `${accent}15`, color: accent, border: `1px solid ${accent}35`,
+                                  fontSize: '0.72rem', height: 22,
+                              '& .MuiChip-deleteIcon': { fontSize: 14, color: `${accent}80`, '&:hover': { color: '#DC2626' } } }} />
                         ) : (
                           <Chip key={sub} label={sub} size="small"
-                            sx={{ bgcolor: '#F2F4F7', color: '#475467', fontSize: '0.72rem', height: 22 }} />
+                            sx={{ bgcolor: `${accent}0D`, color: accent, border: `1px solid ${accent}22`,
+                                  fontSize: '0.72rem', height: 22 }} />
                         );
                       }) : (
                         <Typography sx={{ fontSize: '0.8rem', color: '#98A2B3', fontStyle: 'italic' }}>
