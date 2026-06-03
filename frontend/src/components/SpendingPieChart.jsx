@@ -44,8 +44,8 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={data} dataKey="value" nameKey="name" innerRadius={58} outerRadius={96} paddingAngle={3}>
-                    {data.map((entry, index) => (
-                      <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                    {data.map((entry) => (
+                      <Cell key={entry.name} fill={getCategoryColor(entry.name)} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value) => formatINR(value)} />
