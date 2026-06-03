@@ -398,12 +398,17 @@ def get_categories_with_subcategories() -> list[dict[str, Any]]:
     - subcategories: all subs (built-in + custom)
     - custom_subcategories: only user-added subs (these can be deleted)
     - is_custom: True for categories not in the built-in CATEGORY_NAMES list
+    Built-in categories that the user has deleted are excluded.
     """
     extra = _read_extra_categories()
+    deleted: set[str] = set(extra.get("deleted_categories", []))
     result: list[dict[str, Any]] = []
     known: set[str] = set()
 
     for name in CATEGORY_NAMES:
+        if name in deleted:
+            known.add(name)   # still mark as known so transactions don't re-surface it
+            continue
         meta = CATEGORIES.get(name, {})
         builtin_subs = list(SUBCATEGORY_MAP.get(name, []))
         custom_subs = [s for s in extra.get("subcategories", {}).get(name, []) if s not in builtin_subs]
