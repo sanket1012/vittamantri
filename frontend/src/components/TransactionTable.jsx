@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import toast from 'react-hot-toast';
 import { bulkUpdateTransactions } from '../api/client.js';
+import { getCategoryColor } from '../utils/categoryColors.js';
 import EditTransactionModal from './EditTransactionModal.jsx';
 
 const USER_COLORS = ['#004EEB', '#7C3AED', '#059669', '#DC2626', '#F59E0B', '#0891B2', '#DB2777', '#65A30D'];
