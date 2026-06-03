@@ -1,1 +1,33 @@
-{"categories": [], "subcategories": {}, "deleted_categories": []}
+{
+  "categories": [],
+  "subcategories": {
+    "Food & Dining": [
+      "office-lunch",
+      "office-snacks"
+    ],
+    "Groceries": [
+      "Quick Delivery"
+    ],
+    "Transport": [
+      "Train",
+      "Lunch/Tea"
+    ],
+    "Subscriptions": [
+      "ChatGpt",
+      "Provue"
+    ],
+    "Shopping": [
+      "AmazonPrime"
+    ],
+    "Gifts & Misc": [
+      "Temple",
+      "Office"
+    ],
+    "Rent & Housing": [
+      "Rent",
+      "Repair",
+      "Maintenance"
+    ]
+  },
+  "deleted_categories": []
+}
