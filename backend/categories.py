@@ -66,6 +66,19 @@ def fuzzy_match_category(text: str, extra_names: list[str] | None = None) -> str
     return None
 
 
+def build_categories_prompt_str(all_categories: list[dict]) -> str:
+    """Return a compact inline string for injecting into LLM prompts.
+
+    Format: "Food & Dining (Delivery, Dining Out), Transport (Fuel, Cab), Pet Care, ..."
+    """
+    parts = []
+    for cat in all_categories:
+        name = cat["name"]
+        subs = cat.get("subcategories", [])
+        parts.append(f"{name} ({', '.join(subs)})" if subs else name)
+    return ", ".join(parts)
+
+
 def infer_category(text: str, transaction_type: str = "expense") -> str:
     lower_text = (text or "").lower()
     if transaction_type == "income":
