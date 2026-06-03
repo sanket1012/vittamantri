@@ -301,8 +301,8 @@ def remove_subcategory(category_name, subcategory_name):
 @require_api_key
 def remove_category(category_name):
     try:
-        if not delete_custom_category(category_name):
-            return error_response("Category not found or is a built-in category.", 404)
+        if not delete_category(category_name):
+            return error_response("Category name is required.", 400)
         return jsonify({"message": f"Category '{category_name}' deleted."})
     except Exception:
         logger.exception("remove_category failed")
