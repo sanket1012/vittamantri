@@ -401,8 +401,8 @@ def parse_text():
         if not message:
             return error_response("message is required.", 400)
         all_categories = get_categories_with_subcategories()
-        extracted = extract_from_text(message, all_categories=all_categories)
-        return jsonify({"transaction": extracted})
+        result = extract_from_text(message, all_categories=all_categories)
+        return jsonify({"transactions": result.get("transactions", []), "query": result.get("query")})
     except Exception:
         logger.exception("parse_text failed")
         return _internal_error()
