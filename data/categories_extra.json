@@ -27,6 +27,9 @@
       "Rent",
       "Repair",
       "Maintenance"
+    ],
+    "Salary & Income": [
+      "Income from Different Account"
     ]
   },
   "deleted_categories": []
