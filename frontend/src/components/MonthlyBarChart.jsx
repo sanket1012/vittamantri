@@ -15,10 +15,19 @@ const monthLabel = (key) => {
 export default function MonthlyBarChart({ transactions = [], loading, selectedUser = 'All Users' }) {
   const data = useMemo(() => {
     const now = new Date();
-    const keys = Array.from({ length: 6 }, (_, index) => {
-      const date = new Date(now.getFullYear(), now.getMonth() - (5 - index), 1);
-      return monthKey(date);
-    });
+    // Indian financial year starts April (month index 3)
+    const fyStartYear = now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1;
+    const fyStart = new Date(fyStartYear, 3, 1);
+
+    const keys = [];
+    let cursor = new Date(fyStart);
+    while (
+      cursor.getFullYear() < now.getFullYear() ||
+      (cursor.getFullYear() === now.getFullYear() && cursor.getMonth() <= now.getMonth())
+    ) {
+      keys.push(monthKey(cursor));
+      cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+    }
 
     const totals = Object.fromEntries(keys.map((key) => [key, { month: monthLabel(key), income: 0, expense: 0 }]));
     transactions.forEach((item) => {
