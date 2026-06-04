@@ -102,19 +102,43 @@ function BulkEditBar({ selectedIds, categoriesFull, onApply, onClear }) {
 
 // ── Main table ────────────────────────────────────────────────────────────────
 
+function SortHeader({ label, field, sortConfig, onSort, align = 'left' }) {
+  const active = sortConfig.field === field;
+  const Icon = active ? (sortConfig.dir === 'desc' ? KeyboardArrowDownIcon : KeyboardArrowUpIcon) : UnfoldMoreIcon;
+  return (
+    <Button variant="text" size="small" endIcon={<Icon sx={{ fontSize: '1rem !important' }} />}
+      onClick={() => onSort(field)}
+      sx={{ height: 28, p: 0, minWidth: 0, justifyContent: align === 'right' ? 'flex-end' : 'flex-start',
+            color: active ? '#004EEB' : '#475467', fontWeight: active ? 600 : 500, fontSize: '0.875rem' }}>
+      {label}
+    </Button>
+  );
+}
+
 export default function TransactionTable({ transactions = [], loading, onDelete, onUpdated, categoriesFull = [] }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [sortNewest, setSortNewest] = useState(true);
+  const [sortConfig, setSortConfig] = useState({ field: 'date', dir: 'desc' });
   const [confirmRow, setConfirmRow] = useState(null);
   const [editRow, setEditRow] = useState(null);
   const [selectedIds, setSelectedIds] = useState(new Set());
 
+  const handleSort = (field) => {
+    setSortConfig((prev) => ({ field, dir: prev.field === field && prev.dir === 'desc' ? 'asc' : 'desc' }));
+    setPage(0);
+  };
+
   const sortedRows = useMemo(() => [...transactions].sort((a, b) => {
-    const aStamp = `${a.date || ''} ${a.time || ''}`;
-    const bStamp = `${b.date || ''} ${b.time || ''}`;
-    return sortNewest ? bStamp.localeCompare(aStamp) : aStamp.localeCompare(bStamp);
-  }), [transactions, sortNewest]);
+    const { field, dir } = sortConfig;
+    const mul = dir === 'desc' ? -1 : 1;
+    if (field === 'date') {
+      const aS = `${a.date || ''} ${a.time || ''}`, bS = `${b.date || ''} ${b.time || ''}`;
+      return mul * aS.localeCompare(bS);
+    }
+    if (field === 'amount') return mul * (Number(a.amount || 0) - Number(b.amount || 0));
+    const key = { user: 'logged_by', category: 'category', description: 'description', source: 'source', type: 'type' }[field] || field;
+    return mul * (a[key] || '').toLowerCase().localeCompare((b[key] || '').toLowerCase());
+  }), [transactions, sortConfig]);
 
   const pageRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const pageIds = pageRows.map((r) => r.id);
