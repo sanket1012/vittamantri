@@ -180,7 +180,10 @@ Examples:
             temperature=0.1,
             max_tokens=300,
         )
-        parsed = _parse_response(response.choices[0].message.content)
+        raw = response.choices[0].message.content
+        logger.info("LLM raw response for %r: %s", user_message[:60], raw)
+        parsed = _parse_response(raw)
+        logger.info("LLM parsed result: %s", parsed)
     except Exception as exc:
         logger.warning("Groq API call failed for %r: %s", user_message[:60], exc)
         return {}
