@@ -576,9 +576,9 @@ async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE
             continue
         extracted = parsed.get("transaction", {})
 
-        # LLM classified this as a query or greeting — handle and stop
+        # LLM classified this as a query or greeting — only act on known values
         query = extracted.get("query")
-        if query:
+        if query in ("today", "week", "month", "balance", "greeting"):
             if query == "today":
                 await today(update, context)
             elif query == "week":
