@@ -563,8 +563,8 @@ async def _handle_update_last(update: Update, text: str) -> None:
     await _apply_category_update(update, transaction_id, value_text)
 
 
-async def _handle_add_transaction(update: Update, text: str) -> None:
-    """Parse and save one or more transactions from a free-text message."""
+async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
+    """Send the message to the LLM and route based on what it returns."""
     chat_id = update.message.chat_id
     parts = split_transaction_message(text)
     saved_items: list[dict] = []
@@ -575,9 +575,26 @@ async def _handle_add_transaction(update: Update, text: str) -> None:
         if not parsed:
             continue
         extracted = parsed.get("transaction", {})
+
+        # LLM classified this as a query or greeting — handle and stop
+        query = extracted.get("query")
+        if query:
+            if query == "today":
+                await today(update, context)
+            elif query == "week":
+                await week(update, context)
+            elif query == "month":
+                await month(update, context)
+            elif query == "greeting":
+                await update.message.reply_text(GREETING_REPLY)
+            else:
+                await summary(update, context)
+            return
+
         if not extracted.get("amount"):
             skipped_no_amount = True
             continue
+
         saved = await with_retry(update, save_extracted, extracted, part, "text", telegram_user_info(update))
         if saved:
             saved_items.append(saved)
@@ -606,7 +623,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (update.message.text or "").strip()
     chat_id = update.message.chat_id
 
-    # ── 0. Reply to a bot message always triggers a category update ──────────
+    # Reply to a bot message → category correction (explicit gesture, not intent)
     if update.message.reply_to_message:
         replied = update.message.reply_to_message
         if replied.from_user and replied.from_user.is_bot:
@@ -616,31 +633,14 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await _apply_category_update(update, txn_id, text)
                 return
 
-    # ── 1. Classify intent ────────────────────────────────────────────────────
-    intent = detect_intent(text)
-    logger.info("intent=%s  msg=%r", intent, text[:60])
-
-    # ── 2. Route ──────────────────────────────────────────────────────────────
-    if intent == Intent.GREET:
-        await update.message.reply_text(GREETING_REPLY)
-
-    elif intent == Intent.UPDATE:
+    # Explicit "update last transaction" command — specific enough to catch pre-LLM
+    if _is_update_last_request(text):
         await _handle_update_last(update, text)
+        return
 
-    elif intent == Intent.SUMMARY:
-        await summary(update, context)
-
-    elif intent == Intent.TODAY:
-        await today(update, context)
-
-    elif intent == Intent.WEEK:
-        await week(update, context)
-
-    elif intent == Intent.MONTH:
-        await month(update, context)
-
-    else:  # Intent.ADD or Intent.PARSE — let Groq sort it out
-        await _handle_add_transaction(update, text)
+    # Everything else → LLM decides
+    logger.info("llm msg=%r", text[:60])
+    await _handle_llm_message(update, context, text)
 
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
