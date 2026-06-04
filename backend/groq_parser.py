@@ -122,36 +122,45 @@ def extract_from_text(user_message: str, all_categories: list[dict] | None = Non
             "If none fit, create a short descriptive name (2-4 words, Title Case)."
         )
 
-    system_prompt = f"""You are a finance logging assistant for an Indian user.
-The user is RECORDING a transaction — every message describes money spent or received.
-Extract the transaction details from their casual message (English or Hindi-English mix).
+    system_prompt = f"""You are a personal finance assistant for an Indian user on Telegram.
+Classify the message and extract details. Today is {today}.
 
-Today is {today}. Use this to resolve relative dates like "yesterday", "last month", "May month".
+MESSAGE TYPES:
+1. Transaction log — user is recording money spent or received (e.g. "Zomato 280", "salary 45000", "May month Home EMI 65000")
+2. Finance query — user is asking about their data (e.g. "my balance", "what did I spend today", "this month summary")
+3. Greeting — hi, hello, thanks, ok, etc.
 
-RULES:
-- The user is always logging a transaction, never asking a question — assume something was spent or received
+RULES for transaction logs:
 - Amount can appear ANYWHERE in the message (before or after description)
 - Amounts may have commas (10,000 → 10000) or prefixes like :- or =
 - Month names like "May month", "last month" describe WHEN, not what — still extract the amount
 - "receive", "received", "got", "salary", "income", "credited" → type: income; everything else → expense
 - Person names = source field, not category
-- If there is truly NO number at all in the message → return amount as null
 - date: YYYY-MM-DD if a date/month is mentioned, else null
-- confidence: "high" if amount+category are clear; "medium" if category is inferred; "low" only if no number exists
+- confidence: "high" if amount+category are clear; "medium" if category is inferred; "low" only if truly no number
 
 {category_instructions}
 
 Return ONLY a raw JSON object, no markdown, no explanation:
 {{
+  "query": <null if logging a transaction, or "today" | "week" | "month" | "balance" | "greeting" if not>,
   "amount": <positive float or null>,
   "type": <"expense" or "income" or null>,
-  "category": <existing or new category name>,
+  "category": <existing or new category name, or null>,
   "subcategory": <existing or new subcategory, or null>,
-  "description": <max 8 words>,
+  "description": <max 8 words, or null>,
   "source": <app/shop/person name or null>,
   "date": <"YYYY-MM-DD" or null>,
   "confidence": <"high" or "medium" or "low">
-}}"""
+}}
+
+Examples:
+- "Zomato 280" → query: null, amount: 280, category: "Food & Dining"
+- "May month Home EMI 65000" → query: null, amount: 65000, category: "EMI & Loans"
+- "my balance" → query: "balance", amount: null
+- "what did I spend today" → query: "today", amount: null
+- "this month expenses" → query: "month", amount: null
+- "hi" → query: "greeting", amount: null"""
 
     try:
         response = client.chat.completions.create(
