@@ -1,14 +1,14 @@
 {
-  "last_updated": "2026-06-04T15:05:17+05:30",
+  "last_updated": "2026-06-04T15:14:47+05:30",
   "total_income": 463870.0,
-  "total_expense": 180656.49,
-  "net_savings": 283213.51,
-  "transaction_count": 70,
+  "total_expense": 185735.09,
+  "net_savings": 278134.91,
+  "transaction_count": 74,
   "category_totals": {
     "EMI & Loans": 115500.0,
     "Education": 0.0,
     "Entertainment": 1470.0,
-    "Food & Dining": 4481.1,
+    "Food & Dining": 4516.1,
     "Gifts & Misc": 195.0,
     "Groceries": 13260.59,
     "Health & Medical": 92.0,
@@ -17,17 +17,17 @@
     "Salary & Income": 0.0,
     "Shopping": 0.0,
     "Subscriptions": 19.0,
-    "Transport": 401.8,
+    "Transport": 5445.4,
     "Utilities & Bills": 1607.0
   },
   "monthly_totals": {
     "2026-05": {
       "income": 244185.0,
-      "expense": 168020.9
+      "expense": 169529.5
     },
     "2026-06": {
       "income": 219685.0,
-      "expense": 12635.59
+      "expense": 16205.59
     }
   }
 }
