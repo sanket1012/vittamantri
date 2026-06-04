@@ -200,20 +200,13 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
                   />
                 </Tooltip>
               </TableCell>
-              <TableCell>
-                <Button variant="text" size="small"
-                  endIcon={sortNewest ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
-                  onClick={() => setSortNewest((v) => !v)}
-                  sx={{ height: 28, p: 0, color: '#475467' }}>
-                  Date
-                </Button>
-              </TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Source</TableCell>
-              <TableCell align="right">Amount</TableCell>
-              <TableCell>Type</TableCell>
+              <TableCell><SortHeader label="Date" field="date" sortConfig={sortConfig} onSort={handleSort} /></TableCell>
+              <TableCell><SortHeader label="User" field="user" sortConfig={sortConfig} onSort={handleSort} /></TableCell>
+              <TableCell><SortHeader label="Category" field="category" sortConfig={sortConfig} onSort={handleSort} /></TableCell>
+              <TableCell><SortHeader label="Description" field="description" sortConfig={sortConfig} onSort={handleSort} /></TableCell>
+              <TableCell><SortHeader label="Source" field="source" sortConfig={sortConfig} onSort={handleSort} /></TableCell>
+              <TableCell align="right"><SortHeader label="Amount" field="amount" sortConfig={sortConfig} onSort={handleSort} align="right" /></TableCell>
+              <TableCell><SortHeader label="Type" field="type" sortConfig={sortConfig} onSort={handleSort} /></TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
