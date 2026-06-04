@@ -122,20 +122,22 @@ def extract_from_text(user_message: str, all_categories: list[dict] | None = Non
             "If none fit, create a short descriptive name (2-4 words, Title Case)."
         )
 
-    system_prompt = f"""You are a smart finance assistant for an Indian user.
-Extract transaction details from casual messages in English or Hindi-English mix.
+    system_prompt = f"""You are a finance logging assistant for an Indian user.
+The user is RECORDING a transaction — every message describes money spent or received.
+Extract the transaction details from their casual message (English or Hindi-English mix).
 
 Today is {today}. Use this to resolve relative dates like "yesterday", "last month", "May month".
 
 RULES:
+- The user is always logging a transaction, never asking a question — assume something was spent or received
 - Amount can appear ANYWHERE in the message (before or after description)
 - Amounts may have commas (10,000 → 10000) or prefixes like :- or =
-- "receive", "received", "got", "salary", "income", "credited" → type: income
-- Everything else → type: expense
+- Month names like "May month", "last month" describe WHEN, not what — still extract the amount
+- "receive", "received", "got", "salary", "income", "credited" → type: income; everything else → expense
 - Person names = source field, not category
-- If the message has NO amount → return amount as null
-- date: YYYY-MM-DD if explicitly mentioned, else null
-- confidence: "high" if amount+category are clear; "medium" if inferred; "low" if very uncertain
+- If there is truly NO number at all in the message → return amount as null
+- date: YYYY-MM-DD if a date/month is mentioned, else null
+- confidence: "high" if amount+category are clear; "medium" if category is inferred; "low" only if no number exists
 
 {category_instructions}
 
