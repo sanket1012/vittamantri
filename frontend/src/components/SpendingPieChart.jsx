@@ -53,15 +53,24 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
               </ResponsiveContainer>
             </Box>
             <Box sx={{ display: 'grid', gap: 1, mt: 1 }}>
-              {data.slice(0, 8).map((item) => (
-                <Box key={item.name} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: getCategoryColor(item.name), flexShrink: 0 }} />
-                    <Typography sx={{ fontSize: '0.875rem', color: '#344054', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</Typography>
-                  </Box>
-                  <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#101828' }}>{formatINR(item.value)}</Typography>
-                </Box>
-              ))}
+              {(() => {
+                const total = data.reduce((sum, item) => sum + item.value, 0);
+                return data.slice(0, 8).map((item) => {
+                  const pct = total ? ((item.value / total) * 100).toFixed(1) : 0;
+                  return (
+                    <Box key={item.name} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                        <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: getCategoryColor(item.name), flexShrink: 0 }} />
+                        <Typography sx={{ fontSize: '0.875rem', color: '#344054', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+                        <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#101828' }}>{formatINR(item.value)}</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#667085', minWidth: 38, textAlign: 'right' }}>{pct}%</Typography>
+                      </Box>
+                    </Box>
+                  );
+                });
+              })()}
             </Box>
           </>
         ) : (
