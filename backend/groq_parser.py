@@ -164,11 +164,14 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
         except (TypeError, ValueError):
             parsed["amount"] = fallback.get("amount")
 
-    # If the LLM flagged itself as low confidence, defer category/type to the regex fallback
+    # If the LLM flagged itself as low confidence, use keyword inference instead of trusting the LLM
     low_confidence = parsed.get("confidence") == "low"
     if low_confidence and fallback.get("amount") is not None:
         parsed["type"] = fallback.get("type")
-        parsed["category"] = fallback.get("category")
+        # Use infer_category (keyword-based, covers all 14 categories) rather than _fallback_extract
+        # which only has a handful of rules and defaults to "Gifts & Misc" for unknowns.
+        inferred = infer_category(message, parsed.get("type") or fallback.get("type") or "expense")
+        parsed["category"] = inferred
         parsed["subcategory"] = fallback.get("subcategory") or parsed.get("subcategory")
         parsed["source"] = fallback.get("source") or parsed.get("source")
     else:
@@ -178,7 +181,8 @@ def _normalize_result(parsed: dict, message: str, all_category_names: list[str] 
             # Fuzzy-map to a known/custom category; keep the LLM's name if it's genuinely new
             parsed["category"] = fuzzy_match_category(llm_cat, extra_names=all_category_names) or llm_cat
         else:
-            parsed["category"] = fallback.get("category")
+            # LLM returned no category — infer from keywords
+            parsed["category"] = infer_category(message, parsed.get("type") or "expense")
 
     parsed["description"] = " ".join(str(parsed.get("description") or fallback.get("description") or "Transaction").split()[:8])
     parsed["subcategory"] = parsed.get("subcategory") or fallback.get("subcategory")
