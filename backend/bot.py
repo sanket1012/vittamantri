@@ -280,16 +280,6 @@ async def parse_text_with_retry(message: str) -> dict | None:
     return None
 
 
-def split_transaction_message(text: str) -> list[str]:
-    chunks = []
-    for line in re.split(r"[\r\n;]+", text or ""):
-        line = line.strip()
-        if not line:
-            continue
-        parts = re.split(r",\s*(?=[^\d\s])", line)
-        chunks.extend(part.strip() for part in parts if part.strip())
-    return chunks
-
 
 def save_extracted(transaction: dict, raw_input: str, input_method: str = "text", user_info: dict | None = None) -> dict | None:
     if not transaction or not transaction.get("amount"):
