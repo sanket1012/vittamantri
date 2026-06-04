@@ -271,5 +271,8 @@ IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra li
     except Exception as exc:
         fallback = _fallback_extract(user_message)
         if fallback.get("amount") is not None:
+            # Improve the fallback's category using keyword inference when it defaulted to "Gifts & Misc"
+            if fallback.get("category") in (None, "Gifts & Misc"):
+                fallback["category"] = infer_category(user_message, fallback.get("type") or "expense")
             return fallback
         raise RuntimeError(f"Groq extraction failed: {exc}") from exc
