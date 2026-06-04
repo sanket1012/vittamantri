@@ -153,9 +153,11 @@ def _normalize_transaction(data: dict[str, Any]) -> dict[str, Any]:
     if not category:
         category = infer_category(raw_text, transaction_type) or DEFAULT_CATEGORY
 
+    normalised_date = _normalize_date(data.get("date"))
+    logger.info("_normalize_transaction: incoming date=%r → stored date=%r", data.get("date"), normalised_date)
     return {
         "id": str(data.get("id") or uuid4()),
-        "date": _normalize_date(data.get("date")),
+        "date": normalised_date,
         "time": _normalize_time(data.get("time")),
         "amount": f"{amount:.2f}",
         "type": transaction_type,
