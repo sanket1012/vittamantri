@@ -280,12 +280,6 @@ async def parse_text_with_retry(message: str) -> dict | None:
     return None
 
 
-def is_greeting_message(text: str) -> bool:
-    cleaned = re.sub(r"[^\w\s]", " ", text or "", flags=re.UNICODE).strip().lower()
-    words = [word for word in cleaned.split() if word]
-    return len(words) < 3 and not any(char.isdigit() for char in cleaned)
-
-
 def split_transaction_message(text: str) -> list[str]:
     chunks = []
     for line in re.split(r"[\r\n;]+", text or ""):
