@@ -83,10 +83,18 @@ def _extract_date(message: str) -> str | None:
 def _parse_response(raw: str) -> dict:
     """Parse LLM response into a dict. Returns {} on any parse failure."""
     text = re.sub(r"```json|```", "", raw or "").strip()
-    match = re.search(r"\{[^{}]*\}", text, re.DOTALL)
-    if match:
+    # Try direct parse first (clean JSON output)
+    try:
+        result = json.loads(text)
+        return result if isinstance(result, dict) else {}
+    except json.JSONDecodeError:
+        pass
+    # Extract from first { to last } (handles explanation text around the JSON)
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end > start:
         try:
-            return json.loads(match.group())
+            return json.loads(text[start : end + 1])
         except json.JSONDecodeError:
             pass
     logger.warning("Could not parse LLM response as JSON: %r", raw[:200])
