@@ -101,11 +101,41 @@ def _parse_response(raw: str) -> dict:
     return {}
 
 
-def extract_from_text(user_message: str, all_categories: list[dict] | None = None) -> dict:
-    """Extract a transaction from free text using the LLM.
+def _process_transaction(txn: dict, message: str, all_category_names: list[str]) -> dict | None:
+    """Normalise a single transaction dict returned by the LLM. Returns None if no valid amount."""
+    amount = txn.get("amount")
+    if amount is not None:
+        try:
+            amount = float(str(amount).replace(",", ""))
+        except (TypeError, ValueError):
+            amount = None
+    if not amount:
+        return None
 
-    Returns a dict with transaction fields, or {} if nothing could be extracted.
-    Low-confidence results are returned as-is; the caller decides whether to save them.
+    category = txn.get("category") or ""
+    if category:
+        category = fuzzy_match_category(category, extra_names=all_category_names) or category
+
+    # Regex date is authoritative for relative phrases; fall back to LLM's value
+    date = _extract_date(message) or txn.get("date")
+
+    return {
+        "amount": amount,
+        "type": txn.get("type"),
+        "category": category or None,
+        "subcategory": txn.get("subcategory"),
+        "description": " ".join(str(txn.get("description") or "Transaction").split()[:8]),
+        "source": txn.get("source"),
+        "date": date,
+        "confidence": txn.get("confidence"),
+    }
+
+
+def extract_from_text(user_message: str, all_categories: list[dict] | None = None) -> dict:
+    """Extract transactions from a free-text message using the LLM.
+
+    Returns {"query": str|None, "transactions": [...]}.
+    transactions is an empty list if nothing was extracted or the message is a query/greeting.
     """
     if not os.getenv("GROQ_API_KEY"):
         raise RuntimeError("GROQ_API_KEY is not configured.")
@@ -131,44 +161,48 @@ def extract_from_text(user_message: str, all_categories: list[dict] | None = Non
         )
 
     system_prompt = f"""You are a personal finance assistant for an Indian user on Telegram.
-Classify the message and extract details. Today is {today}.
+Classify the message and extract all transactions. Today is {today}.
 
 MESSAGE TYPES:
-1. Transaction log — user is recording money spent or received (e.g. "Zomato 280", "salary 45000", "May month Home EMI 65000")
-2. Finance query — user is asking about their data (e.g. "my balance", "what did I spend today", "this month summary")
+1. Transaction log — recording money spent or received. May contain multiple transactions.
+2. Finance query — asking about their data (balance, today, this week, this month).
 3. Greeting — hi, hello, thanks, ok, etc.
 
-RULES for transaction logs:
-- Amount can appear ANYWHERE in the message (before or after description)
+RULES for transactions:
+- A single message may contain multiple transactions separated by commas or newlines — extract ALL of them
+- Amount can appear ANYWHERE (before or after description)
 - Amounts may have commas (10,000 → 10000) or prefixes like :- or =
-- Month names like "May month", "last month" describe WHEN, not what — still extract the amount
+- Month names ("May month", "last month") describe WHEN, not what — still extract the amount
 - "receive", "received", "got", "salary", "income", "credited" → type: income; everything else → expense
 - Person names = source field, not category
 - date: YYYY-MM-DD if a date/month is mentioned, else null
-- confidence: "high" if amount+category are clear; "medium" if category is inferred; "low" only if truly no number
+- confidence: "high" if amount+category clear; "medium" if inferred; "low" only if truly no number
 
 {category_instructions}
 
-Return ONLY a raw JSON object, no markdown, no explanation:
+Return ONLY a raw JSON object:
 {{
-  "query": <null if logging a transaction, or "today" | "week" | "month" | "balance" | "greeting" if not>,
-  "amount": <positive float or null>,
-  "type": <"expense" or "income" or null>,
-  "category": <existing or new category name, or null>,
-  "subcategory": <existing or new subcategory, or null>,
-  "description": <max 8 words, or null>,
-  "source": <app/shop/person name or null>,
-  "date": <"YYYY-MM-DD" or null>,
-  "confidence": <"high" or "medium" or "low">
+  "query": <null if logging transactions, or "today" | "week" | "month" | "balance" | "greeting">,
+  "transactions": [
+    {{
+      "amount": <positive float or null>,
+      "type": <"expense" or "income">,
+      "category": <existing or new category name>,
+      "subcategory": <subcategory or null>,
+      "description": <max 8 words>,
+      "source": <app/shop/person or null>,
+      "date": <"YYYY-MM-DD" or null>,
+      "confidence": <"high" or "medium" or "low">
+    }}
+  ]
 }}
 
 Examples:
-- "Zomato 280" → query: null, amount: 280, category: "Food & Dining"
-- "May month Home EMI 65000" → query: null, amount: 65000, category: "EMI & Loans"
-- "my balance" → query: "balance", amount: null
-- "what did I spend today" → query: "today", amount: null
-- "this month expenses" → query: "month", amount: null
-- "hi" → query: "greeting", amount: null"""
+- "Zomato 280" → query: null, transactions: [{{amount:280, category:"Food & Dining", ...}}]
+- "Zomato 280, petrol 500" → query: null, transactions: [{{amount:280,...}}, {{amount:500,...}}]
+- "May month Home EMI 65000" → query: null, transactions: [{{amount:65000, category:"EMI & Loans",...}}]
+- "my balance" → query: "balance", transactions: []
+- "hi" → query: "greeting", transactions: []"""
 
     try:
         response = client.chat.completions.create(
@@ -178,7 +212,7 @@ Examples:
                 {"role": "user", "content": user_message},
             ],
             temperature=0.1,
-            max_tokens=300,
+            max_tokens=600,
         )
         raw = response.choices[0].message.content
         logger.info("LLM raw response for %r: %s", user_message[:60], raw)
@@ -186,34 +220,21 @@ Examples:
         logger.info("LLM parsed result: %s", parsed)
     except Exception as exc:
         logger.warning("Groq API call failed for %r: %s", user_message[:60], exc)
-        return {}
+        return {"query": None, "transactions": []}
 
     if not parsed:
-        return {}
+        return {"query": None, "transactions": []}
 
-    # Coerce amount to float
-    amount = parsed.get("amount")
-    if amount is not None:
-        try:
-            amount = float(str(amount).replace(",", ""))
-        except (TypeError, ValueError):
-            amount = None
+    query = parsed.get("query") if parsed.get("query") in ("today", "week", "month", "balance", "greeting") else None
+    raw_transactions = parsed.get("transactions") or []
 
-    # Fuzzy-map category to closest known/custom name; keep as-is if genuinely new
-    category = parsed.get("category") or ""
-    if category:
-        category = fuzzy_match_category(category, extra_names=all_category_names) or category
+    transactions = [
+        t for t in (
+            _process_transaction(txn, user_message, all_category_names)
+            for txn in raw_transactions
+            if isinstance(txn, dict)
+        )
+        if t is not None
+    ]
 
-    # Regex date override is more reliable than LLM for relative phrases
-    date = _extract_date(user_message) or parsed.get("date")
-
-    return {
-        "amount": amount,
-        "type": parsed.get("type"),
-        "category": category or None,
-        "subcategory": parsed.get("subcategory"),
-        "description": " ".join(str(parsed.get("description") or "Transaction").split()[:8]),
-        "source": parsed.get("source"),
-        "date": date,
-        "confidence": parsed.get("confidence"),
-    }
+    return {"query": query, "transactions": transactions}
