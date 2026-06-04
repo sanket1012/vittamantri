@@ -290,6 +290,7 @@ def save_extracted(transaction: dict, raw_input: str, input_method: str = "text"
         "input_method": input_method,
         "raw_input": raw_input,
     }
+    logger.info("save_extracted payload date=%r category=%r", payload.get("date"), payload.get("category"))
     return api_post("/api/transactions", payload)
 
 
