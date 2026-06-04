@@ -94,7 +94,6 @@ function TrendPlot({ transactions, loading, selectedUser }) {
                 <Legend />
                 <Line type="monotone" dataKey="income" name="Income" stroke="#059669" strokeWidth={3} dot={false} />
                 <Line type="monotone" dataKey="expense" name="Expense" stroke="#DC2626" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="balance" name="Daily Balance" stroke="#004EEB" strokeWidth={3} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </Box>
