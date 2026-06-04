@@ -7,7 +7,7 @@ import pytz
 from dotenv import load_dotenv
 from groq import Groq
 
-from categories import CATEGORY_NAMES, build_categories_prompt_str, fuzzy_match_category
+from categories import CATEGORY_NAMES, build_categories_prompt_str, fuzzy_match_category, infer_category
 
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
