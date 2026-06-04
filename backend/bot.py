@@ -554,38 +554,37 @@ async def _handle_update_last(update: Update, text: str) -> None:
 
 
 async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
-    """Send the message to the LLM and route based on what it returns."""
+    """Send the full message to the LLM once and route based on what it returns."""
     chat_id = update.message.chat_id
-    parts = split_transaction_message(text)
+
+    parsed = await parse_text_with_retry(text)
+    if not parsed:
+        await update.message.reply_text(GROQ_FAILED_REPLY)
+        return
+
+    # LLM classified the message as a query or greeting
+    query = parsed.get("query")
+    if query in ("today", "week", "month", "balance", "greeting"):
+        if query == "today":
+            await today(update, context)
+        elif query == "week":
+            await week(update, context)
+        elif query == "month":
+            await month(update, context)
+        elif query == "greeting":
+            await update.message.reply_text(GREETING_REPLY)
+        else:
+            await summary(update, context)
+        return
+
+    # LLM returned transactions
+    transactions = parsed.get("transactions") or []
     saved_items: list[dict] = []
-    skipped_no_amount = False
 
-    for part in parts:
-        parsed = await parse_text_with_retry(part)
-        if not parsed:
-            continue
-        extracted = parsed.get("transaction", {})
-
-        # LLM classified this as a query or greeting — only act on known values
-        query = extracted.get("query")
-        if query in ("today", "week", "month", "balance", "greeting"):
-            if query == "today":
-                await today(update, context)
-            elif query == "week":
-                await week(update, context)
-            elif query == "month":
-                await month(update, context)
-            elif query == "greeting":
-                await update.message.reply_text(GREETING_REPLY)
-            else:
-                await summary(update, context)
-            return
-
+    for extracted in transactions:
         if not extracted.get("amount"):
-            skipped_no_amount = True
             continue
-
-        saved = await with_retry(update, save_extracted, extracted, part, "text", telegram_user_info(update))
+        saved = await with_retry(update, save_extracted, extracted, text, "text", telegram_user_info(update))
         if saved:
             saved_items.append(saved)
             txn_id = (saved.get("transaction") or saved).get("id")
@@ -593,12 +592,12 @@ async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE
                 _track_last(chat_id, txn_id)
 
     if not saved_items:
-        await update.message.reply_text(AMOUNT_NOT_FOUND_REPLY if skipped_no_amount else GROQ_FAILED_REPLY)
+        await update.message.reply_text(AMOUNT_NOT_FOUND_REPLY)
     elif len(saved_items) == 1:
         item = saved_items[0]
         txn = item.get("transaction") or item
         reply_text = single_transaction_reply(item)
-        if _is_category_uncertain(txn.get("category", ""), parts[0] if parts else text):
+        if _is_category_uncertain(txn.get("category", ""), text):
             reply_text += "\n\n❓ Category unclear — reply with the right one (e.g. Food, Transport, Shopping)"
         sent = await update.message.reply_text(reply_text)
         if txn.get("id"):
