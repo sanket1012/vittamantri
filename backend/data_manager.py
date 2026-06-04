@@ -117,14 +117,41 @@ def _short_description(value: Any) -> str:
     return " ".join(words[:8]) if words else "Transaction"
 
 
+_DATE_FORMATS = [
+    # ISO / numeric
+    "%Y-%m-%d",       # 2026-05-06
+    "%d-%m-%Y",       # 06-05-2026
+    "%d/%m/%Y",       # 06/05/2026
+    "%Y/%m/%d",       # 2026/05/06
+    "%d-%m-%y",       # 06-05-26
+    "%d/%m/%y",       # 06/05/26
+    "%m/%d/%Y",       # 05/06/2026  (US style, rare but possible)
+    # Month-name long year
+    "%d %B %Y",       # 06 May 2026
+    "%d %b %Y",       # 06 May 2026  (abbreviated)
+    "%B %d, %Y",      # May 06, 2026
+    "%b %d, %Y",      # May 06, 2026
+    "%B %d %Y",       # May 06 2026
+    "%b %d %Y",       # May 06 2026
+    "%d-%b-%Y",       # 06-May-2026
+    "%d-%B-%Y",       # 06-May-2026
+    # Month-name short year (2-digit)
+    "%d %b %y",       # 6 May 26
+    "%d %B %y",       # 6 May 2026
+    "%b %d, %y",      # May 6, 26
+    "%d-%b-%y",       # 06-May-26
+]
+
+
 def _normalize_date(value: Any) -> str:
     if value:
-        text = str(value).strip()
-        for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d"):
+        text = str(value).strip().rstrip(".,")
+        for fmt in _DATE_FORMATS:
             try:
                 return datetime.strptime(text, fmt).strftime("%Y-%m-%d")
             except ValueError:
                 pass
+        logger.warning("_normalize_date: unrecognised format %r, using today", text)
     return _now_ist().strftime("%Y-%m-%d")
 
 
