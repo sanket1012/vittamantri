@@ -660,10 +660,6 @@ async def _handle_add_transaction(update: Update, text: str) -> None:
         if not extracted.get("amount"):
             skipped_no_amount = True
             continue
-        # Drop low-confidence extractions — LLM wasn't sure, don't save noise
-        if extracted.get("confidence") == "low":
-            skipped_no_amount = True
-            continue
         saved = await with_retry(update, save_extracted, extracted, part, "text", telegram_user_info(update))
         if saved:
             saved_items.append(saved)
