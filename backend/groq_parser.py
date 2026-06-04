@@ -1,25 +1,18 @@
 import json
+import logging
 import os
 import re
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 
 import pytz
 from dotenv import load_dotenv
 from groq import Groq
 
-from categories import CATEGORY_NAMES, build_categories_prompt_str, fuzzy_match_category, infer_category
+from categories import build_categories_prompt_str, fuzzy_match_category
 
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-
-def safe_json_parse(text: str) -> dict:
-    text = re.sub(r"```json|```", "", text or "").strip()
-    match = re.search(r"\{[^{}]*\}", text, re.DOTALL)
-    if match:
-        return json.loads(match.group())
-    raise ValueError(f"No valid JSON found in: {text}")
-
+logger = logging.getLogger("vittamantri.groq")
 
 _IST = pytz.timezone("Asia/Kolkata")
 
@@ -38,6 +31,11 @@ def _today_ist() -> datetime:
 
 
 def _extract_date(message: str) -> str | None:
+    """Regex-based date extraction as a safety override for relative date phrases.
+
+    The LLM knows today's date and handles most cases, but regex is more reliable
+    for "yesterday", "last month", "May 15" patterns.
+    """
     lower = message.lower()
     today = _today_ist()
 
@@ -52,7 +50,6 @@ def _extract_date(message: str) -> str | None:
     if "today" in lower:
         return today.strftime("%Y-%m-%d")
 
-    # "15th May", "May 15", "15 May" with optional year
     day_month = re.search(
         r"\b(\d{1,2})(?:st|nd|rd|th)?\s+(" + "|".join(_MONTH_MAP) + r")\b",
         lower,
@@ -74,7 +71,7 @@ def _extract_date(message: str) -> str | None:
         except ValueError:
             pass
 
-    # Plain month name: "May month", "in March", etc.
+    # Plain month name: "May month", "in March"
     for name, month_num in _MONTH_MAP.items():
         if re.search(rf"\b{name}\b", lower):
             year = today.year if month_num <= today.month else today.year - 1
@@ -83,125 +80,25 @@ def _extract_date(message: str) -> str | None:
     return None
 
 
-def _extract_amount(message: str) -> float | None:
-    matches = re.findall(r"(?<![\w.])(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.\d+)?)", message, flags=re.IGNORECASE)
-    if not matches:
-        return None
-    try:
-        return float(matches[-1].replace(",", ""))
-    except ValueError:
-        return None
-
-
-def _compact_description(message: str) -> str:
-    cleaned = re.sub(r"(?<![\w.])(?:₹|rs\.?|inr)?\s*[0-9][0-9,]*(?:\.\d+)?", "", message, flags=re.IGNORECASE)
-    cleaned = re.sub(r"\s+", " ", cleaned.replace(":-", " ").replace("=", " ")).strip(" -:")
-    words = cleaned.split()
-    return " ".join(words[:8]) if words else "Transaction"
-
-
-def _fallback_extract(message: str) -> dict:
-    amount = _extract_amount(message)
-    lower = message.lower()
-    if amount is None:
-        return {"amount": None, "type": None, "category": None, "subcategory": None, "description": _compact_description(message), "source": None, "date": _extract_date(message)}
-
-    transaction_type = "income" if re.search(r"\b(receive|received|got|salary|income|credited)\b", lower) else "expense"
-
-    if transaction_type == "income" and "salary" in lower:
-        category = "Salary & Income"
-        subcategory = None
-    elif "hunger box" in lower or any(word in lower for word in ["zomato", "swiggy", "lunch", "dinner", "breakfast", "food"]):
-        category = "Food & Dining"
-        subcategory = "Delivery" if any(word in lower for word in ["hunger box", "zomato", "swiggy"]) else "Dining Out"
-    elif any(word in lower for word in ["fish", "grocery", "groceries", "vegetable", "fruit", "milk"]):
-        category = "Groceries"
-        subcategory = "Dairy" if "milk" in lower else "Fruits" if "fruit" in lower else "Vegetables"
-    elif any(word in lower for word in ["bikewash", "bike wash", "petrol", "diesel", "auto", "uber", "ola", "fuel"]):
-        category = "Transport"
-        subcategory = "Fuel" if any(word in lower for word in ["petrol", "diesel", "fuel"]) else "Auto" if "auto" in lower else "Cab" if any(word in lower for word in ["uber", "ola"]) else None
-    elif any(word in lower for word in ["dress", "dresses", "makeup", "kit", "amazon", "flipkart", "myntra", "shopping"]):
-        category = "Shopping"
-        subcategory = "Beauty" if "makeup" in lower else "Clothes" if any(word in lower for word in ["dress", "dresses"]) else None
-    elif transaction_type == "income":
-        category = "Gifts & Misc"
-        subcategory = None
-    else:
-        category = "Gifts & Misc"
-        subcategory = "Home Decor" if "flower pot" in lower else None
-
-    source = None
-    from_match = re.search(r"\bfrom\s+([A-Z][A-Za-z]+)", message)
-    spend_match = re.search(r"\bspend\s+([A-Z][A-Za-z]+)\b", message)
-    if from_match:
-        source = from_match.group(1)
-    elif spend_match:
-        source = spend_match.group(1)
-    elif "hunger box" in lower:
-        source = "Hunger Box"
-
-    return {
-        "amount": amount,
-        "type": transaction_type,
-        "category": category,
-        "subcategory": subcategory,
-        "description": _compact_description(message),
-        "source": source,
-        "date": _extract_date(message),
-    }
-
-
-def _normalize_result(parsed: dict, message: str, all_category_names: list[str] | None = None) -> dict:
-    fallback = _fallback_extract(message)
-
-    # If the LLM returned no amount, fall back to regex extraction entirely
-    if parsed.get("amount") is None and fallback.get("amount") is not None:
-        parsed = fallback
-
-    if parsed.get("amount") is not None:
+def _parse_response(raw: str) -> dict:
+    """Parse LLM response into a dict. Returns {} on any parse failure."""
+    text = re.sub(r"```json|```", "", raw or "").strip()
+    match = re.search(r"\{[^{}]*\}", text, re.DOTALL)
+    if match:
         try:
-            parsed["amount"] = float(str(parsed["amount"]).replace(",", ""))
-        except (TypeError, ValueError):
-            parsed["amount"] = fallback.get("amount")
-
-    # If the LLM flagged itself as low confidence, use keyword inference instead of trusting the LLM
-    low_confidence = parsed.get("confidence") == "low"
-    if low_confidence and fallback.get("amount") is not None:
-        parsed["type"] = fallback.get("type")
-        # Use infer_category (keyword-based, covers all 14 categories) rather than _fallback_extract
-        # which only has a handful of rules and defaults to "Gifts & Misc" for unknowns.
-        inferred = infer_category(message, parsed.get("type") or fallback.get("type") or "expense")
-        parsed["category"] = inferred
-        parsed["subcategory"] = fallback.get("subcategory") or parsed.get("subcategory")
-        parsed["source"] = fallback.get("source") or parsed.get("source")
-    else:
-        parsed["type"] = parsed.get("type") if parsed.get("type") in {"expense", "income", None} else fallback.get("type")
-        llm_cat = parsed.get("category")
-        if llm_cat:
-            # Fuzzy-map to a known/custom category; keep the LLM's name if it's genuinely new
-            parsed["category"] = fuzzy_match_category(llm_cat, extra_names=all_category_names) or llm_cat
-        else:
-            # LLM returned no category — infer from keywords
-            parsed["category"] = infer_category(message, parsed.get("type") or "expense")
-
-    parsed["description"] = " ".join(str(parsed.get("description") or fallback.get("description") or "Transaction").split()[:8])
-    parsed["subcategory"] = parsed.get("subcategory") or fallback.get("subcategory")
-    parsed["source"] = parsed.get("source") or fallback.get("source")
-    # Regex is still authoritative for relative dates as a safety override.
-    date = _extract_date(message) or parsed.get("date") or fallback.get("date")
-    return {
-        "amount": parsed.get("amount"),
-        "type": parsed.get("type"),
-        "category": parsed.get("category"),
-        "subcategory": parsed.get("subcategory"),
-        "description": parsed.get("description"),
-        "source": parsed.get("source"),
-        "date": date,
-        "confidence": parsed.get("confidence"),
-    }
+            return json.loads(match.group())
+        except json.JSONDecodeError:
+            pass
+    logger.warning("Could not parse LLM response as JSON: %r", raw[:200])
+    return {}
 
 
 def extract_from_text(user_message: str, all_categories: list[dict] | None = None) -> dict:
+    """Extract a transaction from free text using the LLM.
+
+    Returns a dict with transaction fields, or {} if nothing could be extracted.
+    Low-confidence results are returned as-is; the caller decides whether to save them.
+    """
     if not os.getenv("GROQ_API_KEY"):
         raise RuntimeError("GROQ_API_KEY is not configured.")
     if not user_message or not user_message.strip():
@@ -214,47 +111,45 @@ def extract_from_text(user_message: str, all_categories: list[dict] | None = Non
         cats_str = build_categories_prompt_str(all_categories)
         category_instructions = (
             f"Existing categories and subcategories: {cats_str}\n"
-            "Reuse an existing category/subcategory when it fits; create a new one (2-4 words, Title Case) only when nothing matches."
+            "Reuse an existing category/subcategory when it fits; "
+            "create a new one (2-4 words, Title Case) only when nothing matches."
         )
     else:
         category_instructions = (
             'Preferred categories: "Food & Dining", "Groceries", "Transport", "Rent & Housing", '
             '"Health & Medical", "Entertainment", "Shopping", "Subscriptions", "Education", '
             '"EMI & Loans", "Investment & SIP", "Salary & Income", "Gifts & Misc", "Utilities & Bills". '
-            "If none fit, create a short descriptive category name (2-4 words, Title Case)."
+            "If none fit, create a short descriptive name (2-4 words, Title Case)."
         )
 
     system_prompt = f"""You are a smart finance assistant for an Indian user.
-Your job is to extract transaction details from casual, informal messages in English or Hindi-English mix.
+Extract transaction details from casual messages in English or Hindi-English mix.
 
-Today is {today}. Use this to resolve relative dates like "yesterday", "last month", "in May".
+Today is {today}. Use this to resolve relative dates like "yesterday", "last month", "May month".
 
 RULES:
 - Amount can appear ANYWHERE in the message (before or after description)
-- Amounts may have commas like 10,000 — treat as 10000
-- Amounts may have :- or = before them like "Salary :- 24500"
-- "receive", "received", "got", "salary", "income", "credited" = income; everything else = expense
-- Casual phrases like "i spend X on Y", "i bought X", "i buy X" are valid expenses
-- Person names (Sanket, Hridu) = source field, not category
-- If the message has NO amount at all → return amount as null
-- For date: if explicitly mentioned format as YYYY-MM-DD; if not mentioned → return null
-- confidence: "high" if amount and category are clear; "medium" if either is inferred; "low" if very uncertain
+- Amounts may have commas (10,000 → 10000) or prefixes like :- or =
+- "receive", "received", "got", "salary", "income", "credited" → type: income
+- Everything else → type: expense
+- Person names = source field, not category
+- If the message has NO amount → return amount as null
+- date: YYYY-MM-DD if explicitly mentioned, else null
+- confidence: "high" if amount+category are clear; "medium" if inferred; "low" if very uncertain
 
 {category_instructions}
 
-Return ONLY a single raw JSON object:
+Return ONLY a raw JSON object, no markdown, no explanation:
 {{
-  "amount": <float or null>,
+  "amount": <positive float or null>,
   "type": <"expense" or "income" or null>,
-  "category": <reuse an existing name when it fits, else create a new one>,
-  "subcategory": <reuse an existing subcategory when it fits, else create one, or null>,
+  "category": <existing or new category name>,
+  "subcategory": <existing or new subcategory, or null>,
   "description": <max 8 words>,
-  "source": <name of app/shop/person or null>,
+  "source": <app/shop/person name or null>,
   "date": <"YYYY-MM-DD" or null>,
   "confidence": <"high" or "medium" or "low">
-}}
-
-IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra lines."""
+}}"""
 
     try:
         response = client.chat.completions.create(
@@ -266,13 +161,37 @@ IMPORTANT: Return ONLY the JSON object. No markdown. No explanation. No extra li
             temperature=0.1,
             max_tokens=300,
         )
-        text = response.choices[0].message.content.strip()
-        return _normalize_result(safe_json_parse(text), user_message, all_category_names=all_category_names)
+        parsed = _parse_response(response.choices[0].message.content)
     except Exception as exc:
-        fallback = _fallback_extract(user_message)
-        if fallback.get("amount") is not None:
-            # Improve the fallback's category using keyword inference when it defaulted to "Gifts & Misc"
-            if fallback.get("category") in (None, "Gifts & Misc"):
-                fallback["category"] = infer_category(user_message, fallback.get("type") or "expense")
-            return fallback
-        raise RuntimeError(f"Groq extraction failed: {exc}") from exc
+        logger.warning("Groq API call failed for %r: %s", user_message[:60], exc)
+        return {}
+
+    if not parsed:
+        return {}
+
+    # Coerce amount to float
+    amount = parsed.get("amount")
+    if amount is not None:
+        try:
+            amount = float(str(amount).replace(",", ""))
+        except (TypeError, ValueError):
+            amount = None
+
+    # Fuzzy-map category to closest known/custom name; keep as-is if genuinely new
+    category = parsed.get("category") or ""
+    if category:
+        category = fuzzy_match_category(category, extra_names=all_category_names) or category
+
+    # Regex date override is more reliable than LLM for relative phrases
+    date = _extract_date(user_message) or parsed.get("date")
+
+    return {
+        "amount": amount,
+        "type": parsed.get("type"),
+        "category": category or None,
+        "subcategory": parsed.get("subcategory"),
+        "description": " ".join(str(parsed.get("description") or "Transaction").split()[:8]),
+        "source": parsed.get("source"),
+        "date": date,
+        "confidence": parsed.get("confidence"),
+    }
