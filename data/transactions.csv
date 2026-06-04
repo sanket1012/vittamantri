@@ -43,3 +43,39 @@ c998239d-9310-4d59-8aef-76824887197a,2026-06-01,11:06:16,19.00,expense,Subscript
 03d98221-8d0d-422c-8eee-80d2713e26a2,2026-06-01,11:11:20,40.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,40/- vegetable market
 eb1d9348-1d98-4c19-8742-77d3097bdf69,2026-06-01,11:11:24,40.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,40/- vegetable market
 32b22cb1-4eea-4e88-a306-b8f7bacc9d5b,2026-06-01,11:11:29,188.59,expense,Groceries,Household,/- ratnadeep grocery shop,,Vaishnavi,5997163595,text,188.59/- ratnadeep grocery shop
+ee4d3143-e6cd-4aea-a55a-e36898032c33,2026-05-01,14:24:19,65500.00,expense,EMI & Loans,Home Loan,Home EMI,,Sanket,8547667663,text,May month home emi 65500
+a27ccac8-55c5-482b-8b8d-46034afd388b,2026-05-01,14:24:33,219685.00,income,Salary & Income,,May income,,Sanket,8547667663,text,May income 219685
+eddc9a4c-35ed-46cd-a81d-ee03511c1be0,2026-06-01,14:24:54,219685.00,income,Salary & Income,,June income,,Sanket,8547667663,text,June income 219685
+6d0080af-ae18-4b2b-9505-e067ea67ecad,2026-05-01,14:25:12,25000.00,expense,EMI & Loans,Vehicle Loan,car emi,,Sanket,8547667663,text,"May car emi 25000
+June car emi 25000"
+083a22c4-53c2-4de1-9704-2e7b6043b34a,2026-05-01,14:25:12,25000.00,expense,EMI & Loans,Vehicle Loan,car emi,,Sanket,8547667663,text,"May car emi 25000
+June car emi 25000"
+69dcbef0-5f7f-444f-9fb9-d3e11b917c59,2026-05-01,14:25:38,29000.00,expense,Rent & Housing,Rent,house rent,,Sanket,8547667663,text,May house rent 29000
+9e951cd8-e306-48f7-b015-5a900634637c,2026-05-01,14:27:29,838.00,expense,Food & Dining,Delivery,Swiggy order,Swiggy,Sanket,8547667663,text,May swiggy 838
+7f92ad2b-70a6-42e6-a1d9-91a88394da6c,2026-05-01,14:28:51,134.00,expense,Groceries,Dairy,May Dairy,,Sanket,8547667663,text,May Dairy 134 55 64
+d977491e-e5c5-4ebf-909a-42e63ab002d5,2026-05-01,14:28:51,55.00,expense,Groceries,Dairy,May Dairy,,Sanket,8547667663,text,May Dairy 134 55 64
+68d65c22-9e19-47a1-bfed-e1c1b55d8f44,2026-05-01,14:28:51,64.00,expense,Groceries,Dairy,May Dairy,,Sanket,8547667663,text,May Dairy 134 55 64
+39eb40dc-8db9-4dcd-a4f1-62424186e504,2026-05-01,14:31:01,465.00,expense,Food & Dining,Snacks,ice cream,,Sanket,8547667663,text,May month 465 ice cream
+19eb31b9-27eb-4018-8487-87957158b6bf,2026-05-01,14:33:46,1170.00,expense,Entertainment,Movies,Movie ticket,,Sanket,8547667663,text,"May month 
+Movie 1170 300
+Dmart for household 11188"
+42c48b72-b091-4cf5-b73f-dbcd3a4ca91a,2026-05-01,14:33:46,300.00,expense,Entertainment,Movies,Movie snack,,Sanket,8547667663,text,"May month 
+Movie 1170 300
+Dmart for household 11188"
+9b482f7f-3157-48e8-ab88-f5759fdddceb,2026-05-01,14:33:46,11188.00,expense,Groceries,Household,Dmart household,Dmart,Sanket,8547667663,text,"May month 
+Movie 1170 300
+Dmart for household 11188"
+b6bf21e8-7e94-49be-be7b-f81583a38bfc,2026-05-01,14:35:46,320.00,expense,Groceries,Vegetables,May Vegetables,,Sanket,8547667663,text,"May Vegetables 320
+May Biryani 380"
+f3fd0e05-f2ac-4531-b434-41a9f51daa3b,2026-05-01,14:35:46,380.00,expense,Food & Dining,Dining Out,May Biryani,,Sanket,8547667663,text,"May Vegetables 320
+May Biryani 380"
+2c493709-ec7e-496d-a132-d0606b61f763,2026-05-01,14:36:34,85.00,expense,Groceries,Vegetables,May vegetables,,Sanket,8547667663,text,May vegetables 85
+72437b02-168b-4183-a192-dae3ae20d192,2026-05-21,14:37:44,35.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May office tea time 35 21 21
+May electricity 1528"
+65e252c5-45a7-45db-aae7-b51189510494,2026-05-21,14:37:44,21.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May office tea time 35 21 21
+May electricity 1528"
+b1f0e86d-3d4b-4c49-a517-95b6f47fcd49,2026-05-21,14:37:44,21.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May office tea time 35 21 21
+May electricity 1528"
+334a40bf-2618-4dff-b8db-87f5dc82d7d4,2026-05-21,14:37:44,1528.00,expense,Utilities & Bills,Electricity,electricity bill,,Sanket,8547667663,text,"May office tea time 35 21 21
+May electricity 1528"
+a050afa8-07ed-48d0-a0d5-2a804196277c,2026-05-01,14:42:51,1450.00,expense,Rent & Housing,Repair,household repair,,Sanket,8547667663,text,May month 1450 household repair
