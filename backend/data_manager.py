@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+import logging
 import threading
 from datetime import datetime
 from pathlib import Path
@@ -14,6 +15,8 @@ from uuid import uuid4
 import pytz
 
 from categories import CATEGORIES, CATEGORY_NAMES, DEFAULT_CATEGORY, SUBCATEGORY_MAP, infer_category
+
+logger = logging.getLogger("vittamantri.data")
 
 IST = pytz.timezone("Asia/Kolkata")
 BASE_DIR = Path(__file__).resolve().parent.parent
