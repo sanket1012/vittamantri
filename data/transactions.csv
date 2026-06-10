@@ -1,6 +1,6 @@
 id,date,time,amount,type,category,subcategory,description,source,logged_by,logged_by_id,input_method,raw_input
-7fbbd875-4738-44ff-a211-d2b7e80592a1,2026-05-22,10:04:38,24500.00,income,Salary & Income,,Monthly Salary,,Vaishnavi,5997163595,text,Salary 24500 per month
-7752e831-fc84-404b-92fb-ecaf24b22806,2026-05-22,10:14:33,21.75,expense,Food & Dining,office-snacks,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
+7fbbd875-4738-44ff-a211-d2b7e80592a1,2026-05-06,10:04:38,24500.00,income,Salary & Income,,Monthly Salary,,Vaishnavi,5997163595,text,Salary 24500 per month
+7752e831-fc84-404b-92fb-ecaf24b22806,2026-05-22,10:14:33,96.00,expense,Food & Dining,office-snacks,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
 8d801d54-8dcf-4e21-b65f-2cf7c7b78de6,2026-05-22,10:15:12,9.00,expense,Food & Dining,office-snacks,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
 7295a967-e511-4ecb-b245-781b3e3f7f1d,2026-05-22,10:16:09,18.00,expense,Food & Dining,office-snacks,Hungerbox Order VALMZE488132,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
 1cfd0fab-2bdb-4892-a723-89e9c09d6587,2026-05-22,10:17:51,60.00,expense,Food & Dining,office-snacks,Hungerbox Order AMBZFR177765,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
@@ -29,26 +29,24 @@ fec4229b-b8c8-4421-b300-39676049efaf,2026-05-30,16:42:29,92.00,expense,Health & 
 21906613-452d-4f29-878e-a7892abc4278,2026-05-30,16:43:44,1.00,expense,Food & Dining,Dining Out,UPI payment,ASHWINI ARUN PIMPLE,Vaishnavi,5997163595,image,image/pdf upload
 0deea975-01bf-4553-b6c6-de0533ce2af4,2026-05-30,16:43:59,2024.00,expense,Food & Dining,Dining Out,UPI transaction,ASHWINI ARUN PIMPLE,Vaishnavi,5997163595,image,image/pdf upload
 07edad8d-2a53-4eea-b52e-e99d31a4d33a,2026-05-30,16:44:30,35.00,expense,Food & Dining,office-snacks,Hungerbox Order,HungerBox,Vaishnavi,5997163595,image,image/pdf upload
-3cccd62e-633e-4e73-85e9-715abee1ffeb,2026-06-01,11:04:03,5000.00,expense,Investment & SIP,Mutual Fund,/- self to bank of India,,Vaishnavi,5997163595,text,5000/- self to bank of India
-518413fa-b518-480f-9ec7-39262cffaa4e,2026-06-01,11:04:08,2000.00,expense,Investment & SIP,Mutual Fund,/- self account to bank of India,,Vaishnavi,5997163595,text,2000/- self account to bank of India
-c501440d-83b4-4d40-929a-d0923ff4f985,2026-06-01,11:04:12,5000.00,expense,Investment & SIP,Mutual Fund,/- self account to bank of India,,Vaishnavi,5997163595,text,5000/- self account to bank of India
-98eccae4-72a5-422d-8b2b-b217d3b20828,2026-06-01,11:06:08,25.00,expense,Food & Dining,office-snacks,/- hungerbox,,Vaishnavi,5997163595,text,25/- hungerbox
-5ca630d8-ba76-4a7e-8cbf-bb8438140f81,2026-06-01,11:06:12,13.00,expense,Food & Dining,office-snacks,/- hungerbox,,Vaishnavi,5997163595,text,13/- hungerbox
-c998239d-9310-4d59-8aef-76824887197a,2026-06-01,11:06:16,19.00,expense,Subscriptions,Provue,/- Provue,,Vaishnavi,5997163595,text,19/- Provue
-3f2c7e98-d08f-4976-854f-4141992f50b0,2026-06-01,11:06:20,20.00,expense,Food & Dining,office-snacks,/- hungerbox,,Vaishnavi,5997163595,text,20/- hungerbox
-7d7f7ca2-d52c-4dad-9ed0-8c34fd484576,2026-06-01,11:11:03,20.00,expense,Groceries,Vegetables,/-vegetable market,,Vaishnavi,5997163595,text,20/-vegetable market
-692c3ffd-71f9-425e-aaee-7d331d28849f,2026-06-01,11:11:07,70.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,70/- vegetable market
-91ee5505-056a-42ac-8918-d6ae461dd2a1,2026-06-01,11:11:11,150.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,150/- vegetable market
-9cc3e27c-240a-4ea6-96ee-ce3771cb9ca2,2026-06-01,11:11:16,50.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,50/- vegetable market
-03d98221-8d0d-422c-8eee-80d2713e26a2,2026-06-01,11:11:20,40.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,40/- vegetable market
-eb1d9348-1d98-4c19-8742-77d3097bdf69,2026-06-01,11:11:24,40.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,40/- vegetable market
-32b22cb1-4eea-4e88-a306-b8f7bacc9d5b,2026-06-01,11:11:29,188.59,expense,Groceries,Household,/- ratnadeep grocery shop,,Vaishnavi,5997163595,text,188.59/- ratnadeep grocery shop
+3cccd62e-633e-4e73-85e9-715abee1ffeb,2026-05-28,11:04:03,5000.00,expense,Investment & SIP,Mutual Fund,/- self to bank of India,,Vaishnavi,5997163595,text,5000/- self to bank of India
+518413fa-b518-480f-9ec7-39262cffaa4e,2026-05-28,11:04:08,2000.00,expense,Investment & SIP,Mutual Fund,/- self account to bank of India,,Vaishnavi,5997163595,text,2000/- self account to bank of India
+c501440d-83b4-4d40-929a-d0923ff4f985,2026-05-28,11:04:12,5000.00,expense,Investment & SIP,Mutual Fund,/- self account to bank of India,,Vaishnavi,5997163595,text,5000/- self account to bank of India
+98eccae4-72a5-422d-8b2b-b217d3b20828,2026-05-29,11:06:08,25.00,expense,Food & Dining,office-snacks,/- hungerbox,,Vaishnavi,5997163595,text,25/- hungerbox
+5ca630d8-ba76-4a7e-8cbf-bb8438140f81,2026-05-29,11:06:12,13.00,expense,Food & Dining,office-snacks,/- hungerbox,,Vaishnavi,5997163595,text,13/- hungerbox
+c998239d-9310-4d59-8aef-76824887197a,2026-05-30,11:06:16,19.00,expense,Subscriptions,Provue,/- Provue,,Vaishnavi,5997163595,text,19/- Provue
+3f2c7e98-d08f-4976-854f-4141992f50b0,2026-05-31,11:06:20,20.00,expense,Food & Dining,office-snacks,/- hungerbox,,Vaishnavi,5997163595,text,20/- hungerbox
+7d7f7ca2-d52c-4dad-9ed0-8c34fd484576,2026-05-30,11:11:03,20.00,expense,Groceries,Vegetables,/-vegetable market,,Vaishnavi,5997163595,text,20/-vegetable market
+692c3ffd-71f9-425e-aaee-7d331d28849f,2026-05-30,11:11:07,70.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,70/- vegetable market
+91ee5505-056a-42ac-8918-d6ae461dd2a1,2026-05-30,11:11:11,150.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,150/- vegetable market
+9cc3e27c-240a-4ea6-96ee-ce3771cb9ca2,2026-05-30,11:11:16,50.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,50/- vegetable market
+03d98221-8d0d-422c-8eee-80d2713e26a2,2026-05-30,11:11:20,40.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,40/- vegetable market
+eb1d9348-1d98-4c19-8742-77d3097bdf69,2026-05-30,11:11:24,40.00,expense,Groceries,Vegetables,/- vegetable market,,Vaishnavi,5997163595,text,40/- vegetable market
+32b22cb1-4eea-4e88-a306-b8f7bacc9d5b,2026-05-31,11:11:29,188.59,expense,Groceries,Household,/- ratnadeep grocery shop,,Vaishnavi,5997163595,text,188.59/- ratnadeep grocery shop
 ee4d3143-e6cd-4aea-a55a-e36898032c33,2026-05-01,14:24:19,65500.00,expense,EMI & Loans,Home Loan,Home EMI,,Sanket,8547667663,text,May month home emi 65500
 a27ccac8-55c5-482b-8b8d-46034afd388b,2026-05-01,14:24:33,219685.00,income,Salary & Income,,May income,,Sanket,8547667663,text,May income 219685
 eddc9a4c-35ed-46cd-a81d-ee03511c1be0,2026-06-01,14:24:54,219685.00,income,Salary & Income,,June income,,Sanket,8547667663,text,June income 219685
 6d0080af-ae18-4b2b-9505-e067ea67ecad,2026-05-01,14:25:12,25000.00,expense,EMI & Loans,Vehicle Loan,car emi,,Sanket,8547667663,text,"May car emi 25000
-June car emi 25000"
-083a22c4-53c2-4de1-9704-2e7b6043b34a,2026-05-01,14:25:12,25000.00,expense,EMI & Loans,Vehicle Loan,car emi,,Sanket,8547667663,text,"May car emi 25000
 June car emi 25000"
 69dcbef0-5f7f-444f-9fb9-d3e11b917c59,2026-05-01,14:25:38,29000.00,expense,Rent & Housing,Rent,house rent,,Sanket,8547667663,text,May house rent 29000
 9e951cd8-e306-48f7-b015-5a900634637c,2026-05-01,14:27:29,838.00,expense,Food & Dining,Delivery,Swiggy order,Swiggy,Sanket,8547667663,text,May swiggy 838
@@ -84,10 +82,406 @@ a050afa8-07ed-48d0-a0d5-2a804196277c,2026-05-01,14:42:51,1450.00,expense,Rent & 
 e45a6053-2b01-45a5-8421-9df702c2819a,2026-05-01,14:54:12,122.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,May office tea time 35 42 122
 85689869-bcaf-486a-a1e8-7d2f122cab4e,2026-05-01,14:54:46,87.35,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,May office tea time 87 35
 a440d688-0e51-4099-8625-55e4ac6528a8,2026-05-01,15:08:57,35.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,May office tea time 35
-58f396e2-0e7b-4ac6-af30-89f34cdec4be,2026-06-04,15:09:52,1995.00,expense,Transport,Bus,Redbus travel,Redbus,Sanket,8547667663,text,"Redbus travel 1995
+58f396e2-0e7b-4ac6-af30-89f34cdec4be,2026-05-06,15:09:52,1995.00,expense,Transport,Bus,Redbus travel,Redbus,Sanket,8547667663,text,"Redbus travel 1995
 Redbus travel 1575"
-8e8af147-3f78-449b-b14d-f47a17eecca8,2026-06-04,15:09:52,1575.00,expense,Transport,Bus,Redbus travel,Redbus,Sanket,8547667663,text,"Redbus travel 1995
+8e8af147-3f78-449b-b14d-f47a17eecca8,2026-05-06,15:09:52,1575.00,expense,Transport,Bus,Redbus travel,Redbus,Sanket,8547667663,text,"Redbus travel 1995
 Redbus travel 1575"
-6b399b63-8f3a-4112-a704-e476bbc23c81,2026-05-06,15:12:27,1473.60,expense,Transport,Train,IRCTC ticket booking,IRCTC ETICKETING,Sanket,8547667663,image,image/pdf upload
 c476a954-1ff6-4bf2-87b4-ffddc57cea7e,2026-05-06,15:29:18,1473.60,expense,Transport,Train,IRCTC ticket booking,IRCTC ETICKETING,Sanket,8547667663,image,image/pdf upload
 6afdfdfe-1e46-4409-a7d1-4de24d7fdd44,2026-06-04,15:33:52,314.00,expense,Food & Dining,Delivery,Swiggy icecream,Swiggy,Sanket,8547667663,text,Kal raat swiggy se icecream mangaya 314 bill bua
+fab582fb-86e6-4bcb-ba20-6485a75605de,2026-05-31,17:10:36,69.00,expense,Utilities & Bills,Internet,Jio recharge,,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+06865a1b-c1f2-40ff-a76c-e858740b9d93,2026-05-31,17:10:36,35.00,expense,Food & Dining,Snacks,Hungerbox fruit,Hungerbox,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+786b7b35-ed09-4ea4-94b2-abb9634517db,2026-05-31,17:10:36,13.00,expense,Food & Dining,Beverages,Hungerbox tea,Hungerbox,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+311ae0d4-61b1-4032-bf39-9e627535220d,2026-05-31,17:10:36,1000.00,expense,Salary & Income,,Self transfer,Self,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+68d34b22-bf52-4976-a123-127a702bc0f8,2026-05-31,17:10:36,35.00,expense,Food & Dining,Snacks,Hungerbox fruit,Hungerbox,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+e93d240c-254e-4d40-875f-365060264914,2026-05-31,17:10:36,2000.00,expense,Investment & SIP,Gold,Jar gold invest,Jar,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+110566ee-07f4-4620-aeca-2d67ac0defcb,2026-05-31,17:10:36,20.00,expense,Food & Dining,Beverages,Hungerbox tea,Hungerbox,Vaishnavi,5997163595,text,"69 jio recharge may expense 
+Hungerbox 35 fruit bowl  may expense
+Hungerbox 13 tea may expense
+1000 self transfer to bank of India may expense
+35 hungerbox fruit bowl may expense
+Jar gold 2000 invest may expense
+Hungerbox 20 tea may expense"
+23ba7a82-aeef-4cd2-b5c3-4754cf2cc9ee,2026-06-04,22:07:32,300.00,expense,Food & Dining,Beverages,coffee airport,,Sanket,8547667663,text,300 coffee airport
+fc42d039-bfe8-4492-b67f-a9e403f504b0,2026-05-01,13:12:03,200.00,expense,Gifts & Misc,,ballon baby,,Vaishnavi,5997163595,text,200/-  ballon for baby may expense
+a771e6cc-40b5-4918-8b4d-c3cfbe5e68bc,2026-06-06,15:01:08,65.00,expense,Groceries,Household,household,Hridaya,Sanket,8547667663,text,65 household hridaya
+f26741f0-ee3e-4cf6-b573-fdcf71167e61,2026-06-06,15:01:22,2000.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,2000 petrol
+54cf3efe-27e3-4a19-86fe-18a75b354216,2026-06-06,15:01:55,60.00,expense,Transport,Lunch/Tea,tea time,,Sanket,8547667663,text,60 transport tea time
+506ffe67-9812-4c3d-8526-ffde64efccf2,2026-06-06,15:02:28,1000.00,expense,Transport,Toll,car fastag,,Sanket,8547667663,text,1000 car fastag
+bec8791b-aa99-498a-ae7e-2092ab7c779d,2026-06-07,09:55:19,974.00,expense,Gifts & Misc,,gift,,Sanket,8547667663,text,974 gift
+2d8258f8-0385-4b69-b8f1-4b26b926be33,2026-06-07,09:55:57,140.00,expense,Health & Medical,Medicine,hridaya medicine,hridaya,Sanket,8547667663,text,140 hridaya medicine
+591125cd-00c0-4914-a0a9-8c7a771fd29a,2026-06-07,09:56:59,1554.00,expense,Utilities & Bills,Electricity,electricity bill,,Sanket,8547667663,text,1554 electricity
+355b3c84-5fbc-4842-a08a-c412f2686f98,2026-06-09,14:28:27,260.00,expense,Gifts & Misc,,gift for hridaya,hridaya,Sanket,8547667663,text,260 gift for hridaya
+5f64e44d-e006-4cd8-b297-abc8c12e66eb,2026-06-09,14:28:59,2609.00,expense,Shopping,Clothes,clothing,,Sanket,8547667663,text,2609 clothing
+744c0010-325e-43f1-b9e8-26c9a18791c8,2026-06-09,14:29:35,62.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,62 office tea time
+d712f405-de18-4f07-aabe-1984fdca559b,2026-06-09,14:29:52,90.00,expense,Groceries,Fruits,mango,Sukesh,Sanket,8547667663,text,90 mango from Sukesh
+f1778b8b-d54e-45ef-ae93-8057e2892b33,2026-06-09,14:30:13,246.00,expense,Groceries,Quick Delivery,Blinkit,Blinkit,Sanket,8547667663,text,246 blinkit
+0eba8140-a4bf-4ea2-966f-09e81d6e810b,2026-06-09,14:30:32,722.00,expense,Food & Dining,Dining Out,travel dinner,,Sanket,8547667663,text,722 travel dinner
+54ee45e3-aade-4dd6-9868-293f59b31ad2,2026-06-09,14:31:04,102.00,income,Salary & Income,Cashback,Bhim Cashback,Bhim,Sanket,8547667663,text,102 income cashback from bhim
+5b3b1837-29c7-4b8b-a009-09116948c245,2026-06-09,14:31:20,5000.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,5000 petrol
+79546b52-5c12-4c3e-ace5-5d945a6f372b,2026-06-09,14:32:55,80.00,expense,Food & Dining,Travel Food,travel food,,Sanket,8547667663,text,80 travel food
+6cb1a696-3767-4bf8-b752-bd5bc4801bb3,2026-06-09,14:34:42,60.00,expense,Transport,Lunch/Tea,travel teatime,,Sanket,8547667663,text,60 travel teatime
+3b164a83-e22a-4190-ac03-89ee22eb6bd7,2026-05-01,14:41:41,221.00,expense,Transport,Train,irctc ticket,,Sanket,8547667663,text,May month irctc 221
+94cb3ff7-0513-4a9e-8b09-1d4ca2a6ac83,2026-05-07,14:42:30,2500.00,expense,Gifts & Misc,,Sent to Vaishnavi,Vaishnavi,Sanket,8547667663,text,Sent to Vaishnavi 2500
+3a99e4ab-ab6a-4d48-a31e-f147022b3039,2026-05-08,14:45:47,10000.00,expense,Vaishnavi,General,vaishnavi general,,Sanket,8547667663,text,10000 vaishnavi general
+ac45a9a6-5a62-4a85-bc13-094f6be0fd82,2026-05-08,14:46:13,200.00,expense,Gifts & Misc,,misc,,Sanket,8547667663,text,200 miscelley
+03b201f1-e63f-4c3e-9ec5-48e815e14e28,2026-05-08,14:51:23,40.00,expense,Gifts & Misc,,miscellaneous,,Sanket,8547667663,text,40 miscellaneous
+d8ee30d7-a6db-43ab-a913-ba3e57b22381,2026-05-09,14:51:34,1216.00,expense,Food & Dining,Dining Out,reunion dinner,,Sanket,8547667663,text,1216 reunion dinner
+eae0f926-7060-4441-8b34-05c6e9884875,2026-05-01,14:52:39,630.00,expense,Food & Dining,Dining Out,chicken,,Sanket,8547667663,text,May month 630 chicken
+9c0957e6-13de-4bfd-9afc-53985b50a974,2026-05-01,14:52:52,356.00,expense,Groceries,Quick Delivery,Blinkit,,Sanket,8547667663,text,May month 356 blinkit
+900eec87-8503-4075-86b2-33de9ade0504,2026-05-11,14:53:36,160.00,expense,Transport,Lunch/Tea,travel tea,,Sanket,8547667663,text,160 travel tea time
+e5dc4eaa-134b-4957-8408-221dd8cd2416,2026-05-01,14:54:15,1610.00,expense,Food & Dining,Dining Out,reunion dinner,,Sanket,8547667663,text,May month 1610 reunion dinner
+d463964d-664e-4d10-81e7-71443f9b6277,2026-05-01,14:54:38,150.00,expense,Transport,Cab,Ola ride,,Sanket,8547667663,text,May month 150 ola
+9fef8cae-32f3-4b29-9f8d-4f925b16445f,2026-05-01,14:55:03,147.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,May month 82 65 office tea time
+fd33c7d1-0534-49e0-a714-574a82a3fe9e,2026-05-01,14:56:35,120.00,expense,Gifts & Misc,,flower,,Sanket,8547667663,text,May month 120 flower
+6601a4aa-b449-46d4-94e6-56fa9d96e9d7,2026-05-01,14:57:14,146.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,May month 146 office tea time
+eb15a0f8-fbc9-47c3-8885-316ce3aa39c9,2026-05-01,14:57:33,3500.00,expense,Education,,school fees,,Sanket,8547667663,text,May month 3500 school fees
+2fb2bb57-f48e-46ec-9b72-d1531fe3d7eb,2026-05-01,14:58:03,530.00,expense,Food & Dining,Dining Out,Udupi,,Sanket,8547667663,text,May month 530 udipi
+463905fc-1f95-4aff-bb01-4c3d396e9572,2026-05-01,14:58:31,84.00,expense,Food & Dining,office-lunch,office tea,,Sanket,8547667663,text,May month 84 office tea time
+eaa1dd68-69ca-415c-8d77-f984c2c93c25,2026-05-01,14:59:09,188.00,expense,Food & Dining,office-lunch,office tea,,Sanket,8547667663,text,May month 188 office tea time
+e85a2a80-375b-4214-994d-b3fff0c20e2f,2026-05-01,14:59:27,162.00,expense,Transport,Toll,toll plaza,,Sanket,8547667663,text,May month 162 toll plaza
+db991af8-3f33-4dd3-b37b-c1bc8f5acdc8,2026-05-01,14:59:55,156.00,expense,Transport,Toll,toll,,Sanket,8547667663,text,May month 156 toll
+3fc300dc-53ae-4f0b-bd93-6b6ae964a631,2026-05-01,15:02:03,1500.00,expense,Food & Dining,Snacks,chicken,,Sanket,8547667663,text,May month 1500 chicken
+4c00f0f2-93a1-4880-9a99-8c6d8fdd71d6,2026-05-01,15:02:13,100.00,expense,Transport,Toll,toll,,Sanket,8547667663,text,May month 100 toll
+21377da5-3d24-441e-a43e-f6c32440daa1,2026-05-01,15:02:50,106.00,expense,Transport,Toll,toll may,,Sanket,8547667663,text,106 may month toll
+f046a14c-8291-473a-ba23-928beb7cc25a,2026-05-01,15:03:01,2000.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,May month 2000 petrol
+db480f0b-3812-44d2-842d-ee3563e32d2f,2026-05-01,15:03:27,318.00,expense,Transport,Toll,toll payment,,Sanket,8547667663,text,May month 156+162 toll
+bb8f163d-0a81-4e6e-94d1-023bfb6e9fae,2026-05-01,15:03:47,20.00,expense,Transport,Toll,orr toll,,Sanket,8547667663,text,May month 20 orr toll
+4de3b6b6-70ba-4cd4-aa59-aa2e84bd7d9f,2026-05-01,15:05:21,50.00,expense,Groceries,,grocery,,Sanket,8547667663,text,May month 50 grocery
+8e7615d3-9a55-45d0-9caa-30244dda4b4d,2026-05-01,15:08:29,100.00,expense,Groceries,Household,Household,,Sanket,8547667663,text,"May month:-
+100 household
+64 dairy
+65 Ratnadeep
+80 household 
+200 fruits
+400 household"
+af2b38c4-79c5-4ce5-ae11-53e46a633fca,2026-05-01,15:08:29,64.00,expense,Groceries,Dairy,Dairy,,Sanket,8547667663,text,"May month:-
+100 household
+64 dairy
+65 Ratnadeep
+80 household 
+200 fruits
+400 household"
+5780930e-8b5f-40c3-b03c-c6cc4606d5f7,2026-05-01,15:08:29,65.00,expense,Groceries,,Ratnadeep,Ratnadeep,Sanket,8547667663,text,"May month:-
+100 household
+64 dairy
+65 Ratnadeep
+80 household 
+200 fruits
+400 household"
+5e291282-22c7-46b8-85d4-d293bbe7e45a,2026-05-01,15:08:29,80.00,expense,Groceries,Household,Household,,Sanket,8547667663,text,"May month:-
+100 household
+64 dairy
+65 Ratnadeep
+80 household 
+200 fruits
+400 household"
+3ac4b696-d48e-4fbb-a59c-18cc54d601dd,2026-05-01,15:08:29,200.00,expense,Groceries,Fruits,Fruits,,Sanket,8547667663,text,"May month:-
+100 household
+64 dairy
+65 Ratnadeep
+80 household 
+200 fruits
+400 household"
+65271fe5-0b81-4b20-a140-95b587e85f77,2026-05-01,15:08:29,400.00,expense,Groceries,Household,Household,,Sanket,8547667663,text,"May month:-
+100 household
+64 dairy
+65 Ratnadeep
+80 household 
+200 fruits
+400 household"
+b385aa61-da19-43e2-bd1f-cbec87a75bbe,2026-05-01,15:13:40,540.00,expense,Groceries,Vegetables,May vegetables,,Sanket,8547667663,text,May month 540 vegetables
+90ea6911-04da-44c9-ac42-8deccd219467,2026-05-01,15:14:50,35.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"May month Office tea time :-
+35
+41
+46
+35
+62
+41"
+3fdaa036-bfa9-453f-a355-bb8ae4c6b2bd,2026-05-01,15:14:50,41.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"May month Office tea time :-
+35
+41
+46
+35
+62
+41"
+ca23d75e-822f-441b-8463-fee4c380711c,2026-05-01,15:14:50,46.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"May month Office tea time :-
+35
+41
+46
+35
+62
+41"
+8445f319-8582-4ecb-918b-35cd66a1c37d,2026-05-01,15:14:50,35.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"May month Office tea time :-
+35
+41
+46
+35
+62
+41"
+e231c2ec-a2d4-4353-87ca-deb7d879158e,2026-05-01,15:14:50,62.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"May month Office tea time :-
+35
+41
+46
+35
+62
+41"
+961cfeb3-88b6-4cbd-959f-78356d09b328,2026-05-01,15:14:50,41.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"May month Office tea time :-
+35
+41
+46
+35
+62
+41"
+d1ed20e2-90ca-4414-8547-557db6c7115e,2026-05-01,15:15:05,160.00,expense,Food & Dining,Dining Out,chicken,,Sanket,8547667663,text,May month 160 chicken
+41bb88d2-04ba-47e5-b6f1-c4c9c96fc203,2026-05-01,15:15:35,35.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+63
+41
+21"
+0923522d-9ce5-42cf-965f-858ec3b10185,2026-05-01,15:15:35,63.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+63
+41
+21"
+d295d01b-194c-4c03-bdb9-624767f49ba1,2026-05-01,15:15:35,41.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+63
+41
+21"
+2eeee36a-0e12-42a0-a4ce-e0138bccf0b0,2026-05-01,15:15:35,21.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+63
+41
+21"
+81bb63bc-017b-4d09-9e35-39700225ddbd,2026-05-01,15:15:50,965.00,expense,Utilities & Bills,Gas,May gas,,Sanket,8547667663,text,May month 965 gas
+4c3d76cc-8e51-420a-8bdd-50e676923d3d,2026-05-01,15:16:04,428.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,May month 428 petrol
+8803bdf0-a1a5-4d87-a8db-6ec8a5ca1537,2026-05-01,15:16:31,35.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+43
+41
+23"
+f27cbc1e-47bc-4b80-9dd5-1cadc4aecb6a,2026-05-01,15:16:31,43.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+43
+41
+23"
+e96b7afd-9fc8-412a-b7fe-0fb8c3bf353c,2026-05-01,15:16:31,41.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+43
+41
+23"
+4fc25e1b-e2fb-4a37-b055-dbf30cd9b390,2026-05-01,15:16:31,23.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+43
+41
+23"
+bec3008b-33f3-4400-b5e4-83d4a259ff58,2026-05-01,15:16:42,64.00,expense,Groceries,Dairy,dairy,,Sanket,8547667663,text,May month dairy 64
+e4737969-0e26-448a-abaa-26a0dbeb00de,2026-05-01,15:17:18,35.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+61
+70
+23"
+86489c55-c85f-4dfc-9e59-97f7c6d28c65,2026-05-01,15:17:18,61.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+61
+70
+23"
+92f48bef-dce8-4ab0-98bb-6eb304b4dcbc,2026-05-01,15:17:18,70.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+61
+70
+23"
+73b6b23b-07da-4df8-828e-7c08e2f0e1b6,2026-05-01,15:17:18,23.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+35
+61
+70
+23"
+7d300007-aaf9-4650-9d65-4842dc82cc29,2026-05-01,15:17:27,304.00,expense,Groceries,Quick Delivery,Blinkit,Blinkit,Sanket,8547667663,text,May month 304 blinkit
+924e7c87-3519-46b2-9862-ca98ecd6eda7,2026-05-01,15:17:39,2000.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,May month 2000 petrol
+165c912d-9944-47eb-b899-0bcf3fa3aa72,2026-05-01,15:19:06,1190.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,May month 1190 petrol
+e5150617-a237-4d2c-844c-037af06b94de,2026-05-01,15:19:18,292.00,expense,Food & Dining,Delivery,Swiggy,Swiggy,Sanket,8547667663,text,May month 292 swiggy
+11855823-124e-44c1-b39e-b3da5995e2b8,2026-05-01,16:43:14,500.00,expense,Transport,Fuel,Fastag,,Sanket,8547667663,text,May month fastag 500
+d9897c54-7ed4-468f-9764-ae8a13087b17,2026-05-01,16:43:34,60.00,expense,Transport,Toll,toll,,Sanket,8547667663,text,May month toll 60
+c2c24c3f-5108-4d58-a7c0-4dbc06e8f17d,2026-05-01,16:43:45,3350.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,May month petrol 3350
+30095c71-61ac-4771-838e-6a8f7757f769,2026-05-01,16:44:41,500.00,expense,Gifts & Misc,,miscellaneous,,Sanket,8547667663,text,May month 500 miscellaneous
+429ca25b-131f-4e34-a0b8-cfaa19ad9b2a,2026-05-01,16:45:04,500.00,expense,Food & Dining,Travel Food,travel food,,Sanket,8547667663,text,May month travel food 500
+8a2a34f4-57c2-40cb-a7de-c2bd9e174bc4,2026-05-01,16:45:47,3941.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,May month petrol 3941
+8fa0fa41-8990-4d77-855e-4439c96160c1,2026-05-01,16:46:25,104.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,May month office tea time 104
+766675d7-b5b4-4342-b336-7e1b4e497655,2026-05-01,16:46:44,641.00,expense,Food & Dining,Delivery,Swiggy order,,Sanket,8547667663,text,May month 641 swiggy
+8b0f7225-5f20-4182-8c35-ca7386ad4260,2026-05-01,16:57:21,64.00,expense,Groceries,Dairy,dairy,,Sanket,8547667663,text,"May month
+64 dairy
+102 office tea time
+448.333 lunch with Srinath
+310 ice cream"
+4a9d42ec-ae45-43da-82a1-96ada12dbd87,2026-05-01,16:57:21,102.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month
+64 dairy
+102 office tea time
+448.333 lunch with Srinath
+310 ice cream"
+7d12c126-d56c-4b50-9afa-8e3edeb24ddf,2026-05-01,16:57:21,448.33,expense,Food & Dining,Dining Out,lunch with Srinath,Srinath,Sanket,8547667663,text,"May month
+64 dairy
+102 office tea time
+448.333 lunch with Srinath
+310 ice cream"
+08d3c08e-5d2d-417b-86b8-ae4c133857bc,2026-05-01,16:57:21,310.00,expense,Food & Dining,Snacks,ice cream,,Sanket,8547667663,text,"May month
+64 dairy
+102 office tea time
+448.333 lunch with Srinath
+310 ice cream"
+2154e60f-50ea-4ef3-a6b4-8259b3bcbdee,2026-05-01,16:57:33,35.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+df4c08c9-07af-4b25-8931-2d76c47dec10,2026-05-01,16:57:33,41.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+4d138413-fa1a-4b71-8006-5ded2fda9a62,2026-05-01,16:57:33,21.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+1bdd89d8-3d82-496d-87b8-dff757da352e,2026-05-01,16:57:33,30.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+9888da65-a16f-41d5-b7cb-c55771ac0730,2026-05-01,16:57:33,80.00,expense,Food & Dining,Beverages,coffee with wife,wife,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+aaafc02d-9eef-4943-8b4d-99c6d98d5da7,2026-05-01,16:57:33,100.00,expense,Food & Dining,Snacks,fries for hridu,hridu,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+d8450d07-c75f-40c5-9ef6-bef8188bd30f,2026-05-01,16:57:33,160.00,expense,Food & Dining,Dining Out,chicken,,Sanket,8547667663,text,"May month
+35 office tea time
+41 office tea time
+21 office tea time
+30 office tea time
+80 coffee with wife
+100 fries for hridu
+160 chicken"
+03231f03-4cd7-4d87-9370-655c81b1fa50,2026-05-01,16:58:32,43.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+43
+21
+21"
+a3f5dbec-42eb-4448-8a93-ad4c2a866124,2026-05-01,16:58:32,21.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+43
+21
+21"
+cc8a736a-e4f0-456a-9465-ee8c2f861440,2026-05-01,16:58:32,21.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,"May month office tea time
+43
+21
+21"
+876bf13b-c44d-4963-a438-2ac98e4fba0d,2026-05-01,16:58:54,420.00,expense,Food & Dining,office-lunch,office lunch,,Sanket,8547667663,text,May month office lunch 420
+c2974495-d104-4615-bf10-0c8c0e8c7de9,2026-05-01,16:59:04,100.00,expense,Food & Dining,office-lunch,office lunch,,Sanket,8547667663,text,May month office lunch 100
+ef3e9dd1-8e93-440b-a83b-86e51fdcb73a,2026-05-01,17:00:35,60.00,expense,Groceries,Household,household,,Sanket,8547667663,text,"May month household 60
+May month zepto 432"
+a1386de5-7186-4c30-a9b3-ef8fda3043a0,2026-05-01,17:00:35,432.00,expense,Groceries,Quick Delivery,zepto,Zepto,Sanket,8547667663,text,"May month household 60
+May month zepto 432"
+99d7521a-eaeb-4f18-8edf-556d67f38f38,2026-05-01,17:01:03,30.00,expense,Transport,Parking,parking,,Sanket,8547667663,text,May month parking 30
+43b51768-5731-434e-b887-7a9d32f897b5,2026-05-01,17:01:28,1540.00,expense,Food & Dining,Dining Out,Sandeep house dinner,Sandeep,Sanket,8547667663,text,May month Sandeep house dinner 1540
+7f82a3fd-a7b4-4e1d-8f2c-cab87cd27d8a,2026-06-09,17:05:10,62.00,expense,Food & Dining,office-lunch,office tea,,Sanket,8547667663,text,62 office tea time
+a57e0aed-5586-44b1-8b44-76c144b4adea,2026-06-09,17:05:22,15000.00,expense,Vaishnavi,Maid,Maid,Vaishnavi,Sanket,8547667663,text,15000 Vaishnavi for maid
+95f6d51e-23ce-4724-911d-0f9a0dd4d9d3,2026-06-09,17:05:44,5900.00,expense,Education,,school fees,,Sanket,8547667663,text,5900 school fees
+da6c57fa-3a4a-43b0-a9b6-9d26aca37381,2026-06-09,17:05:53,18000.00,expense,Education,,school fees,,Sanket,8547667663,text,18000 school fees
+72537d09-6f8c-4768-8a12-868cf26a0e7d,2026-06-10,17:41:45,45.00,expense,Food & Dining,office-lunch,office tea,,Sanket,8547667663,text,45 officr tea time
+3a9a1463-4629-4599-926d-bf899a2a3a05,2026-06-10,17:42:00,64.00,expense,Groceries,Dairy,dairy,,Sanket,8547667663,text,64 dairy
+3e2792fa-184a-42ee-903f-25f851d96167,2026-06-10,17:42:47,21.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"Office tea time
+21
+20"
+d81cb139-4d07-4a8c-9b1a-d1388aaac85f,2026-06-10,17:42:47,20.00,expense,Food & Dining,office-snacks,Office tea,,Sanket,8547667663,text,"Office tea time
+21
+20"
+42418d97-9301-4306-b64a-7de8702ca877,2026-06-10,17:43:40,600.00,expense,Transport,,car cleaning,,Sanket,8547667663,text,600 car cleaning
+780cb211-ad03-4641-b452-bbf9b68de15f,2026-06-10,17:43:54,257.00,expense,Health & Medical,,medical,,Sanket,8547667663,text,257 medical
+71ef8974-67ae-4294-b31c-c5d6511418fd,2026-06-10,17:44:42,1183.00,expense,Gifts & Misc,,gift for hridaya,hridaya,Sanket,8547667663,text,1183 gift for hridaya
+01a8565c-e2a9-421b-98ef-8ccacabddf27,2026-06-10,17:45:55,126.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,126 office tea time
+1d92371a-111f-4263-bb88-484ab5b5d984,2026-06-10,17:46:38,749.00,expense,Transport,Train,train ticket,,Sanket,8547667663,text,749 train ticket
+2fe9f663-8586-44e6-98bb-0874f64bd0f5,2026-06-10,17:47:03,96.00,expense,Groceries,Dairy,dairy,,Sanket,8547667663,text,96 dairy
+06b8aca8-fecc-4ca6-b872-0695d15e9c96,2026-06-10,17:49:38,144.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,144 office tea time
+cf3755db-c326-42a0-a6e0-6f480ed5ead5,2026-06-10,17:50:07,503.00,expense,Transport,Fuel,petrol,,Sanket,8547667663,text,503 petrol
+b619e9c8-bb45-48e4-9a14-39c0720391bc,2026-06-10,17:50:56,860.00,expense,Food & Dining,Dining Out,Siddique kabab,Siddique,Sanket,8547667663,text,860 Siddique kabab
+48506d21-d6d6-4ce3-8175-accd544f1d17,2026-06-10,17:51:18,295.00,expense,Food & Dining,Snacks,ice cream,,Sanket,8547667663,text,295 ice cream
+52d771e6-c1d5-4c3e-ac18-453abacd2cea,2026-06-10,17:52:33,80.00,expense,Food & Dining,Snacks,sweets,,Sanket,8547667663,text,80 sweets
+1394215c-6e19-4953-a3b0-a5b4f9b57439,2026-06-10,17:53:33,85.00,expense,Food & Dining,office-snacks,office tea,,Sanket,8547667663,text,85 office tea time
+5cb5afd3-b1dd-44d8-b3cd-d2b6b904824e,2026-06-10,17:53:44,580.00,expense,Gifts & Misc,,gift for hridaya,hridaya,Sanket,8547667663,text,580 gift for hridaya
+36679720-1742-45cd-8f4a-92abf990afa2,2026-06-10,17:54:56,24710.00,expense,EMI & Loans,Vehicle Loan,car loan,,Sanket,8547667663,text,24710 car loan
+ce5c077a-64d4-46d0-9cb5-dba3f1c64fab,2026-06-10,17:57:12,342.00,income,Salary & Income,,Received,Santosh,Sanket,8547667663,text,342 received from Santosh
+d550c7c6-f85f-43f4-a0a4-d6504296075c,2026-05-04,17:58:51,260.00,expense,Household Chores,Ironing,cloth iron,,Sanket,8547667663,text,May month 260 household cloth iron
+d075bbb1-2a44-4cd8-a4a0-73c52b9b410d,2026-05-01,18:05:52,220.00,expense,Household Chores,Ironing,cloth iron,,Sanket,8547667663,text,May month 220 household cloth iron
+76f3ae32-ac4e-4013-b780-ef43f766255a,2026-06-10,18:06:12,250.00,expense,Household Chores,Ironing,household cloth,,Sanket,8547667663,text,250 household cloth iron
+c9a6d875-4a0b-4498-8317-2c197cba80db,2026-06-10,18:06:54,4705.00,expense,Rent & Housing,Maintenance,maintenance,,Sanket,8547667663,text,4705 maintenance
+b4d46fbb-123d-41c7-95db-f65fb9ea07a1,2026-06-10,18:07:08,750.00,expense,Shopping,Home Decor,pillows,,Sanket,8547667663,text,750 pillows
+4c4b0559-ef7b-426d-bd79-69d9e7473780,2026-06-10,18:07:38,29000.00,expense,Rent & Housing,Rent,Rent,,Sanket,8547667663,text,Rent 29000
+c65118c5-6b24-4d5f-b021-eb25c5fc49c2,2026-05-01,18:08:17,1000.00,expense,Gifts & Misc,,miscellaneous,Swaroop,Sanket,8547667663,text,May month 1000 swaroop miscellaneous
+eab0e7b2-495c-4fb2-b24a-f30d9f495317,2026-05-01,18:09:51,4543.00,expense,Rent & Housing,Maintenance,May maintenance,,Sanket,8547667663,text,May month maintenance 4543
+d983727e-208d-4edd-92d2-7a4d8f259e4b,2026-06-10,18:11:21,65000.00,expense,EMI & Loans,Home Loan,Home EMI,,Sanket,8547667663,text,65000 home emi
+d061839c-6a95-4975-8a2a-9185f5ab3d98,2026-05-01,18:12:27,2225.00,expense,Subscriptions,ChatGpt,ChatGpt Subscription,,Sanket,8547667663,text,May month chatgpt subscription 2225
+9a12cd92-32c4-4e2f-b930-1a6d8843c0f3,2026-06-10,18:12:46,2225.00,expense,Subscriptions,ChatGpt,ChatGpt,,Sanket,8547667663,text,chatgpt subscription 2225
+596afb61-7e97-40d1-9c51-ec040ade0f74,2026-05-01,18:14:33,3269.00,expense,Health & Medical,Insurance,Term Insurance,,Sanket,8547667663,text,May month  term insurance 3269
+67bdf8c0-4c3c-4506-9828-6b7a1af49d99,2026-06-10,18:14:45,3269.00,expense,Health & Medical,Insurance,Term insurance,,Sanket,8547667663,text,Term insurance 3269
+afa9a48b-e446-4772-bf9f-5eaa3c4a7eaa,2026-05-01,18:15:14,3385.00,expense,Gifts & Misc,,Hridaya gift,Hridaya,Sanket,8547667663,text,May month Hridaya gift 3385
+d10b8fd5-c0d8-4a31-ac43-08b13d53846e,2026-05-01,18:15:38,549.00,expense,Subscriptions,ChatGpt,Overleaf subscription,,Sanket,8547667663,text,May month Overleaf subscription 549
+2aa85fc4-386d-4581-a4e9-4c8330ce4377,2026-06-10,18:15:51,549.00,expense,Subscriptions,ChatGpt,Overleaf,,Sanket,8547667663,text,Overleaf subscription 549
+e170e86d-3ed5-4d7b-ada7-05e0a81d1871,2026-06-10,18:16:29,491.00,expense,Food & Dining,Delivery,Swiggy order,Swiggy,Sanket,8547667663,text,Swiggy 491
+cb0580d3-c9e4-49ec-ac4d-fb42ede1e637,2026-06-10,18:16:51,1548.00,expense,Gifts & Misc,,Hridaya gift,Hridaya,Sanket,8547667663,text,1548 hridaya gift

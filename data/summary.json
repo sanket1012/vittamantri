@@ -1,33 +1,35 @@
 {
-  "last_updated": "2026-06-04T15:38:26+05:30",
-  "total_income": 463870.0,
-  "total_expense": 187522.69,
-  "net_savings": 276347.31,
-  "transaction_count": 76,
+  "last_updated": "2026-06-10T18:58:48+05:30",
+  "total_income": 464314.0,
+  "total_expense": 419802.67,
+  "net_savings": 44511.33,
+  "transaction_count": 229,
   "category_totals": {
-    "EMI & Loans": 115500.0,
-    "Education": 0.0,
+    "EMI & Loans": 180210.0,
+    "Education": 27400.0,
     "Entertainment": 1470.0,
-    "Food & Dining": 4830.1,
-    "Gifts & Misc": 195.0,
-    "Groceries": 13260.59,
-    "Health & Medical": 92.0,
-    "Investment & SIP": 13000.0,
-    "Rent & Housing": 30630.0,
-    "Salary & Income": 0.0,
-    "Shopping": 0.0,
-    "Subscriptions": 19.0,
-    "Transport": 6919.0,
-    "Utilities & Bills": 1607.0
+    "Food & Dining": 20371.68,
+    "Gifts & Misc": 12685.0,
+    "Groceries": 16600.59,
+    "Health & Medical": 7027.0,
+    "Household Chores": 730.0,
+    "Investment & SIP": 15000.0,
+    "Rent & Housing": 68878.0,
+    "Salary & Income": 1000.0,
+    "Shopping": 3359.0,
+    "Subscriptions": 5567.0,
+    "Transport": 30309.4,
+    "Utilities & Bills": 4195.0,
+    "Vaishnavi": 25000.0
   },
   "monthly_totals": {
     "2026-05": {
       "income": 244185.0,
-      "expense": 171003.1
+      "expense": 227099.67
     },
     "2026-06": {
-      "income": 219685.0,
-      "expense": 16519.59
+      "income": 220129.0,
+      "expense": 192703.0
     }
   }
 }

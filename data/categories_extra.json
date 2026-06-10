@@ -1,5 +1,14 @@
 {
-  "categories": [],
+  "categories": [
+    {
+      "name": "Vaishnavi",
+      "emoji": ":)"
+    },
+    {
+      "name": "Household Chores",
+      "emoji": "🏷️"
+    }
+  ],
   "subcategories": {
     "Food & Dining": [
       "office-lunch",
@@ -10,7 +19,8 @@
     ],
     "Transport": [
       "Train",
-      "Lunch/Tea"
+      "Lunch/Tea",
+      "Bus"
     ],
     "Subscriptions": [
       "ChatGpt",
@@ -29,7 +39,15 @@
       "Maintenance"
     ],
     "Salary & Income": [
-      "Income from Different Account"
+      "Income from Different Account",
+      "cashback"
+    ],
+    "Vaishnavi": [
+      "General",
+      "Maid"
+    ],
+    "Household Chores": [
+      "Ironing"
     ]
   },
   "deleted_categories": []
