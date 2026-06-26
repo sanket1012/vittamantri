@@ -86,6 +86,33 @@ export const deleteSubcategory = async (categoryName, subcategoryName) => {
   return data;
 };
 
+// Auth / user profile
+export const getMe = async () => {
+  const { data } = await api.get('/me');
+  return data;
+};
+
+// Member management (admin only)
+export const getMembers = async () => {
+  const { data } = await api.get('/members');
+  return data;
+};
+
+export const addMember = async ({ username, displayName, password, role = 'member' }) => {
+  const { data } = await api.post('/members', { username, display_name: displayName, password, role });
+  return data;
+};
+
+export const deleteMember = async (id) => {
+  const { data } = await api.delete(`/members/${id}`);
+  return data;
+};
+
+export const resetMemberPassword = async (id, password) => {
+  const { data } = await api.patch(`/members/${id}/password`, { password });
+  return data;
+};
+
 export const csvExportUrl = '/api/export/csv';
 
 export default api;
