@@ -1,13 +1,22 @@
-import os
 import logging
+import os
 import pathlib
-from functools import wraps
-from io import StringIO
+from datetime import datetime, timezone
 
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, request, send_file, send_from_directory
+from flask import Flask, Response, g, jsonify, request, send_file, send_from_directory
 from flask_cors import CORS
 
+from auth import (
+    create_token,
+    get_user_by_username,
+    hash_password,
+    load_users,
+    require_admin,
+    require_auth,
+    save_users,
+    verify_password,
+)
 from data_manager import (
     bulk_update_transactions,
     clean_garbage,
@@ -38,9 +47,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("vittamantri.api")
 
 _DEBUG = os.getenv("DEBUG", "false").lower() == "true"
-_DASHBOARD_API_KEY = os.getenv("DASHBOARD_API_KEY", "")
-_DASHBOARD_USERNAME = os.getenv("DASHBOARD_USERNAME", "")
-_DASHBOARD_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")
 _STATIC_DIR = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
 _ALLOWED_ORIGINS = [os.getenv("FRONTEND_URL", "http://localhost:5173")]
@@ -48,7 +54,7 @@ if _DEBUG:
     _ALLOWED_ORIGINS += ["http://localhost:5173", "http://localhost:3000"]
 
 app = Flask(__name__)
-CORS(app, origins=_ALLOWED_ORIGINS, allow_headers=["Content-Type", "X-Api-Key"], supports_credentials=False)
+CORS(app, origins=_ALLOWED_ORIGINS, allow_headers=["Content-Type", "Authorization", "X-Bot-Key"], supports_credentials=False)
 
 _MAX_IMAGE_BYTES = 10 * 1024 * 1024   # 10 MB
 _MAX_PDF_BYTES = 20 * 1024 * 1024     # 20 MB
@@ -69,20 +75,7 @@ def error_response(message: str, status: int = 400):
     return jsonify({"error": message}), status
 
 
-def require_api_key(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not _DASHBOARD_API_KEY:
-            logger.warning("DASHBOARD_API_KEY is not set — API is unprotected")
-            return f(*args, **kwargs)
-        if request.headers.get("X-Api-Key") != _DASHBOARD_API_KEY:
-            return jsonify({"error": "Unauthorized"}), 401
-        return f(*args, **kwargs)
-    return decorated
-
-
 def _validate_image_file(file):
-    """Returns (bytes, mime_type) or raises ValueError."""
     raw = file.read(_MAX_IMAGE_BYTES + 1)
     if len(raw) > _MAX_IMAGE_BYTES:
         raise ValueError("File exceeds 10 MB limit.")
@@ -93,7 +86,6 @@ def _validate_image_file(file):
 
 
 def _validate_pdf_file(file):
-    """Returns bytes or raises ValueError."""
     raw = file.read(_MAX_PDF_BYTES + 1)
     if len(raw) > _MAX_PDF_BYTES:
         raise ValueError("File exceeds 20 MB limit.")
@@ -109,22 +101,159 @@ def health_check():
     return jsonify({"status": "वित्तमंत्री is running"})
 
 
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
 @app.route("/api/login", methods=["POST"])
 def login():
     payload = request.get_json(silent=True) or {}
-    username = payload.get("username", "")
-    password = payload.get("password", "")
-    if not _DASHBOARD_USERNAME or not _DASHBOARD_PASSWORD:
-        return error_response("Login not configured on server.", 500)
-    if username == _DASHBOARD_USERNAME and password == _DASHBOARD_PASSWORD:
-        return jsonify({"token": _DASHBOARD_API_KEY})
-    return jsonify({"error": "Invalid username or password"}), 401
+    username = (payload.get("username") or "").strip()
+    password = payload.get("password") or ""
+    if not username or not password:
+        return error_response("Username and password are required.", 400)
+    users = load_users()
+    if not users:
+        return error_response("No users configured. Run migrate_users.py to set up the first admin.", 503)
+    user = get_user_by_username(username)
+    if not user or not verify_password(user.get("password_hash", ""), password):
+        return jsonify({"error": "Invalid username or password"}), 401
+    token = create_token(user)
+    return jsonify({
+        "token": token,
+        "user": {
+            "id": user["id"],
+            "username": user["username"],
+            "display_name": user.get("display_name") or user["username"].title(),
+            "role": user.get("role", "member"),
+        },
+    })
+
+
+@app.route("/api/me", methods=["GET"])
+@require_auth
+def me():
+    u = g.current_user
+    return jsonify({
+        "id": u.get("user_id"),
+        "username": u.get("username"),
+        "display_name": u.get("display_name"),
+        "role": u.get("role"),
+    })
+
+
+# ── Members (admin-only management) ──────────────────────────────────────────
+
+@app.route("/api/members", methods=["GET"])
+@require_admin
+def list_members():
+    try:
+        users = load_users()
+        return jsonify([{
+            "id": u["id"],
+            "username": u["username"],
+            "display_name": u.get("display_name") or u["username"].title(),
+            "role": u.get("role", "member"),
+            "telegram_id": u.get("telegram_id"),
+            "created_at": u.get("created_at"),
+        } for u in users])
+    except Exception:
+        logger.exception("list_members failed")
+        return _internal_error()
+
+
+@app.route("/api/members", methods=["POST"])
+@require_admin
+def add_member():
+    try:
+        payload = request.get_json(silent=True) or {}
+        username = (payload.get("username") or "").strip()
+        display_name = (payload.get("display_name") or "").strip()
+        password = payload.get("password") or ""
+        role = payload.get("role", "member")
+
+        if not username or not password:
+            return error_response("username and password are required.", 400)
+        if len(password) < 6:
+            return error_response("Password must be at least 6 characters.", 400)
+        if role not in ("admin", "member"):
+            return error_response("role must be 'admin' or 'member'.", 400)
+
+        users = load_users()
+        if any(u["username"].lower() == username.lower() for u in users):
+            return error_response(f"Username '{username}' is already taken.", 409)
+
+        new_id = max((u["id"] for u in users), default=0) + 1
+        new_user = {
+            "id": new_id,
+            "username": username,
+            "display_name": display_name or username.title(),
+            "password_hash": hash_password(password),
+            "telegram_id": None,
+            "role": role,
+            "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        }
+        users.append(new_user)
+        save_users(users)
+        logger.info("Member created: %s (role=%s)", username, role)
+        return jsonify({
+            "id": new_id,
+            "username": username,
+            "display_name": new_user["display_name"],
+            "role": role,
+            "message": f"Member '{username}' created.",
+        }), 201
+    except Exception:
+        logger.exception("add_member failed")
+        return _internal_error()
+
+
+@app.route("/api/members/<int:member_id>", methods=["DELETE"])
+@require_admin
+def delete_member(member_id):
+    try:
+        if member_id == g.current_user.get("user_id"):
+            return error_response("Cannot delete your own account.", 400)
+        users = load_users()
+        new_users = [u for u in users if u["id"] != member_id]
+        if len(new_users) == len(users):
+            return error_response("Member not found.", 404)
+        save_users(new_users)
+        logger.info("Member %d deleted by %s", member_id, g.current_user.get("username"))
+        return jsonify({"message": "Member deleted."})
+    except Exception:
+        logger.exception("delete_member failed")
+        return _internal_error()
+
+
+@app.route("/api/members/<int:member_id>/password", methods=["PATCH"])
+@require_auth
+def update_member_password(member_id):
+    try:
+        current = g.current_user
+        if current.get("role") != "admin" and current.get("user_id") != member_id:
+            return jsonify({"error": "Forbidden"}), 403
+
+        payload = request.get_json(silent=True) or {}
+        new_password = payload.get("password") or ""
+        if len(new_password) < 6:
+            return error_response("Password must be at least 6 characters.", 400)
+
+        users = load_users()
+        user = next((u for u in users if u["id"] == member_id), None)
+        if not user:
+            return error_response("Member not found.", 404)
+
+        user["password_hash"] = hash_password(new_password)
+        save_users(users)
+        return jsonify({"message": "Password updated."})
+    except Exception:
+        logger.exception("update_member_password failed")
+        return _internal_error()
 
 
 # ── Transactions ──────────────────────────────────────────────────────────────
 
 @app.route("/api/transactions", methods=["GET"])
-@require_api_key
+@require_auth
 def list_transactions():
     try:
         month_filter = request.args.get("month")
@@ -138,7 +267,7 @@ def list_transactions():
 
 
 @app.route("/api/transactions/<id>", methods=["GET"])
-@require_api_key
+@require_auth
 def get_transaction(id):
     try:
         transaction = next((t for t in get_all_transactions() if t.get("id") == id), None)
@@ -151,7 +280,7 @@ def get_transaction(id):
 
 
 @app.route("/api/transactions", methods=["POST"])
-@require_api_key
+@require_auth
 def add_transaction():
     try:
         payload = request.get_json(silent=True) or {}
@@ -164,7 +293,7 @@ def add_transaction():
 
 
 @app.route("/api/transactions/batch", methods=["PATCH"])
-@require_api_key
+@require_auth
 def batch_patch_transactions():
     try:
         payload = request.get_json(silent=True) or {}
@@ -182,7 +311,7 @@ def batch_patch_transactions():
 
 
 @app.route("/api/transactions/<id>", methods=["PATCH"])
-@require_api_key
+@require_auth
 def patch_transaction(id):
     try:
         payload = request.get_json(silent=True) or {}
@@ -200,7 +329,7 @@ def patch_transaction(id):
 
 
 @app.route("/api/transactions/<id>", methods=["DELETE"])
-@require_api_key
+@require_auth
 def remove_transaction(id):
     try:
         if not delete_transaction(id):
@@ -212,7 +341,7 @@ def remove_transaction(id):
 
 
 @app.route("/api/transactions/clean", methods=["DELETE"])
-@require_api_key
+@require_auth
 def clean_transactions():
     try:
         deleted_count = clean_garbage()
@@ -225,7 +354,7 @@ def clean_transactions():
 # ── Summary ───────────────────────────────────────────────────────────────────
 
 @app.route("/api/summary", methods=["GET"])
-@require_api_key
+@require_auth
 def summary():
     try:
         return jsonify(rebuild_summary())
@@ -235,7 +364,7 @@ def summary():
 
 
 @app.route("/api/categories", methods=["GET"])
-@require_api_key
+@require_auth
 def categories():
     try:
         return jsonify(get_categories())
@@ -245,7 +374,7 @@ def categories():
 
 
 @app.route("/api/categories/full", methods=["GET"])
-@require_api_key
+@require_auth
 def categories_full():
     try:
         return jsonify(get_categories_with_subcategories())
@@ -255,7 +384,7 @@ def categories_full():
 
 
 @app.route("/api/categories", methods=["POST"])
-@require_api_key
+@require_auth
 def create_category():
     try:
         payload = request.get_json(silent=True) or {}
@@ -271,7 +400,7 @@ def create_category():
 
 
 @app.route("/api/categories/<path:category_name>/subcategories", methods=["POST"])
-@require_api_key
+@require_auth
 def create_subcategory(category_name):
     try:
         payload = request.get_json(silent=True) or {}
@@ -286,7 +415,7 @@ def create_subcategory(category_name):
 
 
 @app.route("/api/categories/<path:category_name>/subcategories/<path:subcategory_name>", methods=["DELETE"])
-@require_api_key
+@require_auth
 def remove_subcategory(category_name, subcategory_name):
     try:
         if not delete_custom_subcategory(category_name, subcategory_name):
@@ -298,7 +427,7 @@ def remove_subcategory(category_name, subcategory_name):
 
 
 @app.route("/api/categories/<path:category_name>", methods=["DELETE"])
-@require_api_key
+@require_auth
 def remove_category(category_name):
     try:
         if not delete_category(category_name):
@@ -310,7 +439,7 @@ def remove_category(category_name):
 
 
 @app.route("/api/users", methods=["GET"])
-@require_api_key
+@require_auth
 def users():
     try:
         return jsonify(get_all_users())
@@ -320,7 +449,7 @@ def users():
 
 
 @app.route("/api/transactions/user/<int:logged_by_id>", methods=["GET"])
-@require_api_key
+@require_auth
 def transactions_by_user(logged_by_id):
     try:
         return jsonify({"transactions": get_transactions_by_user(logged_by_id)})
@@ -330,7 +459,7 @@ def transactions_by_user(logged_by_id):
 
 
 @app.route("/api/summary/user/<int:logged_by_id>", methods=["GET"])
-@require_api_key
+@require_auth
 def summary_by_user(logged_by_id):
     try:
         return jsonify(get_user_summary(logged_by_id))
@@ -340,7 +469,7 @@ def summary_by_user(logged_by_id):
 
 
 @app.route("/api/summary/monthly", methods=["GET"])
-@require_api_key
+@require_auth
 def monthly_summary():
     try:
         return jsonify(get_summary().get("monthly_totals", {}))
@@ -350,7 +479,7 @@ def monthly_summary():
 
 
 @app.route("/api/summary/categories", methods=["GET"])
-@require_api_key
+@require_auth
 def category_summary():
     try:
         return jsonify(get_summary().get("category_totals", {}))
@@ -362,7 +491,7 @@ def category_summary():
 # ── Export ────────────────────────────────────────────────────────────────────
 
 @app.route("/api/export/csv", methods=["GET"])
-@require_api_key
+@require_auth
 def export_csv():
     try:
         return send_file(transaction_csv_path(), as_attachment=True, download_name="transactions.csv", mimetype="text/csv")
@@ -372,7 +501,7 @@ def export_csv():
 
 
 @app.route("/api/export/monthly/<int:year>/<int:month>", methods=["GET"])
-@require_api_key
+@require_auth
 def export_monthly(year, month):
     try:
         if not (1 <= month <= 12):
@@ -393,7 +522,7 @@ def export_monthly(year, month):
 # ── Parse ─────────────────────────────────────────────────────────────────────
 
 @app.route("/api/parse/text", methods=["POST"])
-@require_api_key
+@require_auth
 def parse_text():
     try:
         payload = request.get_json(silent=True) or {}
@@ -409,7 +538,7 @@ def parse_text():
 
 
 @app.route("/api/parse/image", methods=["POST"])
-@require_api_key
+@require_auth
 def parse_image():
     try:
         file = request.files.get("image") or request.files.get("file")
@@ -427,7 +556,7 @@ def parse_image():
 
 
 @app.route("/api/parse/pdf", methods=["POST"])
-@require_api_key
+@require_auth
 def parse_pdf():
     try:
         file = request.files.get("pdf") or request.files.get("file")
