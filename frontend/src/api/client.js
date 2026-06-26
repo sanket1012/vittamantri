@@ -5,10 +5,10 @@ const api = axios.create({
   timeout: 20000,
 });
 
-// Restore key from localStorage on page load
-const storedKey = localStorage.getItem('api_key');
-if (storedKey) {
-  api.defaults.headers.common['X-Api-Key'] = storedKey;
+// Restore JWT from localStorage on page load
+const storedToken = localStorage.getItem('jwt_token');
+if (storedToken) {
+  api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 }
 
 export const fetchTransactions = async (month) => {
