@@ -18,9 +18,9 @@ export default function LoginGate({ onUnlock }) {
     setError('');
     try {
       const { data } = await api.post('/login', { username: username.trim(), password });
-      localStorage.setItem('api_key', data.token);
-      api.defaults.headers.common['X-Api-Key'] = data.token;
-      onUnlock();
+      localStorage.setItem('jwt_token', data.token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+      onUnlock(data.user);
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Check your credentials.');
     } finally {
