@@ -229,6 +229,7 @@ export default function Dashboard({ onLogout, currentUser }) {
   const [loading, setLoading] = useState(true);
   const [addOpen, setAddOpen] = useState(false);
   const [cleanOpen, setCleanOpen] = useState(false);
+  const [membersOpen, setMembersOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
   const [filters, setFilters] = useState({ user: 'All', category: 'All', subcategory: 'All', type: 'All', month: '', search: '' });
 
