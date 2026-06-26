@@ -335,6 +335,8 @@ export default function Dashboard({ onLogout, currentUser }) {
           onLogout={onLogout}
           invalidCount={invalidCount}
           showMenu={isMobile}
+          currentUser={currentUser}
+          onManageMembers={() => setMembersOpen(true)}
         />
 
         <Box sx={{ flex: 1, p: '20px', overflow: 'auto' }}>
