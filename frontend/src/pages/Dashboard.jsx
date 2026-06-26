@@ -392,6 +392,7 @@ export default function Dashboard({ onLogout, currentUser }) {
       </Box>
 
       <AddTransaction open={addOpen} onClose={() => setAddOpen(false)} onSaved={handleSaved} categories={categories} subcategoryOptions={SUBCATEGORY_OPTIONS} />
+      <MembersModal open={membersOpen} onClose={() => setMembersOpen(false)} currentUser={currentUser} />
 
       <Dialog open={cleanOpen} onClose={() => setCleanOpen(false)} maxWidth="xs" fullWidth>
         <DialogTitle sx={{ fontWeight: 600, color: '#101828' }}>🧹 Clean Invalid Transactions</DialogTitle>
