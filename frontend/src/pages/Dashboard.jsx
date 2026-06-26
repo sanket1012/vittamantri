@@ -8,6 +8,7 @@ import AddTransaction from '../components/AddTransaction.jsx';
 import CategoriesPage from '../components/CategoriesPage.jsx';
 import FilterBar from '../components/FilterBar.jsx';
 import Header from '../components/Header.jsx';
+import MembersModal from '../components/MembersModal.jsx';
 import MonthlyBarChart from '../components/MonthlyBarChart.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import SpendingPieChart from '../components/SpendingPieChart.jsx';
