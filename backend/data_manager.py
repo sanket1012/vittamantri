@@ -1,4 +1,4 @@
-"""CSV and JSON storage for VittaMantri."""
+"""CSV and JSON storage for VittaMantri — multi-tenant, one directory per household."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import io
 import json
 import logging
 import threading
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -21,9 +22,7 @@ logger = logging.getLogger("vittamantri.data")
 IST = pytz.timezone("Asia/Kolkata")
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
-TRANSACTIONS_FILE = DATA_DIR / "transactions.csv"
-SUMMARY_FILE = DATA_DIR / "summary.json"
-CATEGORIES_EXTRA_FILE = DATA_DIR / "categories_extra.json"
+
 CSV_COLUMNS = [
     "id",
     "date",
@@ -39,8 +38,26 @@ CSV_COLUMNS = [
     "input_method",
     "raw_input",
 ]
-_lock = threading.Lock()
 
+# Per-household locks: prevents concurrent writes to the same household's files.
+_locks: dict[int, threading.Lock] = defaultdict(threading.Lock)
+
+
+def _lock_for(household_id: int) -> threading.Lock:
+    return _locks[household_id]
+
+
+def _get_paths(household_id: int) -> dict[str, Path]:
+    base = DATA_DIR / f"h_{household_id}"
+    return {
+        "dir": base,
+        "transactions": base / "transactions.csv",
+        "summary": base / "summary.json",
+        "categories_extra": base / "categories_extra.json",
+    }
+
+
+# ── IST helpers ───────────────────────────────────────────────────────────────
 
 def _now_ist() -> datetime:
     return datetime.now(IST)
@@ -58,52 +75,58 @@ def _empty_summary() -> dict[str, Any]:
     }
 
 
-def ensure_data_files() -> None:
+# ── File I/O helpers (all take explicit paths) ────────────────────────────────
+
+def ensure_data_files(household_id: int) -> None:
+    paths = _get_paths(household_id)
     try:
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        if not TRANSACTIONS_FILE.exists():
-            with TRANSACTIONS_FILE.open("w", newline="", encoding="utf-8") as file:
-                csv.DictWriter(file, fieldnames=CSV_COLUMNS).writeheader()
+        paths["dir"].mkdir(parents=True, exist_ok=True)
+        if not paths["transactions"].exists():
+            with paths["transactions"].open("w", newline="", encoding="utf-8") as f:
+                csv.DictWriter(f, fieldnames=CSV_COLUMNS).writeheader()
         else:
-            _migrate_transactions_file()
-        if not SUMMARY_FILE.exists():
-            _write_summary(_empty_summary())
+            _migrate_transactions_file(paths["transactions"])
+        if not paths["summary"].exists():
+            _write_summary_to(paths["summary"], _empty_summary())
     except OSError as exc:
-        raise RuntimeError(f"Unable to initialize data files: {exc}") from exc
+        raise RuntimeError(f"Unable to initialize data files for household {household_id}: {exc}") from exc
 
 
-def _migrate_transactions_file() -> None:
-    with TRANSACTIONS_FILE.open("r", newline="", encoding="utf-8") as file:
-        reader = csv.DictReader(file)
+def _migrate_transactions_file(transactions_file: Path) -> None:
+    with transactions_file.open("r", newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
         if reader.fieldnames == CSV_COLUMNS:
             return
         rows = list(reader)
-    with TRANSACTIONS_FILE.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=CSV_COLUMNS)
+    with transactions_file.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
         writer.writeheader()
         for row in rows:
-            migrated = {column: row.get(column, "") for column in CSV_COLUMNS}
-            writer.writerow(migrated)
+            writer.writerow({col: row.get(col, "") for col in CSV_COLUMNS})
 
 
-def _write_summary(summary: dict[str, Any]) -> None:
-    with SUMMARY_FILE.open("w", encoding="utf-8") as file:
-        json.dump(summary, file, indent=2, ensure_ascii=False)
+def _write_summary_to(summary_file: Path, summary: dict[str, Any]) -> None:
+    with summary_file.open("w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
 
 
-def _read_rows_unlocked() -> list[dict[str, str]]:
-    ensure_data_files()
-    with TRANSACTIONS_FILE.open("r", newline="", encoding="utf-8") as file:
-        return list(csv.DictReader(file))
+def _read_rows_unlocked(household_id: int) -> list[dict[str, str]]:
+    ensure_data_files(household_id)
+    transactions_file = _get_paths(household_id)["transactions"]
+    with transactions_file.open("r", newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
 
 
-def _write_rows_unlocked(rows: list[dict[str, Any]]) -> None:
-    ensure_data_files()
-    with TRANSACTIONS_FILE.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=CSV_COLUMNS)
+def _write_rows_unlocked(household_id: int, rows: list[dict[str, Any]]) -> None:
+    ensure_data_files(household_id)
+    transactions_file = _get_paths(household_id)["transactions"]
+    with transactions_file.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
         writer.writeheader()
-        writer.writerows([{column: row.get(column, "") for column in CSV_COLUMNS} for row in rows])
+        writer.writerows([{col: row.get(col, "") for col in CSV_COLUMNS} for row in rows])
 
+
+# ── Value helpers ─────────────────────────────────────────────────────────────
 
 def _as_float(value: Any) -> float:
     try:
@@ -118,28 +141,25 @@ def _short_description(value: Any) -> str:
 
 
 _DATE_FORMATS = [
-    # ISO / numeric
-    "%Y-%m-%d",       # 2026-05-06
-    "%d-%m-%Y",       # 06-05-2026
-    "%d/%m/%Y",       # 06/05/2026
-    "%Y/%m/%d",       # 2026/05/06
-    "%d-%m-%y",       # 06-05-26
-    "%d/%m/%y",       # 06/05/26
-    "%m/%d/%Y",       # 05/06/2026  (US style, rare but possible)
-    # Month-name long year
-    "%d %B %Y",       # 06 May 2026
-    "%d %b %Y",       # 06 May 2026  (abbreviated)
-    "%B %d, %Y",      # May 06, 2026
-    "%b %d, %Y",      # May 06, 2026
-    "%B %d %Y",       # May 06 2026
-    "%b %d %Y",       # May 06 2026
-    "%d-%b-%Y",       # 06-May-2026
-    "%d-%B-%Y",       # 06-May-2026
-    # Month-name short year (2-digit)
-    "%d %b %y",       # 6 May 26
-    "%d %B %y",       # 6 May 2026
-    "%b %d, %y",      # May 6, 26
-    "%d-%b-%y",       # 06-May-26
+    "%Y-%m-%d",
+    "%d-%m-%Y",
+    "%d/%m/%Y",
+    "%Y/%m/%d",
+    "%d-%m-%y",
+    "%d/%m/%y",
+    "%m/%d/%Y",
+    "%d %B %Y",
+    "%d %b %Y",
+    "%B %d, %Y",
+    "%b %d, %Y",
+    "%B %d %Y",
+    "%b %d %Y",
+    "%d-%b-%Y",
+    "%d-%B-%Y",
+    "%d %b %y",
+    "%d %B %y",
+    "%b %d, %y",
+    "%d-%b-%y",
 ]
 
 
@@ -200,7 +220,7 @@ def _normalize_transaction(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def _public_row(row: dict[str, Any]) -> dict[str, Any]:
-    item = {column: row.get(column, "") for column in CSV_COLUMNS}
+    item = {col: row.get(col, "") for col in CSV_COLUMNS}
     item["logged_by"] = item.get("logged_by") or "Unknown"
     item["logged_by_id"] = str(item.get("logged_by_id") or "0")
     item["amount"] = _as_float(item["amount"])
@@ -233,7 +253,7 @@ def _summary_from_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _recalculate_summary_unlocked(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def _recalculate_summary_unlocked(household_id: int, rows: list[dict[str, Any]]) -> dict[str, Any]:
     summary = _empty_summary()
     for row in rows:
         amount = _as_float(row.get("amount"))
@@ -256,54 +276,43 @@ def _recalculate_summary_unlocked(rows: list[dict[str, Any]]) -> dict[str, Any]:
     summary["total_expense"] = round(summary["total_expense"], 2)
     summary["net_savings"] = round(summary["total_income"] - summary["total_expense"], 2)
     summary["transaction_count"] = len(rows)
-    summary["category_totals"] = {key: round(value, 2) for key, value in sorted(summary["category_totals"].items())}
+    summary["category_totals"] = {k: round(v, 2) for k, v in sorted(summary["category_totals"].items())}
     summary["monthly_totals"] = {
-        key: {"income": round(value.get("income", 0.0), 2), "expense": round(value.get("expense", 0.0), 2)}
-        for key, value in sorted(summary["monthly_totals"].items())
+        k: {"income": round(v.get("income", 0.0), 2), "expense": round(v.get("expense", 0.0), 2)}
+        for k, v in sorted(summary["monthly_totals"].items())
     }
     summary["last_updated"] = _now_ist().replace(microsecond=0).isoformat()
-    _write_summary(summary)
+    _write_summary_to(_get_paths(household_id)["summary"], summary)
     return summary
 
 
-def save_transaction(data: dict[str, Any]) -> str:
-    try:
-        row = _normalize_transaction(data)
-        with _lock:
-            rows = _read_rows_unlocked()
-            rows.append(row)
-            _write_rows_unlocked(rows)
-            _recalculate_summary_unlocked(rows)
-        return row["id"]
-    except Exception as exc:
-        raise RuntimeError(f"Unable to save transaction: {exc}") from exc
+# ── Public read functions ─────────────────────────────────────────────────────
 
-
-def get_all_transactions() -> list[dict[str, Any]]:
+def get_all_transactions(household_id: int) -> list[dict[str, Any]]:
     try:
-        rows = _read_rows_unlocked()
-        return sorted((_public_row(row) for row in rows), key=lambda row: (row["date"], row["time"]), reverse=True)
+        rows = _read_rows_unlocked(household_id)
+        return sorted((_public_row(r) for r in rows), key=lambda r: (r["date"], r["time"]), reverse=True)
     except Exception as exc:
         raise RuntimeError(f"Unable to read transactions: {exc}") from exc
 
 
-def get_transactions_by_month(year: int, month: int) -> list[dict[str, Any]]:
+def get_transactions_by_month(year: int, month: int, household_id: int) -> list[dict[str, Any]]:
     prefix = f"{year:04d}-{month:02d}"
-    return [row for row in get_all_transactions() if str(row.get("date", "")).startswith(prefix)]
+    return [r for r in get_all_transactions(household_id) if str(r.get("date", "")).startswith(prefix)]
 
 
-def get_transactions_by_category(category: str) -> list[dict[str, Any]]:
-    return [row for row in get_all_transactions() if row.get("category") == category]
+def get_transactions_by_category(category: str, household_id: int) -> list[dict[str, Any]]:
+    return [r for r in get_all_transactions(household_id) if r.get("category") == category]
 
 
-def get_transactions_by_user(logged_by_id: int) -> list[dict[str, Any]]:
+def get_transactions_by_user(logged_by_id: int, household_id: int) -> list[dict[str, Any]]:
     user_id = str(logged_by_id)
-    return [row for row in get_all_transactions() if str(row.get("logged_by_id") or "0") == user_id]
+    return [r for r in get_all_transactions(household_id) if str(r.get("logged_by_id") or "0") == user_id]
 
 
-def get_all_users() -> list[dict[str, Any]]:
+def get_all_users(household_id: int) -> list[dict[str, Any]]:
     users: dict[str, dict[str, Any]] = {}
-    for row in get_all_transactions():
+    for row in get_all_transactions(household_id):
         user_id = str(row.get("logged_by_id") or "0")
         name = row.get("logged_by") or "Unknown"
         users.setdefault(user_id, {"logged_by": name, "logged_by_id": int(user_id) if user_id.isdigit() else 0, "count": 0})
@@ -312,14 +321,14 @@ def get_all_users() -> list[dict[str, Any]]:
     return sorted(users.values(), key=lambda item: item["logged_by"].lower())
 
 
-def get_user_summary(logged_by_id: int) -> dict[str, Any]:
-    return _summary_from_rows(get_transactions_by_user(logged_by_id))
+def get_user_summary(logged_by_id: int, household_id: int) -> dict[str, Any]:
+    return _summary_from_rows(get_transactions_by_user(logged_by_id, household_id))
 
 
-def get_categories() -> list[dict[str, str]]:
-    deleted: set[str] = set(_read_extra_categories().get("deleted_categories", []))
+def get_categories(household_id: int) -> list[dict[str, str]]:
+    deleted: set[str] = set(_read_extra_categories(household_id).get("deleted_categories", []))
     names: set[str] = {n for n in CATEGORY_NAMES if n not in deleted}
-    for row in get_all_transactions():
+    for row in get_all_transactions(household_id):
         category = str(row.get("category") or "").strip()
         if category and category not in deleted:
             names.add(category)
@@ -329,30 +338,45 @@ def get_categories() -> list[dict[str, str]]:
     ]
 
 
-def get_summary() -> dict[str, Any]:
+def get_summary(household_id: int) -> dict[str, Any]:
+    paths = _get_paths(household_id)
+    ensure_data_files(household_id)
     try:
-        ensure_data_files()
-        with SUMMARY_FILE.open("r", encoding="utf-8") as file:
-            return json.load(file)
+        with paths["summary"].open("r", encoding="utf-8") as f:
+            return json.load(f)
     except (OSError, json.JSONDecodeError):
-        with _lock:
-            return _recalculate_summary_unlocked(_read_rows_unlocked())
+        with _lock_for(household_id):
+            return _recalculate_summary_unlocked(household_id, _read_rows_unlocked(household_id))
 
 
-def rebuild_summary() -> dict[str, Any]:
-    with _lock:
-        return _recalculate_summary_unlocked(_read_rows_unlocked())
+# ── Public write functions ────────────────────────────────────────────────────
+
+def save_transaction(data: dict[str, Any], household_id: int) -> str:
+    try:
+        row = _normalize_transaction(data)
+        with _lock_for(household_id):
+            rows = _read_rows_unlocked(household_id)
+            rows.append(row)
+            _write_rows_unlocked(household_id, rows)
+            _recalculate_summary_unlocked(household_id, rows)
+        return row["id"]
+    except Exception as exc:
+        raise RuntimeError(f"Unable to save transaction: {exc}") from exc
 
 
-def update_transaction_category(id: str, category: str) -> bool:
-    return update_transaction_fields(id, {"category": category})
+def rebuild_summary(household_id: int) -> dict[str, Any]:
+    with _lock_for(household_id):
+        return _recalculate_summary_unlocked(household_id, _read_rows_unlocked(household_id))
+
+
+def update_transaction_category(id: str, category: str, household_id: int) -> bool:
+    return update_transaction_fields(id, {"category": category}, household_id)
 
 
 _MUTABLE_FIELDS = {"category", "subcategory", "description", "source", "type", "amount", "date"}
 
 
 def _normalize_field(key: str, value: Any) -> str | None:
-    """Normalize and validate a single mutable field value. Returns None to skip."""
     if key == "amount":
         amount = _as_float(value)
         return f"{amount:.2f}" if amount > 0 else None
@@ -364,83 +388,121 @@ def _normalize_field(key: str, value: Any) -> str | None:
     return str(value).strip()
 
 
-def update_transaction_fields(id: str, fields: dict[str, Any]) -> bool:
+def update_transaction_fields(id: str, fields: dict[str, Any], household_id: int) -> bool:
     normalized = {k: _normalize_field(k, v) for k, v in fields.items() if k in _MUTABLE_FIELDS}
     normalized = {k: v for k, v in normalized.items() if v is not None}
     if not normalized:
         return False
     try:
-        with _lock:
-            rows = _read_rows_unlocked()
+        with _lock_for(household_id):
+            rows = _read_rows_unlocked(household_id)
             for row in rows:
                 if row.get("id") == id:
                     row.update(normalized)
-                    _write_rows_unlocked(rows)
-                    _recalculate_summary_unlocked(rows)
+                    _write_rows_unlocked(household_id, rows)
+                    _recalculate_summary_unlocked(household_id, rows)
                     return True
             return False
     except Exception as exc:
         raise RuntimeError(f"Unable to update transaction: {exc}") from exc
 
 
-def bulk_update_transactions(ids: list[str], fields: dict[str, Any]) -> int:
-    """Apply *fields* to every transaction whose id is in *ids*. Returns updated count."""
+def bulk_update_transactions(ids: list[str], fields: dict[str, Any], household_id: int) -> int:
     normalized = {k: _normalize_field(k, v) for k, v in fields.items() if k in _MUTABLE_FIELDS}
     normalized = {k: v for k, v in normalized.items() if v is not None}
     if not normalized or not ids:
         return 0
     id_set = set(ids)
     try:
-        with _lock:
-            rows = _read_rows_unlocked()
+        with _lock_for(household_id):
+            rows = _read_rows_unlocked(household_id)
             count = sum(1 for row in rows if row.get("id") in id_set)
             if not count:
                 return 0
             for row in rows:
                 if row.get("id") in id_set:
                     row.update(normalized)
-            _write_rows_unlocked(rows)
-            _recalculate_summary_unlocked(rows)
+            _write_rows_unlocked(household_id, rows)
+            _recalculate_summary_unlocked(household_id, rows)
             return count
     except Exception as exc:
         raise RuntimeError(f"Unable to bulk update transactions: {exc}") from exc
 
 
+def delete_transaction(id: str, household_id: int) -> bool:
+    try:
+        with _lock_for(household_id):
+            rows = _read_rows_unlocked(household_id)
+            remaining = [r for r in rows if r.get("id") != id]
+            if len(remaining) == len(rows):
+                return False
+            _write_rows_unlocked(household_id, remaining)
+            _recalculate_summary_unlocked(household_id, remaining)
+            return True
+    except Exception as exc:
+        raise RuntimeError(f"Unable to delete transaction: {exc}") from exc
+
+
+def clean_garbage(household_id: int) -> int:
+    try:
+        with _lock_for(household_id):
+            rows = _read_rows_unlocked(household_id)
+            clean_rows = [r for r in rows if not _is_garbage_row(r)]
+            deleted_count = len(rows) - len(clean_rows)
+            if deleted_count:
+                _write_rows_unlocked(household_id, clean_rows)
+            _recalculate_summary_unlocked(household_id, clean_rows)
+            return deleted_count
+    except Exception as exc:
+        raise RuntimeError(f"Unable to clean garbage transactions: {exc}") from exc
+
+
+def export_monthly_report(year: int, month: int, household_id: int) -> str:
+    try:
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=CSV_COLUMNS)
+        writer.writeheader()
+        for row in get_transactions_by_month(year, month, household_id):
+            writer.writerow({col: row.get(col, "") for col in CSV_COLUMNS})
+        return output.getvalue()
+    except Exception as exc:
+        raise RuntimeError(f"Unable to export monthly report: {exc}") from exc
+
+
+def transaction_csv_path(household_id: int) -> Path:
+    ensure_data_files(household_id)
+    return _get_paths(household_id)["transactions"]
+
+
 # ── Custom categories ─────────────────────────────────────────────────────────
 
-def _read_extra_categories() -> dict[str, Any]:
-    if not CATEGORIES_EXTRA_FILE.exists():
+def _read_extra_categories(household_id: int) -> dict[str, Any]:
+    cats_file = _get_paths(household_id)["categories_extra"]
+    if not cats_file.exists():
         return {"categories": [], "subcategories": {}}
     try:
-        with CATEGORIES_EXTRA_FILE.open("r", encoding="utf-8") as file:
-            return json.load(file)
+        with cats_file.open("r", encoding="utf-8") as f:
+            return json.load(f)
     except (OSError, json.JSONDecodeError):
         return {"categories": [], "subcategories": {}}
 
 
-def _write_extra_categories(data: dict[str, Any]) -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    with CATEGORIES_EXTRA_FILE.open("w", encoding="utf-8") as file:
-        json.dump(data, file, indent=2, ensure_ascii=False)
+def _write_extra_categories(household_id: int, data: dict[str, Any]) -> None:
+    paths = _get_paths(household_id)
+    paths["dir"].mkdir(parents=True, exist_ok=True)
+    with paths["categories_extra"].open("w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-def get_categories_with_subcategories() -> list[dict[str, Any]]:
-    """Return all categories with subcategories.
-
-    Each entry includes:
-    - subcategories: all subs (built-in + custom)
-    - custom_subcategories: only user-added subs (these can be deleted)
-    - is_custom: True for categories not in the built-in CATEGORY_NAMES list
-    Built-in categories that the user has deleted are excluded.
-    """
-    extra = _read_extra_categories()
+def get_categories_with_subcategories(household_id: int) -> list[dict[str, Any]]:
+    extra = _read_extra_categories(household_id)
     deleted: set[str] = set(extra.get("deleted_categories", []))
     result: list[dict[str, Any]] = []
     known: set[str] = set()
 
     for name in CATEGORY_NAMES:
         if name in deleted:
-            known.add(name)   # still mark as known so transactions don't re-surface it
+            known.add(name)
             continue
         meta = CATEGORIES.get(name, {})
         builtin_subs = list(SUBCATEGORY_MAP.get(name, []))
@@ -468,7 +530,7 @@ def get_categories_with_subcategories() -> list[dict[str, Any]]:
         })
         known.add(name)
 
-    for row in get_all_transactions():
+    for row in get_all_transactions(household_id):
         cat = str(row.get("category") or "").strip()
         if cat and cat not in known:
             custom_subs = list(extra.get("subcategories", {}).get(cat, []))
@@ -484,35 +546,28 @@ def get_categories_with_subcategories() -> list[dict[str, Any]]:
     return result
 
 
-def save_custom_category(name: str, emoji: str = "🏷️") -> None:
-    extra = _read_extra_categories()
+def save_custom_category(name: str, emoji: str = "🏷️", *, household_id: int) -> None:
+    extra = _read_extra_categories(household_id)
     cats: list[dict] = extra.setdefault("categories", [])
     if not any(c["name"] == name for c in cats):
         cats.append({"name": name, "emoji": emoji})
-        _write_extra_categories(extra)
+        _write_extra_categories(household_id, extra)
 
 
-def save_custom_subcategory(category_name: str, subcategory: str) -> None:
-    extra = _read_extra_categories()
+def save_custom_subcategory(category_name: str, subcategory: str, *, household_id: int) -> None:
+    extra = _read_extra_categories(household_id)
     subs: dict = extra.setdefault("subcategories", {})
     cat_subs: list = subs.setdefault(category_name, [])
     if subcategory not in cat_subs:
         cat_subs.append(subcategory)
-        _write_extra_categories(extra)
+        _write_extra_categories(household_id, extra)
 
 
-def delete_category(name: str) -> bool:
-    """Delete any category — built-in or custom.
-
-    Built-in categories are added to deleted_categories (hidden from UI).
-    Custom categories are removed from the categories list entirely.
-    Always returns True unless the name is blank.
-    """
+def delete_category(name: str, household_id: int) -> bool:
     if not name:
         return False
-    extra = _read_extra_categories()
+    extra = _read_extra_categories(household_id)
     if name in CATEGORY_NAMES:
-        # Mark built-in as deleted rather than removing from code
         deleted: list = extra.setdefault("deleted_categories", [])
         if name not in deleted:
             deleted.append(name)
@@ -521,69 +576,19 @@ def delete_category(name: str) -> bool:
         cats = extra.get("categories", [])
         extra["categories"] = [c for c in cats if c["name"] != name]
         extra.get("subcategories", {}).pop(name, None)
-    _write_extra_categories(extra)
+    _write_extra_categories(household_id, extra)
     return True
 
 
-# Keep old name as alias so existing callers don't break
 delete_custom_category = delete_category
 
 
-def delete_custom_subcategory(category_name: str, subcategory: str) -> bool:
-    """Delete a user-added subcategory. Returns False if not found in the custom list."""
-    extra = _read_extra_categories()
+def delete_custom_subcategory(category_name: str, subcategory: str, household_id: int) -> bool:
+    extra = _read_extra_categories(household_id)
     cat_subs: list = extra.get("subcategories", {}).get(category_name, [])
     if subcategory not in cat_subs:
         return False
     cat_subs.remove(subcategory)
     extra.setdefault("subcategories", {})[category_name] = cat_subs
-    _write_extra_categories(extra)
+    _write_extra_categories(household_id, extra)
     return True
-
-
-def delete_transaction(id: str) -> bool:
-    try:
-        with _lock:
-            rows = _read_rows_unlocked()
-            remaining = [row for row in rows if row.get("id") != id]
-            if len(remaining) == len(rows):
-                return False
-            _write_rows_unlocked(remaining)
-            _recalculate_summary_unlocked(remaining)
-            return True
-    except Exception as exc:
-        raise RuntimeError(f"Unable to delete transaction: {exc}") from exc
-
-
-def clean_garbage() -> int:
-    try:
-        with _lock:
-            rows = _read_rows_unlocked()
-            clean_rows = [row for row in rows if not _is_garbage_row(row)]
-            deleted_count = len(rows) - len(clean_rows)
-            if deleted_count:
-                _write_rows_unlocked(clean_rows)
-            _recalculate_summary_unlocked(clean_rows)
-            return deleted_count
-    except Exception as exc:
-        raise RuntimeError(f"Unable to clean garbage transactions: {exc}") from exc
-
-
-def export_monthly_report(year: int, month: int) -> str:
-    try:
-        output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=CSV_COLUMNS)
-        writer.writeheader()
-        for row in get_transactions_by_month(year, month):
-            writer.writerow({column: row.get(column, "") for column in CSV_COLUMNS})
-        return output.getvalue()
-    except Exception as exc:
-        raise RuntimeError(f"Unable to export monthly report: {exc}") from exc
-
-
-def transaction_csv_path() -> Path:
-    ensure_data_files()
-    return TRANSACTIONS_FILE
-
-
-ensure_data_files()
