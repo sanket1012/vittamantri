@@ -391,6 +391,10 @@ export default function Dashboard({ onLogout, currentUser }) {
           {activeSection === 'export' && (
             <ExportView onExport={handleExport} transactions={filteredTransactions} selectedUser={selectedUserName} />
           )}
+
+          {activeSection === 'profile' && (
+            <Profile currentUser={currentUser} />
+          )}
         </Box>
       </Box>
 
