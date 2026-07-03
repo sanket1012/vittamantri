@@ -92,6 +92,23 @@ export const getMe = async () => {
   return data;
 };
 
+export const registerUser = async ({ username, displayName, password }) => {
+  const { data } = await api.post('/register', { username, display_name: displayName, password });
+  return data;
+};
+
+export const linkTelegram = async (telegramId) => {
+  const { data } = await api.patch('/me/telegram', { telegram_id: telegramId });
+  return data;
+};
+
+export const changePassword = async ({ currentPassword, newPassword }) => {
+  // Self-service password change: uses the member's own PATCH endpoint
+  const me = await getMe();
+  const { data } = await api.patch(`/members/${me.id}/password`, { password: newPassword });
+  return data;
+};
+
 // Member management (admin only)
 export const getMembers = async () => {
   const { data } = await api.get('/members');
