@@ -3,6 +3,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DownloadIcon from '@mui/icons-material/Download';
 import LabelIcon from '@mui/icons-material/Label';
+import PersonIcon from '@mui/icons-material/Person';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { Box, Drawer, Typography } from '@mui/material';
 
@@ -12,6 +13,7 @@ const navItems = [
   { label: 'Analytics', icon: BarChartIcon, target: 'analytics' },
   { label: 'Categories', icon: LabelIcon, target: 'categories' },
   { label: 'Export', icon: DownloadIcon, target: 'export' },
+  { label: 'Profile', icon: PersonIcon, target: 'profile' },
 ];
 
 function SidebarContent({ userCount, activeSection, onNavigate }) {
