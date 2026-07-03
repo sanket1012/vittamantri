@@ -102,6 +102,11 @@ export const linkTelegram = async (telegramId) => {
   return data;
 };
 
+export const unlinkTelegram = async () => {
+  const { data } = await api.patch('/me/telegram', { telegram_id: null });
+  return data;
+};
+
 export const changePassword = async ({ currentPassword, newPassword }) => {
   // Self-service password change: uses the member's own PATCH endpoint
   const me = await getMe();
