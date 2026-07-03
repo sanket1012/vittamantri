@@ -36,6 +36,7 @@ const PAGE_TITLES = {
   analytics: 'Analytics',
   categories: 'Categories',
   export: 'Export',
+  profile: 'Profile',
 };
 
 const PAGE_CAPTIONS = {
@@ -44,6 +45,7 @@ const PAGE_CAPTIONS = {
   analytics: 'Study category mix, monthly movement, and recent money trends.',
   categories: 'Manage expense categories and subcategories.',
   export: 'Download a clean CSV copy of your finance records.',
+  profile: 'Manage your account, Telegram link, and password.',
 };
 
 const formatINR = (amount = 0) =>
