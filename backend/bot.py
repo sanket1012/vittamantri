@@ -19,7 +19,8 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 API_BASE = os.getenv("BACKEND_URL", "http://localhost:8000")
-_API_HEADERS = {"X-Bot-Key": os.getenv("BOT_API_KEY", os.getenv("DASHBOARD_API_KEY", ""))}
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+_BOT_KEY = os.getenv("BOT_API_KEY", os.getenv("DASHBOARD_API_KEY", ""))
 IST = pytz.timezone("Asia/Kolkata")
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
@@ -43,8 +44,21 @@ GROQ_FAILED_REPLY = (
     "• Update: update last to Food"
 )
 
-# ── Intent classification ──────────────────────────────────────────────────────
 
+class NotRegisteredError(RuntimeError):
+    """Raised when the backend returns 403 not_registered for an unknown Telegram ID."""
+
+
+def _api_headers_for(telegram_id: int) -> dict:
+    return {"X-Bot-Key": _BOT_KEY, "X-Telegram-Id": str(telegram_id)}
+
+
+def _signup_message() -> str:
+    return (
+        "👋 You're not registered yet!\n\n"
+        f"Sign up at {FRONTEND_URL} to start tracking your finances.\n"
+        "Then go to Profile → Link Telegram to connect this account."
+    )
 
 
 # Maps (chat_id, bot_message_id) → transaction_id for category-change-via-reply
@@ -57,60 +71,44 @@ _last_transaction_map: dict[int, str] = {}
 
 def _store_msg_transaction(chat_id: int, message_id: int, transaction_id: str) -> None:
     _msg_transaction_map[(chat_id, message_id)] = transaction_id
-    _last_transaction_map[chat_id] = transaction_id      # always track last
+    _last_transaction_map[chat_id] = transaction_id
     if len(_msg_transaction_map) > _MAP_MAX_SIZE:
         del _msg_transaction_map[next(iter(_msg_transaction_map))]
 
 
 def _track_last(chat_id: int, transaction_id: str) -> None:
-    """Track last saved transaction without a message mapping (multi-transaction / media)."""
     _last_transaction_map[chat_id] = transaction_id
 
 
 def _to_new_category(text: str) -> str:
-    """Title-case and trim a user-supplied string for use as a new category name."""
     return " ".join(text.strip().title().split())[:40]
 
 
-def _get_all_categories_from_api() -> list[dict]:
-    """Fetch live categories with subcategories (built-in + custom) from the backend. Returns [] on failure."""
+def _get_all_categories_from_api(headers: dict) -> list[dict]:
     try:
-        return api_get("/api/categories/full")
+        return api_get("/api/categories/full", headers=headers)
     except Exception as exc:
         logger.warning("Could not load categories from API: %s", exc)
         return []
 
 
-def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
-    """Parse (category, subcategory) from a reply message.
-
-    Matching order:
-    1. "Food > Delivery"  → fuzzy-map left → (Food & Dining, Delivery)
-    2. Known subcategory  → "fuel" → (Transport, Fuel)  — checks built-in + custom
-    3. Fuzzy category     → "health" → (Health & Medical, None)
-    4. New category       → "Pet Care" → ("Pet Care", None)  ← created on the fly
-
-    Returns (None, None) only when the input is blank.
-    """
+def _parse_category_from_reply(text: str, headers: dict) -> tuple[str | None, str | None]:
     cleaned = re.sub(r"^(change|cat|category|update|set)\s*[:\-]?\s*", "", (text or "").strip(), flags=re.IGNORECASE).strip()
     if not cleaned:
         return None, None
 
-    all_cats = _get_all_categories_from_api()
+    all_cats = _get_all_categories_from_api(headers)
     all_cat_names = [c["name"] for c in all_cats]
 
-    # "Category > Subcategory" — left side mapped, right side kept as-is
     if ">" in cleaned:
         cat_part, sub_part = (p.strip() for p in cleaned.split(">", 1))
         category = fuzzy_match_category(cat_part, extra_names=all_cat_names) or _to_new_category(cat_part)
         return category, sub_part or None
 
-    # Try fuzzy match against all categories (built-in + custom)
     category = fuzzy_match_category(cleaned, extra_names=all_cat_names)
     if category:
         return category, None
 
-    # Try matching as a subcategory — check built-in and custom subcategories
     lower = cleaned.lower()
     for cat_dict in all_cats:
         cat_name = cat_dict["name"]
@@ -118,32 +116,18 @@ def _parse_category_from_reply(text: str) -> tuple[str | None, str | None]:
             if sub.lower() == lower or sub.lower().startswith(lower) or lower in sub.lower():
                 return cat_name, sub
 
-    # Nothing matched → treat the reply as a brand-new category name
     return _to_new_category(cleaned), None
 
 
 def _is_update_last_request(text: str) -> bool:
-    """True when the message is a command to update the last transaction's category.
-
-    Detects patterns like:
-    - "update last transaction's category to Food"
-    - "change the last one to Transport"
-    - "set last transaction as Groceries"
-    Excludes messages that look like new transactions (contain amounts ≥ 10).
-    """
     lower = (text or "").lower().strip()
     has_verb = bool(re.search(r"\b(?:update|change|set|edit|modify)\b", lower))
     has_last = bool(re.search(r"\b(?:last|latest|prev(?:ious)?|recent)\b", lower))
-    # If the message contains a plausible transaction amount it's likely a new entry, not a command
     has_amount = bool(re.search(r"(?:₹|rs\.?\s*)?\b\d{2,}\b", lower))
     return has_verb and has_last and not has_amount
 
 
 def _extract_update_value(text: str) -> str | None:
-    """Extract the new category value from an update command.
-
-    Handles: "... to Food", "... as Transport", "... : Groceries", "... = Shopping"
-    """
     match = re.search(r"\b(?:to|as)\s+[\"']?(.+?)[\"']?\s*$", text, re.IGNORECASE)
     if match:
         value = re.sub(r"[.,!?]+$", "", match.group(1).strip().strip("\"'"))
@@ -156,7 +140,6 @@ def _extract_update_value(text: str) -> str | None:
 
 
 def _is_category_uncertain(category: str, raw_message: str) -> bool:
-    """True when category landed on the generic default with no clear justification."""
     if category != "Gifts & Misc":
         return False
     lower = (raw_message or "").lower()
@@ -211,55 +194,60 @@ def telegram_user_info(update: Update) -> dict:
     return {"logged_by": logged_by, "logged_by_id": user.id}
 
 
-def api_get(path: str):
-    response = requests.get(f"{API_BASE}{path}", headers=_API_HEADERS, timeout=20)
+def _raise_for_status(response: requests.Response) -> None:
+    if response.ok:
+        return
+    try:
+        detail = response.json()
+        error_msg = detail.get("error") or response.text
+    except ValueError:
+        error_msg = response.text
+    if response.status_code == 403 and error_msg == "not_registered":
+        raise NotRegisteredError("not_registered")
+    raise RuntimeError(f"{response.status_code} from backend: {error_msg}")
+
+
+def api_get(path: str, headers: dict | None = None):
+    response = requests.get(f"{API_BASE}{path}", headers=headers, timeout=20)
     _raise_for_status(response)
     return response.json()
 
 
-def api_post(path: str, payload: dict):
-    response = requests.post(f"{API_BASE}{path}", json=payload, headers=_API_HEADERS, timeout=20)
+def api_post(path: str, payload: dict, headers: dict | None = None):
+    response = requests.post(f"{API_BASE}{path}", json=payload, headers=headers, timeout=20)
     _raise_for_status(response)
     return response.json()
 
 
-def api_delete(path: str):
-    response = requests.delete(f"{API_BASE}{path}", headers=_API_HEADERS, timeout=20)
+def api_delete(path: str, headers: dict | None = None):
+    response = requests.delete(f"{API_BASE}{path}", headers=headers, timeout=20)
     _raise_for_status(response)
     return response.json()
 
 
-def api_patch(path: str, payload: dict):
-    response = requests.patch(f"{API_BASE}{path}", json=payload, headers=_API_HEADERS, timeout=20)
+def api_patch(path: str, payload: dict, headers: dict | None = None):
+    response = requests.patch(f"{API_BASE}{path}", json=payload, headers=headers, timeout=20)
     _raise_for_status(response)
     return response.json()
 
 
-def api_upload(path: str, field_name: str, filename: str, content: bytes, mime_type: str):
+def api_upload(path: str, field_name: str, filename: str, content: bytes, mime_type: str, headers: dict | None = None):
     response = requests.post(
         f"{API_BASE}{path}",
         files={field_name: (filename, content, mime_type)},
-        headers=_API_HEADERS,
+        headers=headers,
         timeout=60,
     )
     _raise_for_status(response)
     return response.json()
 
 
-def _raise_for_status(response: requests.Response) -> None:
-    if response.ok:
-        return
-    try:
-        detail = response.json().get("error") or response.text
-    except ValueError:
-        detail = response.text
-    raise RuntimeError(f"{response.status_code} from backend: {detail}")
-
-
 async def with_retry(update: Update, func, *args):
     for attempt in range(2):
         try:
             return func(*args)
+        except NotRegisteredError:
+            raise
         except Exception as exc:
             logger.warning("Retryable operation failed on attempt %s: %s", attempt + 1, exc)
             if attempt == 0:
@@ -269,10 +257,10 @@ async def with_retry(update: Update, func, *args):
             return None
 
 
-async def parse_text_with_retry(message: str) -> dict | None:
+async def parse_text_with_retry(message: str, headers: dict) -> dict | None:
     for attempt in range(2):
         try:
-            return api_post("/api/parse/text", {"message": message})
+            return api_post("/api/parse/text", {"message": message}, headers=headers)
         except Exception as exc:
             logger.warning("Groq text parse failed on attempt %s for %r: %s", attempt + 1, message, exc)
             if attempt == 0:
@@ -280,8 +268,7 @@ async def parse_text_with_retry(message: str) -> dict | None:
     return None
 
 
-
-def save_extracted(transaction: dict, raw_input: str, input_method: str = "text", user_info: dict | None = None) -> dict | None:
+def save_extracted(transaction: dict, raw_input: str, input_method: str = "text", user_info: dict | None = None, headers: dict | None = None) -> dict | None:
     if not transaction or not transaction.get("amount"):
         return None
     payload = {
@@ -291,12 +278,12 @@ def save_extracted(transaction: dict, raw_input: str, input_method: str = "text"
         "raw_input": raw_input,
     }
     logger.info("save_extracted payload date=%r category=%r", payload.get("date"), payload.get("category"))
-    return api_post("/api/transactions", payload)
+    return api_post("/api/transactions", payload, headers=headers)
 
 
-def summary_balance() -> float:
+def summary_balance(headers: dict | None = None) -> float:
     try:
-        return float(api_get("/api/summary").get("net_savings", 0))
+        return float(api_get("/api/summary", headers=headers).get("net_savings", 0))
     except Exception as exc:
         logger.warning("Could not load balance: %s", exc)
         return 0.0
@@ -310,7 +297,7 @@ def _cat_display(category: str, subcategory: str | None = None) -> str:
     return display
 
 
-def single_transaction_reply(item: dict) -> str:
+def single_transaction_reply(item: dict, headers: dict | None = None) -> str:
     transaction = item.get("transaction") or item
     category = clean_text(transaction.get("category"))
     subcategory = clean_text(transaction.get("subcategory")) or None
@@ -319,7 +306,7 @@ def single_transaction_reply(item: dict) -> str:
     description = clean_text(transaction.get("description")) or "Transaction"
     source = clean_text(transaction.get("source"))
     note = f"{description} · {source}" if source else description
-    balance = indian_format(summary_balance())
+    balance = indian_format(summary_balance(headers=headers))
     return f"{icon} {amount} · {_cat_display(category, subcategory)}\n📝 {note}\n🏦 Balance: {balance}"
 
 
@@ -334,7 +321,7 @@ def transaction_line(transaction: dict) -> str:
     return f"{icon} {amount} · {_cat_display(category, subcategory)} · {tail}"
 
 
-def multi_transaction_reply(saved_items: list[dict], total: float) -> str:
+def multi_transaction_reply(saved_items: list[dict], total: float, headers: dict | None = None) -> str:
     count = len(saved_items)
     lines = [f"✅ {count} transactions logged!", ""]
     show_count = min(5, count)
@@ -342,7 +329,7 @@ def multi_transaction_reply(saved_items: list[dict], total: float) -> str:
         lines.append(transaction_line(item.get("transaction") or item))
     if count > show_count:
         lines.append(f"+ {count - show_count} more logged")
-    lines.extend(["", f"💳 Total: {indian_format(total)}", f"🏦 Balance: {indian_format(summary_balance())}"])
+    lines.extend(["", f"💳 Total: {indian_format(total)}", f"🏦 Balance: {indian_format(summary_balance(headers=headers))}"])
     return "\n".join(lines)
 
 
@@ -374,70 +361,82 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def me(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
-    user_info = telegram_user_info(update)
-    user_id = user_info.get("logged_by_id", 0)
-    data = await with_retry(update, api_get, f"/api/summary/user/{user_id}")
-    if not data:
-        return
-    name = user_info.get("logged_by", "You")
-    lines = [
-        f"👤 {name}'s Summary\n",
-        f"💰 Income:  {indian_format(data.get('total_income'))}",
-        f"💸 Expense: {indian_format(data.get('total_expense'))}",
-        f"🏦 Balance: {indian_format(data.get('net_savings'))}",
-        f"📋 Transactions: {data.get('transaction_count', 0)}",
-    ]
-    await update.message.reply_text("\n".join(lines))
+    headers = _api_headers_for(update.effective_user.id)
+    try:
+        user_info = telegram_user_info(update)
+        user_id = user_info.get("logged_by_id", 0)
+        data = await with_retry(update, api_get, f"/api/summary/user/{user_id}", headers)
+        if not data:
+            return
+        name = user_info.get("logged_by", "You")
+        lines = [
+            f"👤 {name}'s Summary\n",
+            f"💰 Income:  {indian_format(data.get('total_income'))}",
+            f"💸 Expense: {indian_format(data.get('total_expense'))}",
+            f"🏦 Balance: {indian_format(data.get('net_savings'))}",
+            f"📋 Transactions: {data.get('transaction_count', 0)}",
+        ]
+        await update.message.reply_text("\n".join(lines))
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
 async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
-    data = await with_retry(update, api_get, "/api/summary")
-    if not data:
-        return
-    users = []
+    headers = _api_headers_for(update.effective_user.id)
     try:
-        users = api_get("/api/users")
-    except Exception as exc:
-        logger.warning("Could not load user breakdown: %s", exc)
-    lines = [
-        "📊 Your Summary\n\n"
-        f"💰 Income:  {indian_format(data.get('total_income'))}\n"
-        f"💸 Expense: {indian_format(data.get('total_expense'))}\n"
-        f"🏦 Balance: {indian_format(data.get('net_savings'))}\n"
-        f"📋 Total: {data.get('transaction_count', 0)} transactions"
-    ]
-    if len(users) >= 1:
-        lines.append("\n👥 By User:")
-        transactions = api_get("/api/transactions").get("transactions", [])
-        for user in users[:5]:
-            uid = str(user.get("logged_by_id"))
-            user_rows = [row for row in transactions if str(row.get("logged_by_id")) == uid]
-            spent = sum(float(row.get("amount", 0)) for row in user_rows if row.get("type") == "expense")
-            earned = sum(float(row.get("amount", 0)) for row in user_rows if row.get("type") == "income")
-            lines.append(
-                f"- {user.get('logged_by')}: "
-                f"💰 {indian_format(earned)} in · 💸 {indian_format(spent)} out"
-            )
-    await update.message.reply_text("\n".join(lines))
+        data = await with_retry(update, api_get, "/api/summary", headers)
+        if not data:
+            return
+        users = []
+        try:
+            users = api_get("/api/users", headers=headers)
+        except Exception as exc:
+            logger.warning("Could not load user breakdown: %s", exc)
+        lines = [
+            "📊 Your Summary\n\n"
+            f"💰 Income:  {indian_format(data.get('total_income'))}\n"
+            f"💸 Expense: {indian_format(data.get('total_expense'))}\n"
+            f"🏦 Balance: {indian_format(data.get('net_savings'))}\n"
+            f"📋 Total: {data.get('transaction_count', 0)} transactions"
+        ]
+        if len(users) >= 1:
+            lines.append("\n👥 By User:")
+            transactions = api_get("/api/transactions", headers=headers).get("transactions", [])
+            for user in users[:5]:
+                uid = str(user.get("logged_by_id"))
+                user_rows = [row for row in transactions if str(row.get("logged_by_id")) == uid]
+                spent = sum(float(row.get("amount", 0)) for row in user_rows if row.get("type") == "expense")
+                earned = sum(float(row.get("amount", 0)) for row in user_rows if row.get("type") == "income")
+                lines.append(
+                    f"- {user.get('logged_by')}: "
+                    f"💰 {indian_format(earned)} in · 💸 {indian_format(spent)} out"
+                )
+        await update.message.reply_text("\n".join(lines))
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
 async def today(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
-    data = await with_retry(update, api_get, "/api/transactions")
-    if not data:
-        return
-    today_key = datetime.now(IST).strftime("%Y-%m-%d")
-    rows = [row for row in data.get("transactions", []) if row.get("date") == today_key]
-    if not rows:
-        await update.message.reply_text("📅 Today · 0 transactions")
-        return
-    spent = sum(float(row.get("amount", 0)) for row in rows if row.get("type") == "expense")
-    earned = sum(float(row.get("amount", 0)) for row in rows if row.get("type") == "income")
-    lines = [f"📅 Today · {len(rows)} transactions", ""]
-    lines += [f"{compact_transaction_row(row)} [{row.get('logged_by') or 'Unknown'}]" for row in rows[:5]]
-    lines += ["", f"💸 Spent: {indian_format(spent)}", f"💰 Earned: {indian_format(earned)}"]
-    await update.message.reply_text("\n".join(lines))
+    headers = _api_headers_for(update.effective_user.id)
+    try:
+        data = await with_retry(update, api_get, "/api/transactions", headers)
+        if not data:
+            return
+        today_key = datetime.now(IST).strftime("%Y-%m-%d")
+        rows = [row for row in data.get("transactions", []) if row.get("date") == today_key]
+        if not rows:
+            await update.message.reply_text("📅 Today · 0 transactions")
+            return
+        spent = sum(float(row.get("amount", 0)) for row in rows if row.get("type") == "expense")
+        earned = sum(float(row.get("amount", 0)) for row in rows if row.get("type") == "income")
+        lines = [f"📅 Today · {len(rows)} transactions", ""]
+        lines += [f"{compact_transaction_row(row)} [{row.get('logged_by') or 'Unknown'}]" for row in rows[:5]]
+        lines += ["", f"💸 Spent: {indian_format(spent)}", f"💰 Earned: {indian_format(earned)}"]
+        await update.message.reply_text("\n".join(lines))
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
 def category_totals_for_rows(rows: list[dict]) -> dict[str, float]:
@@ -451,28 +450,36 @@ def category_totals_for_rows(rows: list[dict]) -> dict[str, float]:
 
 async def week(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
-    data = await with_retry(update, api_get, "/api/transactions")
-    if not data:
-        return
-    start_day = datetime.now(IST).date() - timedelta(days=7)
-    rows = []
-    for row in data.get("transactions", []):
-        try:
-            if datetime.strptime(row.get("date", ""), "%Y-%m-%d").date() >= start_day:
-                rows.append(row)
-        except ValueError:
-            continue
-    await send_period_summary(update, "🗓️ Last 7 Days", rows)
+    headers = _api_headers_for(update.effective_user.id)
+    try:
+        data = await with_retry(update, api_get, "/api/transactions", headers)
+        if not data:
+            return
+        start_day = datetime.now(IST).date() - timedelta(days=7)
+        rows = []
+        for row in data.get("transactions", []):
+            try:
+                if datetime.strptime(row.get("date", ""), "%Y-%m-%d").date() >= start_day:
+                    rows.append(row)
+            except ValueError:
+                continue
+        await send_period_summary(update, "🗓️ Last 7 Days", rows)
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
 async def month(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
-    data = await with_retry(update, api_get, "/api/transactions")
-    if not data:
-        return
-    month_key = datetime.now(IST).strftime("%Y-%m")
-    rows = [row for row in data.get("transactions", []) if str(row.get("date", "")).startswith(month_key)]
-    await send_period_summary(update, f"📆 {datetime.now(IST).strftime('%B %Y')}", rows)
+    headers = _api_headers_for(update.effective_user.id)
+    try:
+        data = await with_retry(update, api_get, "/api/transactions", headers)
+        if not data:
+            return
+        month_key = datetime.now(IST).strftime("%Y-%m")
+        rows = [row for row in data.get("transactions", []) if str(row.get("date", "")).startswith(month_key)]
+        await send_period_summary(update, f"📆 {datetime.now(IST).strftime('%B %Y')}", rows)
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
 async def send_period_summary(update: Update, title: str, rows: list[dict]):
@@ -495,14 +502,17 @@ async def categories(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def export(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
+    headers = _api_headers_for(update.effective_user.id)
     try:
-        response = requests.get(f"{API_BASE}/api/export/csv", headers=_API_HEADERS, timeout=20)
+        response = requests.get(f"{API_BASE}/api/export/csv", headers=headers, timeout=20)
         response.raise_for_status()
         with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as temp:
             temp.write(response.content)
             temp_path = temp.name
         await update.message.reply_document(document=Path(temp_path), filename="transactions.csv")
         Path(temp_path).unlink(missing_ok=True)
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
     except Exception as exc:
         logger.warning("CSV export failed: %s", exc)
         await update.message.reply_text("Could not export CSV right now.")
@@ -512,20 +522,23 @@ async def delete(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("Send /delete <id>")
         return
-    result = await with_retry(update, api_delete, f"/api/transactions/{context.args[0]}")
-    if result:
-        await update.message.reply_text("✅ Deleted")
+    headers = _api_headers_for(update.effective_user.id)
+    try:
+        result = await with_retry(update, api_delete, f"/api/transactions/{context.args[0]}", headers)
+        if result:
+            await update.message.reply_text("✅ Deleted")
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
-async def _apply_category_update(update: Update, transaction_id: str, text: str) -> bool:
-    """Parse *text* as a category/subcategory update and apply it.  Returns True on success."""
-    new_category, new_subcategory = _parse_category_from_reply(text)
+async def _apply_category_update(update: Update, transaction_id: str, text: str, headers: dict) -> bool:
+    new_category, new_subcategory = _parse_category_from_reply(text, headers)
     if not new_category:
         return False
     patch_payload: dict = {"category": new_category}
     if new_subcategory is not None:
         patch_payload["subcategory"] = new_subcategory
-    result = await with_retry(update, api_patch, f"/api/transactions/{transaction_id}", patch_payload)
+    result = await with_retry(update, api_patch, f"/api/transactions/{transaction_id}", patch_payload, headers)
     if result:
         is_new = new_category not in CATEGORY_NAMES
         tag = " ✨ new" if is_new else ""
@@ -534,8 +547,7 @@ async def _apply_category_update(update: Update, transaction_id: str, text: str)
     return True
 
 
-async def _handle_update_last(update: Update, text: str) -> None:
-    """Handle 'update last transaction to X' commands."""
+async def _handle_update_last(update: Update, text: str, headers: dict) -> None:
     chat_id = update.message.chat_id
     transaction_id = _last_transaction_map.get(chat_id)
     if not transaction_id:
@@ -551,19 +563,17 @@ async def _handle_update_last(update: Update, text: str) -> None:
             "Try: update last to Food  ·  change last to Transport > Fuel"
         )
         return
-    await _apply_category_update(update, transaction_id, value_text)
+    await _apply_category_update(update, transaction_id, value_text, headers)
 
 
-async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
-    """Send the full message to the LLM once and route based on what it returns."""
+async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, headers: dict) -> None:
     chat_id = update.message.chat_id
 
-    parsed = await parse_text_with_retry(text)
+    parsed = await parse_text_with_retry(text, headers=headers)
     if not parsed:
         await update.message.reply_text(GROQ_FAILED_REPLY)
         return
 
-    # LLM classified the message as a query or greeting
     query = parsed.get("query")
     if query in ("today", "week", "month", "balance", "greeting"):
         if query == "today":
@@ -578,14 +588,13 @@ async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE
             await summary(update, context)
         return
 
-    # LLM returned transactions
     transactions = parsed.get("transactions") or []
     saved_items: list[dict] = []
 
     for extracted in transactions:
         if not extracted.get("amount"):
             continue
-        saved = await with_retry(update, save_extracted, extracted, text, "text", telegram_user_info(update))
+        saved = await with_retry(update, save_extracted, extracted, text, "text", telegram_user_info(update), headers)
         if saved:
             saved_items.append(saved)
             txn_id = (saved.get("transaction") or saved).get("id")
@@ -597,7 +606,7 @@ async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     elif len(saved_items) == 1:
         item = saved_items[0]
         txn = item.get("transaction") or item
-        reply_text = single_transaction_reply(item)
+        reply_text = single_transaction_reply(item, headers=headers)
         if _is_category_uncertain(txn.get("category", ""), text):
             reply_text += "\n\n❓ Category unclear — reply with the right one (e.g. Food, Transport, Shopping)"
         sent = await update.message.reply_text(reply_text)
@@ -605,43 +614,49 @@ async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE
             _store_msg_transaction(chat_id, sent.message_id, txn["id"])
     else:
         total = sum(float((item.get("transaction") or {}).get("amount", 0)) for item in saved_items)
-        await update.message.reply_text(multi_transaction_reply(saved_items, total))
+        await update.message.reply_text(multi_transaction_reply(saved_items, total, headers=headers))
 
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
     text = (update.message.text or "").strip()
     chat_id = update.message.chat_id
+    headers = _api_headers_for(update.effective_user.id)
 
-    # Reply to a bot message → category correction (explicit gesture, not intent)
-    if update.message.reply_to_message:
-        replied = update.message.reply_to_message
-        if replied.from_user and replied.from_user.is_bot:
-            key = (chat_id, replied.message_id)
-            txn_id = _msg_transaction_map.get(key) or _last_transaction_map.get(chat_id)
-            if txn_id:
-                await _apply_category_update(update, txn_id, text)
-                return
+    try:
+        # Reply to a bot message → category correction
+        if update.message.reply_to_message:
+            replied = update.message.reply_to_message
+            if replied.from_user and replied.from_user.is_bot:
+                key = (chat_id, replied.message_id)
+                txn_id = _msg_transaction_map.get(key) or _last_transaction_map.get(chat_id)
+                if txn_id:
+                    await _apply_category_update(update, txn_id, text, headers)
+                    return
 
-    # Explicit "update last transaction" command — specific enough to catch pre-LLM
-    if _is_update_last_request(text):
-        await _handle_update_last(update, text)
-        return
+        if _is_update_last_request(text):
+            await _handle_update_last(update, text, headers)
+            return
 
-    # Everything else → LLM decides
-    logger.info("llm msg=%r", text[:60])
-    await _handle_llm_message(update, context, text)
+        logger.info("llm msg=%r", text[:60])
+        await _handle_llm_message(update, context, text, headers)
+
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
 
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(ChatAction.TYPING)
+    headers = _api_headers_for(update.effective_user.id)
     try:
         telegram_file = await update.message.photo[-1].get_file()
         image_bytes = bytes(await telegram_file.download_as_bytearray())
-        parsed = await with_retry(update, api_upload, "/api/parse/image", "image", "receipt.jpg", image_bytes, "image/jpeg")
+        parsed = await with_retry(update, api_upload, "/api/parse/image", "image", "receipt.jpg", image_bytes, "image/jpeg", headers)
         if not parsed:
             return
-        await save_media_transactions(update, parsed.get("transactions", []), "image", telegram_user_info(update))
+        await save_media_transactions(update, parsed.get("transactions", []), "image", telegram_user_info(update), headers)
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
     except Exception as exc:
         logger.warning("Image processing failed: %s", exc)
         await update.message.reply_text("Could not process image right now.")
@@ -653,24 +668,27 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Please send a PDF document.")
         return
     await update.message.chat.send_action(ChatAction.TYPING)
+    headers = _api_headers_for(update.effective_user.id)
     try:
         telegram_file = await document.get_file()
         pdf_bytes = bytes(await telegram_file.download_as_bytearray())
-        parsed = await with_retry(update, api_upload, "/api/parse/pdf", "pdf", document.file_name or "statement.pdf", pdf_bytes, "application/pdf")
+        parsed = await with_retry(update, api_upload, "/api/parse/pdf", "pdf", document.file_name or "statement.pdf", pdf_bytes, "application/pdf", headers)
         if not parsed:
             return
-        await save_media_transactions(update, parsed.get("transactions", []), "pdf", telegram_user_info(update))
+        await save_media_transactions(update, parsed.get("transactions", []), "pdf", telegram_user_info(update), headers)
+    except NotRegisteredError:
+        await update.message.reply_text(_signup_message())
     except Exception as exc:
         logger.warning("PDF processing failed: %s", exc)
         await update.message.reply_text("Could not process PDF right now.")
 
 
-async def save_media_transactions(update: Update, transactions: list[dict], input_method: str, user_info: dict):
+async def save_media_transactions(update: Update, transactions: list[dict], input_method: str, user_info: dict, headers: dict):
     chat_id = update.message.chat_id
     saved_items = []
     total = 0.0
     for item in transactions:
-        saved = await with_retry(update, save_extracted, item, "image/pdf upload", input_method, user_info)
+        saved = await with_retry(update, save_extracted, item, "image/pdf upload", input_method, user_info, headers)
         if saved:
             saved_items.append(saved)
             total += float(saved.get("transaction", {}).get("amount", 0))
@@ -678,7 +696,7 @@ async def save_media_transactions(update: Update, transactions: list[dict], inpu
             if txn_id:
                 _track_last(chat_id, txn_id)
     if saved_items:
-        await update.message.reply_text(multi_transaction_reply(saved_items, total))
+        await update.message.reply_text(multi_transaction_reply(saved_items, total, headers=headers))
     else:
         await update.message.reply_text("No transactions found.")
 
