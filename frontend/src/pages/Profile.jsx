@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Avatar,
@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import toast from 'react-hot-toast';
-import { changePassword, linkTelegram } from '../api/client.js';
+import { changePassword, getMe, linkTelegram, unlinkTelegram } from '../api/client.js';
 
 const ROLE_COLOR = { admin: '#004EEB', member: '#344054' };
 const ROLE_BG = { admin: '#EFF4FF', member: '#F2F4F7' };
