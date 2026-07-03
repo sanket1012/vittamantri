@@ -9,6 +9,9 @@ from flask_cors import CORS
 
 from auth import (
     create_token,
+    create_user,
+    find_user_by_telegram_id,
+    get_user_by_id,
     get_user_by_username,
     hash_password,
     load_users,
@@ -23,6 +26,7 @@ from data_manager import (
     delete_category,
     delete_custom_subcategory,
     delete_transaction,
+    ensure_data_files,
     export_monthly_report,
     get_all_transactions,
     get_all_users,
@@ -47,14 +51,15 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("vittamantri.api")
 
 _DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+_FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 _STATIC_DIR = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
-_ALLOWED_ORIGINS = [os.getenv("FRONTEND_URL", "http://localhost:5173")]
+_ALLOWED_ORIGINS = [_FRONTEND_URL]
 if _DEBUG:
     _ALLOWED_ORIGINS += ["http://localhost:5173", "http://localhost:3000"]
 
 app = Flask(__name__)
-CORS(app, origins=_ALLOWED_ORIGINS, allow_headers=["Content-Type", "Authorization", "X-Bot-Key"], supports_credentials=False)
+CORS(app, origins=_ALLOWED_ORIGINS, allow_headers=["Content-Type", "Authorization", "X-Bot-Key", "X-Telegram-Id"], supports_credentials=False)
 
 _MAX_IMAGE_BYTES = 10 * 1024 * 1024   # 10 MB
 _MAX_PDF_BYTES = 20 * 1024 * 1024     # 20 MB
@@ -94,6 +99,11 @@ def _validate_pdf_file(file):
     return raw
 
 
+def _hid() -> int:
+    """Household ID of the authenticated user. Falls back to 1 for legacy tokens."""
+    return g.current_user.get("household_id", 1)
+
+
 # ── Health ────────────────────────────────────────────────────────────────────
 
 @app.route("/api/health")
@@ -116,6 +126,7 @@ def login():
     user = get_user_by_username(username)
     if not user or not verify_password(user.get("password_hash", ""), password):
         return jsonify({"error": "Invalid username or password"}), 401
+    ensure_data_files(user.get("household_id", 1))
     token = create_token(user)
     return jsonify({
         "token": token,
@@ -124,8 +135,44 @@ def login():
             "username": user["username"],
             "display_name": user.get("display_name") or user["username"].title(),
             "role": user.get("role", "member"),
+            "household_id": user.get("household_id", 1),
         },
     })
+
+
+@app.route("/api/register", methods=["POST"])
+def register():
+    """Public endpoint — creates a new user with their own isolated household."""
+    payload = request.get_json(silent=True) or {}
+    username = (payload.get("username") or "").strip()
+    display_name = (payload.get("display_name") or "").strip()
+    password = payload.get("password") or ""
+
+    if not username or not password:
+        return error_response("username and password are required.", 400)
+    if len(password) < 6:
+        return error_response("Password must be at least 6 characters.", 400)
+    if len(username) < 3:
+        return error_response("Username must be at least 3 characters.", 400)
+
+    try:
+        new_user, token = create_user(username, display_name, password)
+        ensure_data_files(new_user["household_id"])
+        return jsonify({
+            "token": token,
+            "user": {
+                "id": new_user["id"],
+                "username": new_user["username"],
+                "display_name": new_user["display_name"],
+                "role": new_user["role"],
+                "household_id": new_user["household_id"],
+            },
+        }), 201
+    except ValueError as exc:
+        return error_response(str(exc), 409)
+    except Exception:
+        logger.exception("register failed")
+        return _internal_error()
 
 
 @app.route("/api/me", methods=["GET"])
@@ -137,15 +184,50 @@ def me():
         "username": u.get("username"),
         "display_name": u.get("display_name"),
         "role": u.get("role"),
+        "household_id": u.get("household_id", 1),
     })
 
 
-# ── Members (admin-only management) ──────────────────────────────────────────
+@app.route("/api/me/telegram", methods=["PATCH"])
+@require_auth
+def link_telegram():
+    """Link or update the Telegram ID for the current user."""
+    try:
+        payload = request.get_json(silent=True) or {}
+        telegram_id_raw = payload.get("telegram_id")
+        if telegram_id_raw is None:
+            return error_response("telegram_id is required.", 400)
+        try:
+            telegram_id = int(telegram_id_raw)
+        except (TypeError, ValueError):
+            return error_response("telegram_id must be a number.", 400)
+
+        current_user_id = g.current_user.get("user_id")
+        users = load_users()
+
+        # Check no other user already linked this Telegram ID
+        existing = next((u for u in users if u.get("telegram_id") == telegram_id and u["id"] != current_user_id), None)
+        if existing:
+            return error_response("This Telegram account is already linked to another user.", 409)
+
+        user = next((u for u in users if u["id"] == current_user_id), None)
+        if not user:
+            return error_response("User not found.", 404)
+        user["telegram_id"] = telegram_id
+        save_users(users)
+        return jsonify({"message": "Telegram account linked.", "telegram_id": telegram_id})
+    except Exception:
+        logger.exception("link_telegram failed")
+        return _internal_error()
+
+
+# ── Members (admin-only management within same household) ─────────────────────
 
 @app.route("/api/members", methods=["GET"])
 @require_admin
 def list_members():
     try:
+        hid = _hid()
         users = load_users()
         return jsonify([{
             "id": u["id"],
@@ -154,7 +236,7 @@ def list_members():
             "role": u.get("role", "member"),
             "telegram_id": u.get("telegram_id"),
             "created_at": u.get("created_at"),
-        } for u in users])
+        } for u in users if u.get("household_id", 1) == hid])
     except Exception:
         logger.exception("list_members failed")
         return _internal_error()
@@ -182,8 +264,10 @@ def add_member():
             return error_response(f"Username '{username}' is already taken.", 409)
 
         new_id = max((u["id"] for u in users), default=0) + 1
+        hid = _hid()
         new_user = {
             "id": new_id,
+            "household_id": hid,
             "username": username,
             "display_name": display_name or username.title(),
             "password_hash": hash_password(password),
@@ -193,7 +277,7 @@ def add_member():
         }
         users.append(new_user)
         save_users(users)
-        logger.info("Member created: %s (role=%s)", username, role)
+        logger.info("Member created: %s (household=%d, role=%s)", username, hid, role)
         return jsonify({
             "id": new_id,
             "username": username,
@@ -212,10 +296,14 @@ def delete_member(member_id):
     try:
         if member_id == g.current_user.get("user_id"):
             return error_response("Cannot delete your own account.", 400)
+        hid = _hid()
         users = load_users()
-        new_users = [u for u in users if u["id"] != member_id]
-        if len(new_users) == len(users):
+        target = next((u for u in users if u["id"] == member_id), None)
+        if not target:
             return error_response("Member not found.", 404)
+        if target.get("household_id", 1) != hid:
+            return error_response("Cannot delete a member from another household.", 403)
+        new_users = [u for u in users if u["id"] != member_id]
         save_users(new_users)
         logger.info("Member %d deleted by %s", member_id, g.current_user.get("username"))
         return jsonify({"message": "Member deleted."})
@@ -256,8 +344,9 @@ def update_member_password(member_id):
 @require_auth
 def list_transactions():
     try:
+        hid = _hid()
         month_filter = request.args.get("month")
-        transactions = get_all_transactions()
+        transactions = get_all_transactions(hid)
         if month_filter:
             transactions = [t for t in transactions if str(t.get("date", "")).startswith(month_filter)]
         return jsonify({"transactions": transactions})
@@ -270,7 +359,8 @@ def list_transactions():
 @require_auth
 def get_transaction(id):
     try:
-        transaction = next((t for t in get_all_transactions() if t.get("id") == id), None)
+        hid = _hid()
+        transaction = next((t for t in get_all_transactions(hid) if t.get("id") == id), None)
         if not transaction:
             return error_response("Transaction not found.", 404)
         return jsonify(transaction)
@@ -283,9 +373,10 @@ def get_transaction(id):
 @require_auth
 def add_transaction():
     try:
+        hid = _hid()
         payload = request.get_json(silent=True) or {}
-        transaction_id = save_transaction(payload)
-        transaction = next((t for t in get_all_transactions() if t.get("id") == transaction_id), None)
+        transaction_id = save_transaction(payload, hid)
+        transaction = next((t for t in get_all_transactions(hid) if t.get("id") == transaction_id), None)
         return jsonify({"id": transaction_id, "transaction": transaction, "message": "Transaction saved."}), 201
     except Exception:
         logger.exception("add_transaction failed")
@@ -296,6 +387,7 @@ def add_transaction():
 @require_auth
 def batch_patch_transactions():
     try:
+        hid = _hid()
         payload = request.get_json(silent=True) or {}
         ids = payload.get("ids", [])
         fields = payload.get("fields", {})
@@ -303,7 +395,7 @@ def batch_patch_transactions():
             return error_response("ids is required.", 400)
         if not fields:
             return error_response("fields is required.", 400)
-        count = bulk_update_transactions(ids, fields)
+        count = bulk_update_transactions(ids, fields, hid)
         return jsonify({"updated_count": count, "message": f"Updated {count} transactions."})
     except Exception:
         logger.exception("batch_patch_transactions failed")
@@ -314,14 +406,15 @@ def batch_patch_transactions():
 @require_auth
 def patch_transaction(id):
     try:
+        hid = _hid()
         payload = request.get_json(silent=True) or {}
         mutable = {"category", "subcategory", "description", "source", "type", "amount", "date"}
         fields = {k: v for k, v in payload.items() if k in mutable and v is not None}
         if not fields:
             return error_response("At least one editable field is required.", 400)
-        if not update_transaction_fields(id, fields):
+        if not update_transaction_fields(id, fields, hid):
             return error_response("Transaction not found.", 404)
-        transaction = next((t for t in get_all_transactions() if t.get("id") == id), None)
+        transaction = next((t for t in get_all_transactions(hid) if t.get("id") == id), None)
         return jsonify({"id": id, "transaction": transaction, "message": "Transaction updated."})
     except Exception:
         logger.exception("patch_transaction failed")
@@ -332,7 +425,8 @@ def patch_transaction(id):
 @require_auth
 def remove_transaction(id):
     try:
-        if not delete_transaction(id):
+        hid = _hid()
+        if not delete_transaction(id, hid):
             return jsonify({"success": False, "message": "Transaction not found"}), 404
         return jsonify({"success": True, "message": "Transaction deleted"})
     except Exception:
@@ -344,7 +438,8 @@ def remove_transaction(id):
 @require_auth
 def clean_transactions():
     try:
-        deleted_count = clean_garbage()
+        hid = _hid()
+        deleted_count = clean_garbage(hid)
         return jsonify({"deleted_count": deleted_count, "message": f"Removed {deleted_count} garbage transactions"})
     except Exception:
         logger.exception("clean_transactions failed")
@@ -357,7 +452,7 @@ def clean_transactions():
 @require_auth
 def summary():
     try:
-        return jsonify(rebuild_summary())
+        return jsonify(rebuild_summary(_hid()))
     except Exception:
         logger.exception("summary failed")
         return _internal_error()
@@ -367,7 +462,7 @@ def summary():
 @require_auth
 def categories():
     try:
-        return jsonify(get_categories())
+        return jsonify(get_categories(_hid()))
     except Exception:
         logger.exception("categories failed")
         return _internal_error()
@@ -377,7 +472,7 @@ def categories():
 @require_auth
 def categories_full():
     try:
-        return jsonify(get_categories_with_subcategories())
+        return jsonify(get_categories_with_subcategories(_hid()))
     except Exception:
         logger.exception("categories_full failed")
         return _internal_error()
@@ -392,7 +487,7 @@ def create_category():
         emoji = payload.get("emoji", "🏷️").strip() or "🏷️"
         if not name:
             return error_response("name is required.", 400)
-        save_custom_category(name, emoji)
+        save_custom_category(name, emoji, household_id=_hid())
         return jsonify({"name": name, "emoji": emoji, "message": "Category saved."}), 201
     except Exception:
         logger.exception("create_category failed")
@@ -407,7 +502,7 @@ def create_subcategory(category_name):
         subcategory = payload.get("name", "").strip()
         if not subcategory:
             return error_response("name is required.", 400)
-        save_custom_subcategory(category_name, subcategory)
+        save_custom_subcategory(category_name, subcategory, household_id=_hid())
         return jsonify({"category": category_name, "subcategory": subcategory, "message": "Subcategory saved."}), 201
     except Exception:
         logger.exception("create_subcategory failed")
@@ -418,7 +513,7 @@ def create_subcategory(category_name):
 @require_auth
 def remove_subcategory(category_name, subcategory_name):
     try:
-        if not delete_custom_subcategory(category_name, subcategory_name):
+        if not delete_custom_subcategory(category_name, subcategory_name, _hid()):
             return error_response("Subcategory not found or is a built-in subcategory.", 404)
         return jsonify({"message": f"Subcategory '{subcategory_name}' deleted."})
     except Exception:
@@ -430,7 +525,7 @@ def remove_subcategory(category_name, subcategory_name):
 @require_auth
 def remove_category(category_name):
     try:
-        if not delete_category(category_name):
+        if not delete_category(category_name, _hid()):
             return error_response("Category name is required.", 400)
         return jsonify({"message": f"Category '{category_name}' deleted."})
     except Exception:
@@ -442,7 +537,7 @@ def remove_category(category_name):
 @require_auth
 def users():
     try:
-        return jsonify(get_all_users())
+        return jsonify(get_all_users(_hid()))
     except Exception:
         logger.exception("users failed")
         return _internal_error()
@@ -452,7 +547,7 @@ def users():
 @require_auth
 def transactions_by_user(logged_by_id):
     try:
-        return jsonify({"transactions": get_transactions_by_user(logged_by_id)})
+        return jsonify({"transactions": get_transactions_by_user(logged_by_id, _hid())})
     except Exception:
         logger.exception("transactions_by_user failed")
         return _internal_error()
@@ -462,7 +557,7 @@ def transactions_by_user(logged_by_id):
 @require_auth
 def summary_by_user(logged_by_id):
     try:
-        return jsonify(get_user_summary(logged_by_id))
+        return jsonify(get_user_summary(logged_by_id, _hid()))
     except Exception:
         logger.exception("summary_by_user failed")
         return _internal_error()
@@ -472,7 +567,7 @@ def summary_by_user(logged_by_id):
 @require_auth
 def monthly_summary():
     try:
-        return jsonify(get_summary().get("monthly_totals", {}))
+        return jsonify(get_summary(_hid()).get("monthly_totals", {}))
     except Exception:
         logger.exception("monthly_summary failed")
         return _internal_error()
@@ -482,7 +577,7 @@ def monthly_summary():
 @require_auth
 def category_summary():
     try:
-        return jsonify(get_summary().get("category_totals", {}))
+        return jsonify(get_summary(_hid()).get("category_totals", {}))
     except Exception:
         logger.exception("category_summary failed")
         return _internal_error()
@@ -494,7 +589,7 @@ def category_summary():
 @require_auth
 def export_csv():
     try:
-        return send_file(transaction_csv_path(), as_attachment=True, download_name="transactions.csv", mimetype="text/csv")
+        return send_file(transaction_csv_path(_hid()), as_attachment=True, download_name="transactions.csv", mimetype="text/csv")
     except Exception:
         logger.exception("export_csv failed")
         return _internal_error()
@@ -508,7 +603,7 @@ def export_monthly(year, month):
             return error_response("Month must be between 1 and 12.", 400)
         if not (2000 <= year <= 2100):
             return error_response("Year must be between 2000 and 2100.", 400)
-        csv_text = export_monthly_report(year, month)
+        csv_text = export_monthly_report(year, month, _hid())
         return Response(
             csv_text,
             mimetype="text/csv",
@@ -525,11 +620,12 @@ def export_monthly(year, month):
 @require_auth
 def parse_text():
     try:
+        hid = _hid()
         payload = request.get_json(silent=True) or {}
         message = payload.get("message", "")
         if not message:
             return error_response("message is required.", 400)
-        all_categories = get_categories_with_subcategories()
+        all_categories = get_categories_with_subcategories(hid)
         result = extract_from_text(message, all_categories=all_categories)
         return jsonify({"transactions": result.get("transactions", []), "query": result.get("query")})
     except Exception:
@@ -541,11 +637,12 @@ def parse_text():
 @require_auth
 def parse_image():
     try:
+        hid = _hid()
         file = request.files.get("image") or request.files.get("file")
         if not file:
             return error_response("image file is required.", 400)
         image_bytes, mime_type = _validate_image_file(file)
-        all_categories = get_categories_with_subcategories()
+        all_categories = get_categories_with_subcategories(hid)
         transactions = extract_from_image(image_bytes, mime_type, all_categories=all_categories)
         return jsonify({"transactions": transactions})
     except ValueError as exc:
@@ -559,11 +656,12 @@ def parse_image():
 @require_auth
 def parse_pdf():
     try:
+        hid = _hid()
         file = request.files.get("pdf") or request.files.get("file")
         if not file:
             return error_response("pdf file is required.", 400)
         pdf_bytes = _validate_pdf_file(file)
-        all_categories = get_categories_with_subcategories()
+        all_categories = get_categories_with_subcategories(hid)
         transactions = extract_from_pdf(pdf_bytes, all_categories=all_categories)
         return jsonify({"transactions": transactions})
     except ValueError as exc:
