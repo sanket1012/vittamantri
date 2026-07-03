@@ -14,6 +14,7 @@ import Sidebar from '../components/Sidebar.jsx';
 import SpendingPieChart from '../components/SpendingPieChart.jsx';
 import StatsCards from '../components/StatsCards.jsx';
 import TransactionTable from '../components/TransactionTable.jsx';
+import Profile from './Profile.jsx';
 
 export const SUBCATEGORY_OPTIONS = {
   'Food & Dining': ['Delivery', 'Dining Out', 'Snacks', 'Beverages'],
