@@ -179,40 +179,56 @@ def register():
 @require_auth
 def me():
     u = g.current_user
+    record = get_user_by_id(u.get("user_id")) if u.get("user_id") else None
+    if record:
+        return jsonify({
+            "id": record["id"],
+            "username": record["username"],
+            "display_name": record.get("display_name") or record["username"].title(),
+            "role": record.get("role", "member"),
+            "household_id": record.get("household_id", 1),
+            "telegram_id": record.get("telegram_id"),
+        })
     return jsonify({
         "id": u.get("user_id"),
         "username": u.get("username"),
         "display_name": u.get("display_name"),
         "role": u.get("role"),
         "household_id": u.get("household_id", 1),
+        "telegram_id": None,
     })
 
 
 @app.route("/api/me/telegram", methods=["PATCH"])
 @require_auth
 def link_telegram():
-    """Link or update the Telegram ID for the current user."""
+    """Link, update, or unlink (telegram_id: null) the Telegram ID for the current user."""
     try:
         payload = request.get_json(silent=True) or {}
-        telegram_id_raw = payload.get("telegram_id")
-        if telegram_id_raw is None:
+        if "telegram_id" not in payload:
             return error_response("telegram_id is required.", 400)
+        telegram_id_raw = payload.get("telegram_id")
+
+        current_user_id = g.current_user.get("user_id")
+        users = load_users()
+        user = next((u for u in users if u["id"] == current_user_id), None)
+        if not user:
+            return error_response("User not found.", 404)
+
+        if telegram_id_raw is None:
+            user["telegram_id"] = None
+            save_users(users)
+            return jsonify({"message": "Telegram account unlinked.", "telegram_id": None})
+
         try:
             telegram_id = int(telegram_id_raw)
         except (TypeError, ValueError):
             return error_response("telegram_id must be a number.", 400)
 
-        current_user_id = g.current_user.get("user_id")
-        users = load_users()
-
-        # Check no other user already linked this Telegram ID
         existing = next((u for u in users if u.get("telegram_id") == telegram_id and u["id"] != current_user_id), None)
         if existing:
             return error_response("This Telegram account is already linked to another user.", 409)
 
-        user = next((u for u in users if u["id"] == current_user_id), None)
-        if not user:
-            return error_response("User not found.", 404)
         user["telegram_id"] = telegram_id
         save_users(users)
         return jsonify({"message": "Telegram account linked.", "telegram_id": telegram_id})
