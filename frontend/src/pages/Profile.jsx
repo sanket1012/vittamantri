@@ -25,7 +25,21 @@ function Section({ title, children }) {
   );
 }
 
-export default function Profile({ currentUser }) {
+export default function Profile({ currentUser: initialUser }) {
+  const [profile, setProfile] = useState(initialUser);
+  const currentUser = profile || initialUser;
+
+  const refreshProfile = async () => {
+    try {
+      const data = await getMe();
+      setProfile(data);
+    } catch {
+      // keep showing whatever we already had
+    }
+  };
+
+  useEffect(() => { refreshProfile(); }, []);
+
   const initials = currentUser?.display_name
     ? currentUser.display_name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
     : '?';
@@ -46,8 +60,22 @@ export default function Profile({ currentUser }) {
       await linkTelegram(id);
       toast.success('Telegram account linked!');
       setTelegramId('');
+      await refreshProfile();
     } catch (err) {
       toast.error(err.response?.data?.error || 'Could not link Telegram account.');
+    } finally {
+      setTelegramSaving(false);
+    }
+  };
+
+  const handleUnlinkTelegram = async () => {
+    setTelegramSaving(true);
+    try {
+      await unlinkTelegram();
+      toast.success('Telegram account unlinked.');
+      await refreshProfile();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Could not unlink Telegram account.');
     } finally {
       setTelegramSaving(false);
     }
