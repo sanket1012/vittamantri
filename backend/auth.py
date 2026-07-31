@@ -1,50 +1,85 @@
 import hashlib
-import json
 import logging
 import os
 import secrets
 from datetime import datetime, timedelta, timezone
 from functools import wraps
-from pathlib import Path
 from typing import Optional
 
 import jwt
 from flask import g, jsonify, request
+from sqlalchemy import delete, insert, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.exc import IntegrityError
+
+from db import engine, households, users as users_table
 
 logger = logging.getLogger("vittamantri.auth")
-
-_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-USERS_FILE = _DATA_DIR / "users.json"
 
 _JWT_SECRET = os.getenv("JWT_SECRET", "")
 _TOKEN_EXPIRY_DAYS = 30
 
 
+def _row_to_dict(row) -> dict:
+    return {
+        "id": row.id,
+        "household_id": row.household_id,
+        "username": row.username,
+        "display_name": row.display_name,
+        "password_hash": row.password_hash,
+        "telegram_id": row.telegram_id,
+        "role": row.role,
+        "created_at": row.created_at.strftime("%Y-%m-%d") if row.created_at else None,
+    }
+
+
 def load_users() -> list[dict]:
-    if not USERS_FILE.exists():
-        return []
-    try:
-        return json.loads(USERS_FILE.read_text(encoding="utf-8"))
-    except Exception:
-        logger.exception("Failed to load users.json")
-        return []
+    with engine.connect() as conn:
+        rows = conn.execute(select(users_table)).all()
+    return [_row_to_dict(r) for r in rows]
 
 
 def save_users(users: list[dict]) -> None:
-    _DATA_DIR.mkdir(parents=True, exist_ok=True)
-    USERS_FILE.write_text(json.dumps(users, indent=2, ensure_ascii=False), encoding="utf-8")
+    """Reconciles the DB against a full user list, mirroring the old
+    "load whole file, mutate in Python, save whole file back" pattern that
+    main.py's member-management routes rely on: any id missing from `users`
+    is deleted, everything else is upserted."""
+    ids = [u["id"] for u in users]
+    with engine.begin() as conn:
+        if ids:
+            conn.execute(delete(users_table).where(users_table.c.id.notin_(ids)))
+        else:
+            conn.execute(delete(users_table))
+        for u in users:
+            values = {
+                "household_id": u.get("household_id", 1),
+                "username": u["username"],
+                "display_name": u.get("display_name") or u["username"].title(),
+                "password_hash": u["password_hash"],
+                "telegram_id": u.get("telegram_id"),
+                "role": u.get("role", "member"),
+            }
+            stmt = pg_insert(users_table).values(id=u["id"], **values)
+            stmt = stmt.on_conflict_do_update(index_elements=["id"], set_=values)
+            conn.execute(stmt)
 
 
 def get_user_by_id(user_id: int) -> Optional[dict]:
-    return next((u for u in load_users() if u["id"] == user_id), None)
+    with engine.connect() as conn:
+        row = conn.execute(select(users_table).where(users_table.c.id == user_id)).first()
+    return _row_to_dict(row) if row else None
 
 
 def get_user_by_username(username: str) -> Optional[dict]:
-    return next((u for u in load_users() if u["username"].lower() == username.lower()), None)
+    with engine.connect() as conn:
+        row = conn.execute(select(users_table).where(users_table.c.username == username)).first()
+    return _row_to_dict(row) if row else None
 
 
 def find_user_by_telegram_id(telegram_id: int) -> Optional[dict]:
-    return next((u for u in load_users() if u.get("telegram_id") == telegram_id), None)
+    with engine.connect() as conn:
+        row = conn.execute(select(users_table).where(users_table.c.telegram_id == telegram_id)).first()
+    return _row_to_dict(row) if row else None
 
 
 def hash_password(password: str) -> str:
@@ -90,26 +125,27 @@ def decode_token(token: str) -> Optional[dict]:
 
 def create_user(username: str, display_name: str, password: str) -> tuple[dict, str]:
     """Create a new user with their own household. Returns (user_dict, token)."""
-    users = load_users()
-    if any(u["username"].lower() == username.lower() for u in users):
-        raise ValueError(f"Username '{username}' is already taken.")
+    try:
+        with engine.begin() as conn:
+            household_id = conn.execute(insert(households).returning(households.c.id)).scalar_one()
+            new_id = conn.execute(
+                insert(users_table)
+                .values(
+                    household_id=household_id,
+                    username=username,
+                    display_name=display_name or username.title(),
+                    password_hash=hash_password(password),
+                    telegram_id=None,
+                    role="admin",
+                )
+                .returning(users_table.c.id)
+            ).scalar_one()
+    except IntegrityError as exc:
+        raise ValueError(f"Username '{username}' is already taken.") from exc
 
-    new_id = max((u["id"] for u in users), default=0) + 1
-    new_household_id = max((u.get("household_id", 1) for u in users), default=0) + 1
-    new_user = {
-        "id": new_id,
-        "household_id": new_household_id,
-        "username": username,
-        "display_name": display_name or username.title(),
-        "password_hash": hash_password(password),
-        "telegram_id": None,
-        "role": "admin",
-        "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-    }
-    users.append(new_user)
-    save_users(users)
+    new_user = get_user_by_id(new_id)
     token = create_token(new_user)
-    logger.info("New user registered: %s (household=%d)", username, new_household_id)
+    logger.info("New user registered: %s (household=%d)", username, new_user["household_id"])
     return new_user, token
 
 
