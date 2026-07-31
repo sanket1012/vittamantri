@@ -196,10 +196,25 @@ def verify(household_ids: list[int]) -> bool:
 # ── Entry point ────────────────────────────────────────────────────────────────
 
 def main() -> None:
+    global DATA_DIR, USERS_FILE
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apply", action="store_true", help="Write to Postgres (default is dry-run).")
+    parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=None,
+        help="Override the data/ directory to read from (defaults to <repo_root>/data). "
+        "Use this to validate against a copied-down production data/ folder without "
+        "touching this repo's own data/.",
+    )
     args = parser.parse_args()
 
+    if args.data_dir:
+        DATA_DIR = args.data_dir.resolve()
+        USERS_FILE = DATA_DIR / "users.json"
+
+    print(f"Reading legacy data from: {DATA_DIR}")
     legacy_users = load_legacy_users()
     household_ids = household_ids_from_legacy_users(legacy_users)
     print(f"Found {len(legacy_users)} user(s) across {len(household_ids)} household(s): {household_ids}")
