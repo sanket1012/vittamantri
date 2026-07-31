@@ -322,6 +322,14 @@ export default function Dashboard({ onLogout, currentUser }) {
     setMobileOpen(false);
   };
 
+  const handleToggleCollapse = () => {
+    setSidebarCollapsed((current) => {
+      const next = !current;
+      localStorage.setItem('sidebar_collapsed', String(next));
+      return next;
+    });
+  };
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F6F6F6' }}>
       <Sidebar userCount={users.length} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} activeSection={activeSection} onNavigate={handleSidebarNavigate} />
