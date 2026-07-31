@@ -49,18 +49,6 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
         <Button variant="contained" startIcon={<AddIcon />} onClick={onAdd}>
           Add
         </Button>
-
-        <Tooltip title={`${currentUser?.display_name || 'User'} — Logout`}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, cursor: 'pointer' }} onClick={onLogout}>
-            <Avatar sx={{ width: 30, height: 30, bgcolor: '#004EEB', fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
-            <Typography sx={{ fontSize: '0.875rem', color: '#344054', display: { xs: 'none', sm: 'block' } }}>
-              {currentUser?.display_name || ''}
-            </Typography>
-            <IconButton size="small" sx={{ color: '#667085', p: 0.5 }}>
-              <LogoutIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        </Tooltip>
       </Box>
     </Box>
   );
