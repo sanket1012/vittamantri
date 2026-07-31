@@ -332,7 +332,17 @@ export default function Dashboard({ onLogout, currentUser }) {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F6F6F6' }}>
-      <Sidebar userCount={users.length} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} activeSection={activeSection} onNavigate={handleSidebarNavigate} />
+      <Sidebar
+        userCount={users.length}
+        mobileOpen={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        activeSection={activeSection}
+        onNavigate={handleSidebarNavigate}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={handleToggleCollapse}
+        currentUser={currentUser}
+        onLogout={onLogout}
+      />
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Header
           title={PAGE_TITLES[activeSection] || 'Dashboard'}
@@ -344,7 +354,6 @@ export default function Dashboard({ onLogout, currentUser }) {
           onExport={handleExport}
           onClean={() => setCleanOpen(true)}
           onAdd={() => setAddOpen(true)}
-          onLogout={onLogout}
           invalidCount={invalidCount}
           showMenu={isMobile}
           currentUser={currentUser}
