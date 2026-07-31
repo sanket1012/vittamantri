@@ -224,6 +224,7 @@ export default function Dashboard({ onLogout, currentUser }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('sidebar_collapsed') === 'true');
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState(null);
   const [categories, setCategories] = useState([]);
