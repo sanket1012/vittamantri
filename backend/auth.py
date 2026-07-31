@@ -62,6 +62,13 @@ def save_users(users: list[dict]) -> None:
             stmt = pg_insert(users_table).values(id=u["id"], **values)
             stmt = stmt.on_conflict_do_update(index_elements=["id"], set_=values)
             conn.execute(stmt)
+        # Explicit-id inserts (e.g. main.py's add_member, which computes its own
+        # next id) don't advance `users.id`'s identity sequence, so a later
+        # auto-generated insert (create_user's registration flow) could try to
+        # reuse an id that's still in use. Re-sync after every write.
+        conn.execute(
+            text("SELECT setval(pg_get_serial_sequence('users', 'id'), (SELECT COALESCE(MAX(id), 0) FROM users), true)")
+        )
 
 
 def get_user_by_id(user_id: int) -> Optional[dict]:
