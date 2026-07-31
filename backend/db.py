@@ -49,14 +49,14 @@ metadata = MetaData()
 households = Table(
     "households",
     metadata,
-    Column("id", BigInteger, primary_key=True),
+    Column("id", BigInteger, Identity(always=False), primary_key=True),
     Column("created_at", TIMESTAMP(timezone=True), nullable=False, server_default=func.now()),
 )
 
 users = Table(
     "users",
     metadata,
-    Column("id", BigInteger, primary_key=True),
+    Column("id", BigInteger, Identity(always=False), primary_key=True),
     Column("household_id", BigInteger, ForeignKey("households.id"), nullable=False),
     Column("username", CITEXT, nullable=False, unique=True),
     Column("display_name", Text, nullable=False),
