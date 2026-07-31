@@ -10,6 +10,7 @@ from sqlalchemy import (
     Column,
     Date,
     ForeignKey,
+    Identity,
     MetaData,
     Numeric,
     Table,
