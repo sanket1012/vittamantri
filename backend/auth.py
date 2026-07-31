@@ -8,7 +8,7 @@ from typing import Optional
 
 import jwt
 from flask import g, jsonify, request
-from sqlalchemy import delete, insert, select
+from sqlalchemy import delete, insert, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.exc import IntegrityError
 
