@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
   Box,
   Button,
@@ -11,8 +12,8 @@ import {
 } from '@mui/material';
 import api, { registerUser } from '../api/client.js';
 
-export default function LoginGate({ onUnlock }) {
-  const [tab, setTab] = useState(0); // 0 = Sign In, 1 = Register
+export default function LoginGate({ onUnlock, initialTab = 0, onBack }) {
+  const [tab, setTab] = useState(initialTab); // 0 = Sign In, 1 = Register
   const [form, setForm] = useState({ username: '', password: '', displayName: '', confirm: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
