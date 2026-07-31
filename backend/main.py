@@ -4,7 +4,7 @@ import pathlib
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
-from flask import Flask, Response, g, jsonify, request, send_file, send_from_directory
+from flask import Flask, Response, g, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 from auth import (
