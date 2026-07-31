@@ -605,7 +605,12 @@ def category_summary():
 @require_auth
 def export_csv():
     try:
-        return send_file(transaction_csv_path(_hid()), as_attachment=True, download_name="transactions.csv", mimetype="text/csv")
+        csv_text = export_all_csv(_hid())
+        return Response(
+            csv_text,
+            mimetype="text/csv",
+            headers={"Content-Disposition": "attachment; filename=transactions.csv"},
+        )
     except Exception:
         logger.exception("export_csv failed")
         return _internal_error()
