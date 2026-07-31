@@ -41,7 +41,6 @@ from data_manager import (
     save_custom_category,
     save_custom_subcategory,
     save_transaction,
-    transaction_csv_path,
     update_transaction_fields,
 )
 from gemini_parser import extract_from_image, extract_from_pdf
