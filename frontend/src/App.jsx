@@ -35,7 +35,17 @@ export default function App() {
   };
 
   if (!unlocked) {
-    return <LoginGate onUnlock={handleUnlock} />;
+    if (!showAuth) {
+      return (
+        <Landing
+          onGetStarted={(tab) => {
+            setAuthTab(tab);
+            setShowAuth(true);
+          }}
+        />
+      );
+    }
+    return <LoginGate onUnlock={handleUnlock} initialTab={authTab} onBack={() => setShowAuth(false)} />;
   }
 
   return <Dashboard onLogout={handleLogout} currentUser={currentUser} />;
