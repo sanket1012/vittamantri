@@ -74,7 +74,16 @@ export default function LoginGate({ onUnlock, initialTab = 0, onBack }) {
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f5f5f5">
-      <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
+      <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%', position: 'relative' }}>
+        {onBack && (
+          <Button
+            onClick={onBack}
+            startIcon={<ArrowBackIcon fontSize="small" />}
+            sx={{ minWidth: 0, height: 'auto', p: 0, mb: 2, fontWeight: 500, fontSize: '0.8125rem', color: '#667085', '&:hover': { bgcolor: 'transparent', color: '#004EEB' } }}
+          >
+            Back to home
+          </Button>
+        )}
         <Typography variant="h5" fontWeight={600} mb={0.5}>वित्तमंत्री</Typography>
         <Typography variant="body2" color="text.secondary" mb={2}>Family Finance Tracker</Typography>
 
