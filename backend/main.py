@@ -27,6 +27,7 @@ from data_manager import (
     delete_custom_subcategory,
     delete_transaction,
     ensure_data_files,
+    export_all_csv,
     export_monthly_report,
     get_all_transactions,
     get_all_users,
