@@ -11,6 +11,9 @@ git pull
 # Update Python dependencies if requirements changed
 "$APP_DIR/.venv/bin/pip" install --quiet -r "$APP_DIR/backend/requirements.txt"
 
+# Apply any pending database schema migrations
+(cd "$APP_DIR/backend" && "$APP_DIR/.venv/bin/alembic" upgrade head)
+
 # Rebuild React frontend
 cd "$APP_DIR/frontend"
 npm ci --silent
