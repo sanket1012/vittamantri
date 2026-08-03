@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Box, Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { formatCompactINR } from '../utils/formatCurrency.js';
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
