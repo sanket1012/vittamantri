@@ -94,7 +94,7 @@ function TrendPlot({ transactions, loading, selectedUser }) {
               <LineChart data={data}>
                 <CartesianGrid stroke="#E2DCC9" vertical={false} />
                 <XAxis dataKey="label" stroke="#6B6F63" tickLine={false} axisLine={false} />
-                <YAxis stroke="#6B6F63" tickLine={false} axisLine={false} tickFormatter={(value) => `₹${Number(value) / 1000}k`} />
+                <YAxis stroke="#6B6F63" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
                 <Tooltip formatter={(value) => formatINR(value)} />
                 <Legend />
                 <Line type="monotone" dataKey="income" name="Income" stroke="#059669" strokeWidth={3} dot={false} />
