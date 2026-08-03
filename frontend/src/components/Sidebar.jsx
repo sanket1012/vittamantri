@@ -31,9 +31,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
     <Box sx={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, minHeight: '100vh', bgcolor: '#FFFFFF', borderRight: '1px solid #E2DCC9', display: 'flex', flexDirection: 'column', transition: 'width 180ms ease' }}>
       <Box sx={{ height: 72, px: collapsed ? 1.5 : 2.5, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', gap: 1.5, borderBottom: '1px solid #E2DCC9' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-          <Box sx={{ width: 40, height: 40, flexShrink: 0, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <AccountBalanceWalletIcon />
-          </Box>
+          <BrandMark size={40} radius="10px" />
           {!collapsed && (
             <Box sx={{ minWidth: 0 }}>
               <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#202421', lineHeight: 1.2 }}>वित्तमंत्री</Typography>
