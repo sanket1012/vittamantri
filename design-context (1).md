@@ -1,98 +1,138 @@
-# Design Context 
-Reference for developers building new pages or components in the portal.
+# Design Context — वित्तमंत्री (VittaMantri)
+
+Reference for developers building new pages or components in the app.
+Reflects the household finance tracker brand direction (see
+`vittamantri_landing_page_content.md`) as actually implemented in
+`frontend/src`.
 
 ---
 
 ## Theme Foundation
 
 - **UI Framework**: Material UI (MUI) v5
-- **Font**: Inter (TTF), base size 14px (1rem = 14px)
-- **Theme file**: `src/theme/theme.js`
-- **Colors**: `src/theme/colors.styles.js`
-- **Typography**: `src/theme/font.js`
-- **Dimensions**: `src/theme/dims.js`
-- **Form controls**: `src/theme/form-controls.styles.js`
-- **Table styles**: `src/theme/table.styles.js`
+- **Font**: Inter, base size 14px (`1rem = 14px`)
+- **Theme file**: `frontend/src/theme/theme.js`
+- **Brand mark**: `frontend/src/components/BrandMark.jsx` — the "वि" household
+  monogram (from वित्तमंत्री's opening syllables). Used instead of any generic
+  finance icon (wallet, ₹, piggy bank) — see **Brand Voice** below.
+- No separate colors/typography/dims files — everything lives in the one
+  `theme.js` (`palette`, `shape`, `shadows`, `components` overrides) plus
+  inline `sx` props on components. Keep it that way; don't split into a
+  larger theme-file structure unless the app's complexity actually demands it.
 
 ---
 
 ## Color Palette
 
-### Primary
+Brand direction: a warm household product, not a financial institution or
+bank. Large whitespace, warm neutral background, rounded cards — not a dark
+corporate dashboard.
+
+### Primary — Deep Green
 | Token | Hex | Usage |
 |-------|-----|-------|
-| primary.main | #004EEB | Buttons, links, active states |
-| primary.dark600 | #155EEF | Hover states |
-| primary.darker | #00359E | Pressed states |
+| primary.main | `#173F35` | Buttons, links, active nav state, primary CTAs |
+| primary.dark | `#0F2A23` | Hover states |
+
+### Accent — Muted Gold
+| Token | Hex | Usage |
+|-------|-----|-------|
+| accent.main (`theme.palette.accent.main`) | `#D89B45` | **Sparingly** — final-CTA buttons on a dark section, small highlights, important numbers. Never as the default button color. |
+
+### Background
+| Token | Hex | Usage |
+|-------|-----|-------|
+| background.default | `#F6F1E7` | App/page background (warm ivory) |
+| background.paper / card bg | `#FFFFFF` | Cards, modals, sidebar — kept white (not ivory) so data-dense surfaces (tables, forms) stay legible against the warm canvas |
+| soft green | `#E6EFEA` | Feature-card backgrounds, icon-chip backgrounds, active nav item background, analytics tint |
 
 ### Text
 | Token | Hex | Usage |
 |-------|-----|-------|
-| text.primary | #101828 | Page titles, card values, body text |
-| text.secondary | #344054 | Subtitles, form labels |
-| text.caption | #475467 | Section headers, table head, captions |
-| text.disabled | #787486 | Disabled text |
-| text.label | #5D5E74 | Form field labels |
-| — | #667085 | Muted descriptions, subtext |
-| — | #98A2B3 | Placeholder text, icons |
+| text.primary | `#202421` | Charcoal — page titles, card values, body text |
+| text.secondary | `#454940` | Subtitles, form labels |
+| — | `#5B5F54` | Section headers, table head, captions |
+| — | `#6B6F63` | Muted descriptions, subtext |
+| — | `#9A9C90` | Placeholder text, faint icons |
 
-### Backgrounds
+### Borders / Dividers
 | Token | Hex | Usage |
 |-------|-----|-------|
-| background.default | #F6F6F6 | App background |
-| gray.50 | #F9FAFB | Card hover, subtle backgrounds |
-| gray.100 | #F2F4F7 | Table head, accordion, sticky header bg |
-| gray.200 | #EAECF0 | Borders, dividers |
-| gray.300 | #D0D5DD | Form input borders |
+| — | `#E2DCC9` | Borders, dividers (warm, not cool gray) |
+| — | `#CFC7AE` | Form input borders |
+| — | `#F1ECDD` | Card/row hover background |
+| — | `#EDE7D8` | Table head background |
 
-### Status
+### Status (semantic — unrelated to brand chrome, left as standard finance semantics)
 | Status | Main | Background | Usage |
 |--------|------|------------|-------|
-| Success | #059669 | #F0FDF4 | On track, resolved |
-| Warning | #F59E0B | #FFFBEB | Attention needed |
-| Error | #DC2626 | #FEF2F2 | Critical, breached |
-| Info | #2563EB | #EFF6FF | Informational |
+| Success | `#059669` | `#E6EFEA` | Income, resolved states |
+| Warning | `#F59E0B` | `#FFFBEB` | Attention needed |
+| Error | `#DC2626` | `#FEF2F2` | Expense-adjacent errors, destructive actions |
+| Info | `#2563EB` | `#EFF4FF`/`#DBEAFE` | Informational only |
 
-### Extended Status (chips, badges)
-| Type | Background | Text | Border |
-|------|-----------|------|--------|
-| Primary chip | #EFF8FF | #004EEB | #B2DDFF |
-| Success chip | #ECFDF3 | #067647 | #ABEFC6 |
-| Warning chip | #FEDF89 | #B54708 | — |
-| Error chip | #FEF2F2 | #D92D20 | — |
+### Data-viz / category colors
+Category chips, per-member avatar colors, and category-legend swatches use a
+distinct small palette (`#7C3AED`, `#0891B2`, `#DB2777`, `#EA580C`, `#D97706`,
+`#65A30D`, `#4F46E5`, `#9333EA`, `#16A34A`, `#0D9488`, `#BE123C`, `#047857`,
+`#0369A1`) kept intentionally separate from brand chrome — these exist purely
+to visually distinguish N categories/members from each other, not to carry
+brand meaning. Don't reassign these to brand tokens.
+
+---
+
+## Brand Voice — Do / Do Not
+
+वित्तमंत्री should read as **calm, trustworthy, simple, modern, warm,
+family-oriented** — never like a bank, investment platform, accounting
+product, or corporate ERP tool.
+
+**Avoid in UI copy and iconography:**
+- ₹ symbol as a standalone icon, piggy banks, wallet icons, coin stacks,
+  upward stock charts, bank buildings, credit cards, handshake icons
+- Words: wealth, portfolio, financial freedom, optimize, AI-powered,
+  revolutionary, fintech, budget discipline
+- Corporate banking layouts, heavy dark dashboards, neon fintech colors,
+  glassmorphism, dense accounting tables above the fold
+
+**Prefer:**
+- Household, family, spending, expenses, clarity, together, understand,
+  track, simple, private
+- The "वि" brand mark (`BrandMark.jsx`) over any generic finance icon
+- Large whitespace, rounded cards (`0.75rem`–`1rem` radius), simple charts
 
 ---
 
 ## Typography Scale
 
-All sizes in rem where 1rem = 14px.
+All sizes in rem where `1rem = 14px` (MUI's `typography.fontSize: 14`).
 
-| Variant | Size | Weight | Usage |
-|---------|------|--------|-------|
-| subtitle1 | 1.675rem (24px) | 600 | Page titles (PageHeader default) |
-| subtitle2 | 1.25rem (18px) | 600 | Section titles (DashSection) |
-| subtitle3 | 1rem (14px) | 600 | Card titles, bold labels |
-| caption | 0.875rem (12px) | 400 | Small labels |
-| caption2 | 1rem (14px) | 400 | PageHeader caption, descriptions |
-| caption3 | 1rem (14px) | 600 | Bold captions |
-| h1 | 1.714rem (24px) | 700 | Large headings |
-| h2 | 1.571rem (22px) | 600 | Card headers (DashCard) |
-| overline | — | 500 | Section labels (uppercase) |
+| Usage | Size | Weight |
+|-------|------|--------|
+| Page title (Header) | 1.675rem (24px) | 600 |
+| Landing hero heading | 2–3.25rem responsive (32–46px) | 700 |
+| Section heading (Landing) | 1.86–2.29rem responsive (26–32px) | 700 |
+| Card section title | 1.25rem (18px) | 600 |
+| Card title / KPI value | 1.714rem (24px) | 700 |
+| Body text | 0.875rem–1.0625rem (14–17px) | 400 |
+| Caption / muted subtext | 0.75–0.875rem (12–14px) | 400–500 |
+| Section eyebrow (uppercase label) | 0.8125rem (13px) | 600, letter-spacing 0.06em |
+| Table head | 0.857rem (12px) | 500, uppercase, letter-spacing 0.05em |
 
 ---
 
 ## Spacing
 
-Theme spacing unit = 8px. Common values:
+Theme spacing unit = 8px (MUI default). Common values in this codebase:
 
 | Usage | Value |
 |-------|-------|
-| Grid container gaps | `spacing={2}` (16px) |
-| Page padding (PageContainer) | `1.43rem` (20px) |
-| Card internal padding (large) | `1.71rem` (24px) |
+| Grid container gaps | `spacing={2}` (16px) or `spacing={2.5}` (20px) on Landing |
+| Main content area padding (Dashboard) | `p: '20px'` |
+| Card internal padding (large) | `p: 3` (24px) or `p: '1.71rem'` |
 | Card internal padding (compact) | `p: 2.5` (20px) |
-| Section bottom margin | `mb={2}` (16px) |
-| PageHeader bottom margin | `30px` |
+| Landing section vertical padding | `py: { xs: 7, md: 9 }` |
+| Sidebar header height | `72px` (fixed, matches Header height so they align) |
 
 ---
 
@@ -100,257 +140,93 @@ Theme spacing unit = 8px. Common values:
 
 | Element | Value |
 |---------|-------|
-| Sidebar width | 260px (desktop), 240px (mobile) |
-| Sidebar collapsed | 5.78571rem (~82px) |
-| Header height | 66px (desktop only) |
-| Input height | 2.75rem (44px) |
-| Input border-radius | 0.57rem (8px) |
-| Button height | 2.75rem (44px) |
-| Tab height | 40px |
+| Sidebar width (expanded) | 260px |
+| Sidebar width (collapsed) | 80px |
+| Header height | 72px |
+| Input / button height | 44px |
+| Input / button border-radius | 8px |
+| Card border-radius | 0.75rem (12px) large cards; 1rem on Landing feature cards |
 
 ---
 
-## Page Structure
+## Layout Patterns
 
-Every page follows this exact wrapper pattern to ensure headers are flush with the sidebar:
-
+### Authenticated app shell (`pages/Dashboard.jsx`)
 ```jsx
-import PageContainer from '../../shared/components/PageContainer';
-import PageHeader from '../../shared/components/PageHeader';
-import PageContent from '../../shared/components/PageContent';
-
-const MyPage = () => (
-  <PageContainer sx={{ pt: 0 }}>
-    <PageHeader title="Page Title" caption="Description text">
-      {/* Action buttons go here as children */}
-      <Button variant="outlined">Action</Button>
-    </PageHeader>
-
-    <PageContent sx={{ p: 2, top: 20 }}>
-      {/* Scrollable page content goes here */}
-    </PageContent>
-  </PageContainer>
-);
+<Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F6F1E7' }}>
+  <Sidebar
+    collapsed={sidebarCollapsed}
+    onToggleCollapse={handleToggleCollapse}
+    currentUser={currentUser}
+    onLogout={onLogout}
+    activeSection={activeSection}
+    onNavigate={handleSidebarNavigate}
+  />
+  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+    <Header title={...} caption={...} {...actionProps} />
+    <Box sx={{ flex: 1, p: '20px', overflow: 'auto' }}>{/* page content */}</Box>
+  </Box>
+</Box>
 ```
 
-### PageContainer (`src/shared/components/PageContainer.js`)
-- Wraps full page
-- Adds `padding: 1.43rem`, `height: 100vh`, `overflow: auto`
-- **MUST include `sx={{ pt: 0 }}`** when used with `PageHeader` to align the header flush to the top viewport edge.
+### Sidebar (`components/Sidebar.jsx`)
+- Collapsible: `collapsed` prop shrinks it to an 80px icon-only rail with
+  tooltips; state lives in `Dashboard.jsx`, persisted to
+  `localStorage['sidebar_collapsed']`.
+- **User + logout footer lives at the bottom of the sidebar** (avatar, name,
+  role, logout icon) — not in the Header. Don't move logout back to the
+  header; it was deliberately relocated so it isn't sandwiched between
+  action buttons.
+- Desktop: fixed `Box`. Mobile (`xs`/`sm`): MUI `Drawer`, always full-width,
+  never collapsed.
 
-### PageHeader (`src/shared/components/PageHeader.js`)
-- **CRITICAL**: Do NOT wrap `PageHeader` in a `<Stack>`, `<Box>`, or breadcrumb component. Doing so breaks the full-bleed edge-to-edge layout. It must be a direct child of `PageContainer`.
-- Fixed height: `72px` to exactly match the sidebar logo header height.
-- Flat background (`#FAFBFF`), no shadows or gradients. 
-- Props: `title`, `caption`, `subTitle`, `icon`, `onBack`, `children` (action buttons)
-- Title: `variant="subtitle1"` (1.675rem, weight 600)
-- Caption: `variant="caption2"` (1rem, weight 400)
-- Bottom border: `1px solid #EAECF0`
-- Action buttons placed via `children` (right-aligned)
+### Landing page (`pages/Landing.jsx`)
+- Full pre-login marketing page, not just a login card. Sticky nav
+  (`Overview` / `How it works` / `Analytics` / `Privacy` anchors + Login/Get
+  started buttons) → 10 content sections → footer.
+- `SectionShell` helper: alternates `bgcolor` between `transparent`
+  (page background shows through) and `#FFFFFF` band, `maxWidth: 1100`,
+  centered, `py: { xs: 7, md: 9 }`.
+- Section structure: uppercase `Eyebrow` label → heading → supporting copy →
+  bold highlight line in `primary.main`. Reuse this rhythm for any new
+  marketing section rather than inventing a new one.
+- The only section on a solid dark background is the final CTA
+  (`bgcolor: '#173F35'`, white text, **gold** button) — that combination is
+  reserved for the single closing CTA, not used elsewhere.
 
----
-
-## Card Patterns
-
-### Large Summary Card (Dashboard command centre)
-
-Used for KPI-style metrics with status border and subtitle.
-
+### Card patterns
+**KPI / stat card** (`components/StatsCards.jsx`, Dashboard summary row):
 ```jsx
-<Card variant="outlined" sx={{
-  borderRadius: '0.75rem',
-  border: '1px solid #EAECF0',
-  boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
-  borderTop: '3px solid #059669',  // green/amber/red by status
-}}>
-  <CardContent sx={{ p: '1.71rem', '&:last-child': { pb: '1.71rem' } }}>
-    <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-      <Box>
-        <Typography sx={{ fontSize: '0.857rem', fontWeight: 500, color: '#475467',
-          textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
-          TITLE
-        </Typography>
-        <Typography sx={{ fontSize: '1.714rem', fontWeight: 700, color: '#101828' }}>
-          VALUE
-        </Typography>
-        <Typography sx={{ fontSize: '0.857rem', color: '#667085', mt: 0.5 }}>
-          Subtitle
-        </Typography>
-      </Box>
-      <Box sx={{ width: 44, height: 44, borderRadius: '10px',
-        backgroundColor: '#05966910', color: '#059669',
-        display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Icon />
-      </Box>
-    </Box>
+<Card variant="outlined" sx={{ borderRadius: '0.75rem', borderTop: '3px solid #059669' }}>
+  <CardContent sx={{ p: 3 }}>
+    <Typography sx={{ fontSize: '0.857rem', fontWeight: 500, color: '#5B5F54', textTransform: 'uppercase' }}>TITLE</Typography>
+    <Typography sx={{ fontSize: '1.714rem', fontWeight: 700, color: '#202421' }}>VALUE</Typography>
+    <Typography sx={{ fontSize: '0.857rem', color: '#6B6F63' }}>Subtitle</Typography>
   </CardContent>
 </Card>
 ```
 
-### Compact Metric Card (Exception Hub, Task Manager)
-
-Used for clickable filter cards with counts. Horizontal icon + text layout.
-
+**Section card with header** (charts, tables):
 ```jsx
-<Card elevation={0} onClick={handleClick} sx={{
-  p: 2.5,
-  cursor: 'pointer',
-  border: isSelected ? `2px solid ${color}` : '1px solid #EAECF0',
-  borderRadius: 2,
-  transition: 'all 150ms ease',
-  backgroundColor: isSelected ? `${color}08` : '#fff',
-  '&:hover': { borderColor: color, transform: 'translateY(-1px)',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.08)' },
-}}>
-  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-    <Box sx={{ width: 44, height: 44, borderRadius: 1.5,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      bgcolor: `${color}18`, color }}>
+<Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
+  <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E2DCC9' }}>
+    <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#202421' }}>Section Title</Typography>
+  </Box>
+  <CardContent sx={{ p: 3 }}>{/* chart / table */}</CardContent>
+</Card>
+```
+
+**Landing feature card:**
+```jsx
+<Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF' }}>
+  <CardContent sx={{ p: 3.5 }}>
+    <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Icon />
     </Box>
-    <Box>
-      <Typography sx={{ fontSize: '0.75rem', fontWeight: 600,
-        textTransform: 'uppercase', color: '#475467', letterSpacing: '0.05em' }}>
-        LABEL
-      </Typography>
-      <Typography sx={{ fontSize: '2rem', fontWeight: 700,
-        lineHeight: 1.1, color: '#101828' }}>
-        COUNT
-      </Typography>
-    </Box>
-  </Box>
+    {/* title, copy, checklist */}
+  </CardContent>
 </Card>
 ```
-
-Grid for compact cards (auto-width columns):
-```jsx
-<Grid container spacing={2}>
-  <Grid item xs={6} sm={3} md> {/* md with no value = auto-fill */}
-    <CompactMetricCard />
-  </Grid>
-</Grid>
-```
-
-### Card with Header Section (Regional Status, Team Performance)
-
-```jsx
-<Card variant="outlined" sx={{ borderRadius: '0.75rem', border: '1px solid #EAECF0' }}>
-  <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #EAECF0' }}>
-    <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#101828' }}>
-      Section Title
-    </Typography>
-  </Box>
-  <TableContainer>
-    <Table size="small">...</Table>
-  </TableContainer>
-</Card>
-```
-
-### Action Required Banner
-
-```jsx
-<Card variant="outlined" sx={{
-  mb: 2,
-  border: '1px solid #FEDF89',
-  backgroundColor: '#FFFAEB',
-  borderRadius: '0.75rem',
-}}>
-```
-
----
-
-## Clickable Card Filter Pattern
-
-Used in Exception Hub and Task Manager. Cards act as filters for a table below.
-
-```jsx
-const [activeCard, setActiveCard] = useState(null);
-
-const handleCardClick = (key) => {
-  setActiveCard(activeCard === key ? null : key);
-};
-
-// In the card:
-const isSelected = activeCard === card.key;
-// border: isSelected ? `2px solid ${color}` : '1px solid #EAECF0'
-// backgroundColor: isSelected ? `${color}08` : '#fff'
-
-// Show active filter chip:
-{activeCard && (
-  <Chip
-    label={`Filtered: ${label} (${count})`}
-    onDelete={() => setActiveCard(null)}
-    color="primary" size="small"
-  />
-)}
-
-// Filter table data:
-const filtered = useMemo(() => {
-  let data = allData;
-  if (activeCard) {
-    data = data.filter((item) => item.status === cardStatusMap[activeCard]);
-  }
-  return data;
-}, [allData, activeCard]);
-```
-
----
-
-## Dropdown / Select Pattern
-
-When building filters or form controls requiring standard dropdowns, **ALWAYS use the custom shared `DropdownSelect` component** (`src/shared/components/Forms/Dropdowns/DropdownSelect.js`).
-
-For filter cards or inline layouts, use the `labelAlignment="left"` prop to place the label horizontally next to the input. This prevents the label text from becoming tiny and squished at the top of the input box:
-
-```jsx
-import DropdownSelect from '../../shared/components/Forms/Dropdowns/DropdownSelect';
-
-<DropdownSelect
-  labelAlignment="left"
-  label="Domain"
-  value={filter}
-  options={[
-    { id: 'ALL', label: 'All' },
-    { id: 'FRAUD', label: 'Fraud' },
-    { id: 'RVM_FLEET', label: 'RVM Fleet' }
-  ]}
-  onChange={(op) => setFilter(op ? op.id : 'ALL')}
-  containerStyle={{ minWidth: 200 }}
-  disableClearBtn
-/>
-```
-
-Do NOT use standard Material `TextField select` or `FormControl + Select` directly, as their default floating labels break styling consistency, shrink text too small, or clip with the portal theme:
-
-```jsx
-// AVOID: Very small stacked/floating label
-<TextField select size="small" label="Domain" />
-
-// AVOID: Label clipping
-<FormControl size="small">
-  <InputLabel>Domain</InputLabel>
-  <Select value={filter} label="Domain" onChange={...}>
-    <MenuItem value="ALL">All</MenuItem>
-  </Select>
-</FormControl>
-```
-
-Exception: `FormControl` + `InputLabel` + `Select` is acceptable inside Dialogs where full-width layout prevents clipping.
-
----
-
-## Table Styling
-
-Tables inherit from theme (`src/theme/table.styles.js`):
-
-| Element | Style |
-|---------|-------|
-| Head cell bg | #F2F4F7 |
-| Head cell text | #475467, weight 500, 12px |
-| Head cell height | 2.75rem (44px) |
-| Body cell | 14px, padding 6px 16px, height 3.75rem |
-| Row hover | #FCF3DF |
-| Border color | #EAECF0 |
 
 ---
 
@@ -358,172 +234,59 @@ Tables inherit from theme (`src/theme/table.styles.js`):
 
 | Variant | Background | Text | Border |
 |---------|-----------|------|--------|
-| contained | primary.main | white | none |
-| outlined | white | #344054 | 1px solid #D0D5DD |
-| text | transparent | primary.main | none |
+| contained | `primary.main` (#173F35) | white | none |
+| outlined | white | `#454940` | 1px solid `#CFC7AE` |
+| text | transparent | `primary.main` | none |
+| Final-CTA exception (Landing, dark section only) | `#D89B45` (gold) | `#202421` | none |
 
-Common props:
-- `fontWeight: 600`
-- `borderRadius: 0.57rem (8px)`
-- `textTransform: capitalize`
-- No elevation (shadows disabled)
+Common props: `fontWeight: 600`, `borderRadius: 8px`, `textTransform: capitalize`, no elevation/shadow.
+
+---
+
+## Table Styling
+
+| Element | Style |
+|---------|-------|
+| Head cell bg | `#EDE7D8` |
+| Head cell text | `#5B5F54`, weight 500, 12px, uppercase |
+| Body cell | 14px, padding `6px 16px`, height 60px |
+| Row hover | `#FCF3DF` |
+| Border color | `#E2DCC9` |
 
 ---
 
 ## Form Inputs
 
-- Height: 2.75rem (44px)
-- Border-radius: 0.57rem (8px)
-- Border: 1px solid #D0D5DD
-- Box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05)
-- Label: weight 500, 0.857rem, color #344054
-- Disabled bg: #F0F3F6
-
----
-
-## Grid Layouts
-
-### Dashboard — 4-column metrics (large cards)
-```jsx
-<Grid container spacing={2}>
-  <Grid item xs={12} sm={6} md={3}>
-    <SummaryCard />
-  </Grid>
-</Grid>
-```
-
-### Dashboard — auto-width columns (compact cards)
-```jsx
-<Grid container spacing={2}>
-  <Grid item xs={6} sm={3} md>
-    <CompactMetricCard />
-  </Grid>
-</Grid>
-```
-
-### Dashboard — 3-column metrics
-```jsx
-<Grid container spacing={2}>
-  <Grid item xs={12} sm={4}>
-    <SummaryCard />
-  </Grid>
-</Grid>
-```
-
-### Content with sidebar
-```jsx
-<Grid container spacing={2}>
-  <Grid container item xs={9} rowGap={2} columnSpacing={2}>
-    {/* Main */}
-  </Grid>
-  <Grid container item xs={3} rowGap={2}>
-    {/* Sidebar */}
-  </Grid>
-</Grid>
-```
-
----
-
-## Section Headers
-
-```jsx
-<Typography
-  variant="overline"
-  sx={{ color: '#475467', fontWeight: 500, mb: 1, display: 'block', fontSize: '0.857rem' }}
->
-  SECTION TITLE
-</Typography>
-```
-
----
-
-## Shadows
-
-| Usage | Value |
-|-------|-------|
-| Standard card | `0px 1px 2px 0px rgba(16, 24, 40, 0.05)` |
-| Hover/elevated | `0px 4px 12px rgba(0, 0, 0, 0.08)` |
-| Compact card hover | `0 2px 8px rgba(0,0,0,0.08)` |
-| Form inputs | `0px 1px 2px 0px rgba(16, 24, 40, 0.05)` |
-
----
-
-## Domain / Enum Values
-
-When building dropdowns or filters, use these values to match backend enums.
-
-### Exception Domains
-`RVM_FLEET`, `COLLECTIONS`, `FINANCE`, `COMPLIANCE`, `DISPUTES`, `FRAUD`, `RETAILER_OPS`
-
-### Exception Severity
-`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`
-
-### Exception Status
-`OPEN`, `ACKNOWLEDGED`, `ASSIGNED`, `IN_PROGRESS`, `PARTIALLY_RESOLVED`, `RESOLVED`, `ESCALATED`, `CLOSED`
-
-### Task Status
-`OPEN`, `ASSIGNED`, `IN_PROGRESS`, `COMPLETED`, `OVERDUE`, `CANCELLED`
-
-### Task Types
-`EXCEPTION_RESOLUTION`, `APPROVAL`, `REVIEW`, `INVESTIGATION`, `FOLLOW_UP`, `GENERAL`, `ACTION`, `RESPONSE`, `REPORT`
-
-### Notification Severity
-`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, `WARNING`, `INFO`
-
-### Notification Status
-`UNREAD`, `READ`, `ACKNOWLEDGED`, `SNOOZED`, `DELEGATED`, `DISMISSED`
-
----
-
-## RTK Query — Operations Centre API
-
-API file: `src/redux/operationsCentre/opsCentre.api.js`
-
-Key settings:
-- `keepUnusedDataFor: 0` — no caching, data dropped on unmount
-- `refetchOnMountOrArgChange: true` — fresh API call on every page navigation
-- Base URL: `process.env.REACT_APP_OPS_CENTRE_URL || 'http://localhost:8096'`
-- Service prefix: `/api/v1`
-
----
-
-## Shared Components
-
-| Component | Path | Usage |
-|-----------|------|-------|
-| PageContainer | `src/shared/components/PageContainer.js` | Page wrapper |
-| PageHeader | `src/shared/components/PageHeader.js` | Page title bar |
-| PageContent | `src/shared/components/PageContent.js` | Content Paper wrapper |
-| AppChip | `src/shared/components/AppChip.js` | Styled chip |
-| AppCard | `src/shared/components/AppCard.js` | Card wrapper |
-| CanShow | `src/shared/components/CanShow.js` | Conditional rendering |
-| Loader | `src/shared/components/Loader.js` | Loading spinner |
-| DashCard | `src/pages/Dashboard/components/DashCard.js` | Dashboard card with header |
-| DashSection | `src/pages/Dashboard/components/DashSection.js` | Dashboard section with title + divider |
+- Height: 44px, border-radius: 8px
+- Border: `1px solid #CFC7AE`, hover border: `primary.main`
+- Box-shadow: `0px 1px 2px 0px rgba(16,24,40,0.05)`
+- Avoid `TextField select` for anything beyond the simple user/category
+  filters already in `Header.jsx`/`FilterBar.jsx` — those are fine as-is;
+  don't introduce a new dropdown pattern without reason.
 
 ---
 
 ## Do / Do Not
 
 **Do:**
-- Use `PageContainer sx={{ pt: 0 }}` + `PageHeader` + `PageContent sx={{ p: 2, top: 20 }}` on every page.
-- Use `variant="outlined"` on Cards (or `elevation={0}` for compact cards).
-- Use `DropdownSelect` with `labelAlignment="left"` for filter dropdowns to ensure legible side-by-side labels.
-- Use theme color tokens instead of hardcoded hex.
-- Use `spacing={2}` for Grid containers.
-- Use `0.75rem` border-radius on large cards, `borderRadius: 2` on compact cards.
-- Use `#EAECF0` for borders and dividers.
-- Use `#475467` for section headers and table heads.
-- Use `#101828` for primary text, `#667085` for muted text.
-- Use compact card pattern (p: 2.5, horizontal layout) for clickable metric filters.
-- Use large card pattern (p: 1.71rem, vertical layout) for dashboard KPI summaries.
+- Reference `theme.palette.*` tokens where the component already threads
+  through the theme (MuiButton/MuiCard/MuiOutlinedInput overrides); use the
+  documented hex values above for one-off `sx` colors elsewhere, matching
+  the existing inline-hex convention in this codebase.
+- Keep cards `variant="outlined"`, radius `0.75rem`–`1rem`.
+- Keep the sidebar's user/logout footer at the bottom — don't reintroduce a
+  header-based logout.
+- Use the `SectionShell` + `Eyebrow` rhythm for any new Landing section.
+- Use `BrandMark` for the app logo everywhere (sidebar, login, landing nav).
+- Keep semantic status colors (success/error/warning) and the data-viz
+  category palette separate from brand chrome — don't reuse `primary.main`
+  for a category swatch or vice versa.
 
 **Do Not:**
-- Wrap `PageHeader` in any parent component like `<Stack>` or `<Box>` (this breaks the full screen bleed width calculations).
-- Use custom Box wrappers instead of PageContainer/PageContent.
-- Use standard `TextField select` or `FormControl + InputLabel` for dropdowns (causes tiny squished floating labels or clipping).
-- Use `spacing={3}` (portal standard is 2).
-- Use hardcoded colors like `#6B7280`, `#9CA3AF`, `#111827` — use `#475467`, `#667085`, `#101828`.
-- Add box-shadow to cards manually (theme handles it)
-- Use `variant="elevation"` on cards
-- Mix card patterns — use compact for filters, large for KPI summaries
+- Don't reintroduce the old blue (`#004EEB`) or cool-gray (`#EAECF0`,
+  `#101828`) palette — this app is fully on the deep-green/ivory/gold
+  system now.
+- Don't use wallet/₹/piggy-bank icons for branding.
+- Don't make the gold accent (`#D89B45`) a default action color — it's a
+  highlight color, used sparingly (currently: one final-CTA button).
+- Don't add dark corporate-dashboard styling, neon colors, or glassmorphism.
