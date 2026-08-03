@@ -30,6 +30,16 @@ function buildStats(summary, transactions, selectedUserId, activeMonth) {
   };
 }
 
+// Shrinks the KPI value font as the formatted string gets longer, so amounts
+// up to 9+ digits (with currency symbol and Indian comma grouping) always
+// stay on one line instead of wrapping mid-number.
+function valueFontSize(value) {
+  const len = String(value).length;
+  if (len <= 9) return '1.714rem';
+  if (len <= 12) return '1.35rem';
+  return '1.05rem';
+}
+
 function StatCard({ title, value, helper, color, icon, loading }) {
   return (
     <Card
