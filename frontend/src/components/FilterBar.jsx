@@ -1,7 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Card, InputAdornment, MenuItem, TextField } from '@mui/material';
 
-export default function FilterBar({ filters, setFilters, categories = [], users = [], subcategoryOptions = {}, transactions = [] }) {
+export default function FilterBar({ filters, setFilters, categories = [], subcategoryOptions = {}, transactions = [] }) {
   const availableSubcategories = filters.category !== 'All'
     ? subcategoryOptions[filters.category] || [...new Set(transactions.filter((item) => item.category === filters.category).map((item) => item.subcategory).filter(Boolean))]
     : [...new Set(transactions.map((item) => item.subcategory).filter(Boolean))];
@@ -23,12 +23,6 @@ export default function FilterBar({ filters, setFilters, categories = [], users 
   return (
     <Card variant="outlined" sx={{ px: 2, py: 1, borderRadius: '0.75rem', border: '1px solid #E2DCC9' }}>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
-        <TextField select size="small" label="User" value={filters.user}
-          onChange={(e) => updateFilter('user', e.target.value)} sx={selectSx}>
-          <MenuItem value="All">All</MenuItem>
-          {users.map((u) => <MenuItem key={u.logged_by_id} value={String(u.logged_by_id)}>{u.logged_by}</MenuItem>)}
-        </TextField>
-
         <TextField select size="small" label="Category" value={filters.category}
           onChange={(e) => updateFilter('category', e.target.value)} sx={{ minWidth: 140 }}>
           <MenuItem value="All">All</MenuItem>
