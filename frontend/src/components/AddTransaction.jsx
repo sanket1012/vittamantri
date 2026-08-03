@@ -64,8 +64,8 @@ export default function AddTransaction({ open, onClose, onSaved, categories = []
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <Box component="form" onSubmit={handleSubmit}>
         <DialogTitle sx={{ px: 3, py: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#101828' }}>Add Transaction</Typography>
-          <IconButton onClick={onClose} sx={{ color: '#98A2B3' }}>
+          <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#202421' }}>Add Transaction</Typography>
+          <IconButton onClick={onClose} sx={{ color: '#9A9C90' }}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>

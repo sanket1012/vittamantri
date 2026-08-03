@@ -7,16 +7,16 @@ import { Box, Button, IconButton, MenuItem, TextField, Tooltip, Typography } fro
 
 export default function Header({ title, caption, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu, currentUser, onManageMembers }) {
   return (
-    <Box sx={{ minHeight: 72, bgcolor: '#FAFBFF', borderBottom: '1px solid #EAECF0', px: 2.5, py: 1.25, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
+    <Box sx={{ minHeight: 72, bgcolor: '#F8F4E9', borderBottom: '1px solid #E2DCC9', px: 2.5, py: 1.25, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         {showMenu && (
-          <IconButton onClick={onMenuClick} sx={{ color: '#344054' }}>
+          <IconButton onClick={onMenuClick} sx={{ color: '#454940' }}>
             <MenuIcon />
           </IconButton>
         )}
         <Box>
-          <Typography sx={{ fontSize: '1.675rem', fontWeight: 600, color: '#101828', lineHeight: 1.2 }}>{title}</Typography>
-          {caption && <Typography sx={{ fontSize: '1rem', fontWeight: 400, color: '#667085', mt: 0.25 }}>{caption}</Typography>}
+          <Typography sx={{ fontSize: '1.675rem', fontWeight: 600, color: '#202421', lineHeight: 1.2 }}>{title}</Typography>
+          {caption && <Typography sx={{ fontSize: '1rem', fontWeight: 400, color: '#6B6F63', mt: 0.25 }}>{caption}</Typography>}
         </Box>
       </Box>
 

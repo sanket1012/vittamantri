@@ -73,13 +73,13 @@ export default function LoginGate({ onUnlock, initialTab = 0, onBack }) {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f5f5f5">
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#F6F1E7">
       <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%', position: 'relative' }}>
         {onBack && (
           <Button
             onClick={onBack}
             startIcon={<ArrowBackIcon fontSize="small" />}
-            sx={{ minWidth: 0, height: 'auto', p: 0, mb: 2, fontWeight: 500, fontSize: '0.8125rem', color: '#667085', '&:hover': { bgcolor: 'transparent', color: '#004EEB' } }}
+            sx={{ minWidth: 0, height: 'auto', p: 0, mb: 2, fontWeight: 500, fontSize: '0.8125rem', color: '#6B6F63', '&:hover': { bgcolor: 'transparent', color: '#173F35' } }}
           >
             Back to home
           </Button>

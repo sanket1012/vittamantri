@@ -36,7 +36,7 @@ function StatCard({ title, value, helper, color, icon, loading }) {
       variant="outlined"
       sx={{
         borderRadius: '0.75rem',
-        border: '1px solid #EAECF0',
+        border: '1px solid #E2DCC9',
         boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05)',
         borderTop: `3px solid ${color}`,
         height: '100%',
@@ -45,15 +45,15 @@ function StatCard({ title, value, helper, color, icon, loading }) {
       <CardContent sx={{ p: '1.71rem', '&:last-child': { pb: '1.71rem' } }}>
         <Box display="flex" justifyContent="space-between" alignItems="flex-start">
           <Box sx={{ minWidth: 0 }}>
-            <Typography sx={{ fontSize: '0.857rem', fontWeight: 500, color: '#475467', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
+            <Typography sx={{ fontSize: '0.857rem', fontWeight: 500, color: '#5B5F54', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
               {title}
             </Typography>
             {loading ? (
               <Skeleton width={130} height={36} />
             ) : (
-              <Typography sx={{ fontSize: '1.714rem', fontWeight: 700, color: '#101828', wordBreak: 'break-word' }}>{value}</Typography>
+              <Typography sx={{ fontSize: '1.714rem', fontWeight: 700, color: '#202421', wordBreak: 'break-word' }}>{value}</Typography>
             )}
-            <Typography sx={{ fontSize: '0.857rem', color: '#667085', mt: 0.5 }}>{helper}</Typography>
+            <Typography sx={{ fontSize: '0.857rem', color: '#6B6F63', mt: 0.5 }}>{helper}</Typography>
           </Box>
           <Box sx={{ width: 44, height: 44, borderRadius: '10px', backgroundColor: `${color}10`, color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {icon}
@@ -66,7 +66,7 @@ function StatCard({ title, value, helper, color, icon, loading }) {
 
 export default function StatsCards({ summary, transactions = [], selectedUserId = 'All', activeMonth = '', loading }) {
   const stats = buildStats(summary, transactions, selectedUserId, activeMonth);
-  const balanceColor = stats.balance >= 0 ? '#004EEB' : '#DC2626';
+  const balanceColor = stats.balance >= 0 ? '#173F35' : '#DC2626';
   const scope = activeMonth ? `${activeMonth}` : 'All time';
 
   const cards = [

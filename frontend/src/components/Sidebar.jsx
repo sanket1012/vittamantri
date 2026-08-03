@@ -28,22 +28,22 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
     : '?';
 
   return (
-    <Box sx={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, minHeight: '100vh', bgcolor: '#FFFFFF', borderRight: '1px solid #EAECF0', display: 'flex', flexDirection: 'column', transition: 'width 180ms ease' }}>
-      <Box sx={{ height: 72, px: collapsed ? 1.5 : 2.5, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', gap: 1.5, borderBottom: '1px solid #EAECF0' }}>
+    <Box sx={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, minHeight: '100vh', bgcolor: '#FFFFFF', borderRight: '1px solid #E2DCC9', display: 'flex', flexDirection: 'column', transition: 'width 180ms ease' }}>
+      <Box sx={{ height: 72, px: collapsed ? 1.5 : 2.5, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', gap: 1.5, borderBottom: '1px solid #E2DCC9' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-          <Box sx={{ width: 40, height: 40, flexShrink: 0, borderRadius: '10px', bgcolor: '#EFF6FF', color: '#004EEB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ width: 40, height: 40, flexShrink: 0, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <AccountBalanceWalletIcon />
           </Box>
           {!collapsed && (
             <Box sx={{ minWidth: 0 }}>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#101828', lineHeight: 1.2 }}>वित्तमंत्री</Typography>
-              <Typography sx={{ fontSize: 12, color: '#667085' }}>Finance Tracker</Typography>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#202421', lineHeight: 1.2 }}>वित्तमंत्री</Typography>
+              <Typography sx={{ fontSize: 12, color: '#6B6F63' }}>Finance Tracker</Typography>
             </Box>
           )}
         </Box>
         {collapsible && !collapsed && (
           <Tooltip title="Collapse sidebar">
-            <IconButton size="small" onClick={onToggleCollapse} sx={{ color: '#667085', flexShrink: 0 }}>
+            <IconButton size="small" onClick={onToggleCollapse} sx={{ color: '#6B6F63', flexShrink: 0 }}>
               <ChevronLeftIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -53,7 +53,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
       {collapsible && collapsed && (
         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 1 }}>
           <Tooltip title="Expand sidebar" placement="right">
-            <IconButton size="small" onClick={onToggleCollapse} sx={{ color: '#667085' }}>
+            <IconButton size="small" onClick={onToggleCollapse} sx={{ color: '#6B6F63' }}>
               <ChevronRightIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -80,10 +80,10 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
                 alignItems: 'center',
                 justifyContent: collapsed ? 'center' : 'flex-start',
                 gap: '10px',
-                color: active ? '#004EEB' : '#344054',
-                bgcolor: active ? '#EFF6FF' : 'transparent',
+                color: active ? '#173F35' : '#454940',
+                bgcolor: active ? '#E6EFEA' : 'transparent',
                 border: 0,
-                borderLeft: collapsed ? '3px solid transparent' : active ? '3px solid #004EEB' : '3px solid transparent',
+                borderLeft: collapsed ? '3px solid transparent' : active ? '3px solid #173F35' : '3px solid transparent',
                 borderRadius: '8px',
                 fontSize: 14,
                 fontWeight: 500,
@@ -91,7 +91,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
                 textAlign: 'left',
                 cursor: 'pointer',
                 transition: 'all 150ms ease',
-                '&:hover': { bgcolor: active ? '#EFF6FF' : '#F9FAFB', transform: collapsed ? 'none' : 'translateX(1px)' },
+                '&:hover': { bgcolor: active ? '#E6EFEA' : '#F1ECDD', transform: collapsed ? 'none' : 'translateX(1px)' },
               }}
             >
               <Icon sx={{ fontSize: 20 }} />
@@ -110,24 +110,24 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
 
       {!collapsed && (
         <Box sx={{ px: 2.5, pb: 1.5 }}>
-          <Typography sx={{ fontSize: 12, color: '#667085' }}>👥 {userCount} users active</Typography>
+          <Typography sx={{ fontSize: 12, color: '#6B6F63' }}>👥 {userCount} users active</Typography>
         </Box>
       )}
 
-      <Box sx={{ p: collapsed ? 1.5 : 2, borderTop: '1px solid #EAECF0', display: 'flex', alignItems: 'center', gap: 1, justifyContent: collapsed ? 'center' : 'space-between' }}>
+      <Box sx={{ p: collapsed ? 1.5 : 2, borderTop: '1px solid #E2DCC9', display: 'flex', alignItems: 'center', gap: 1, justifyContent: collapsed ? 'center' : 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-          <Avatar sx={{ width: 32, height: 32, bgcolor: '#004EEB', fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
+          <Avatar sx={{ width: 32, height: 32, bgcolor: '#173F35', fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
           {!collapsed && (
             <Box sx={{ minWidth: 0 }}>
-              <Typography sx={{ fontSize: 13, fontWeight: 600, color: '#101828', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <Typography sx={{ fontSize: 13, fontWeight: 600, color: '#202421', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {currentUser?.display_name || 'User'}
               </Typography>
-              <Typography sx={{ fontSize: 11, color: '#667085', textTransform: 'capitalize' }}>{currentUser?.role || 'member'}</Typography>
+              <Typography sx={{ fontSize: 11, color: '#6B6F63', textTransform: 'capitalize' }}>{currentUser?.role || 'member'}</Typography>
             </Box>
           )}
         </Box>
         <Tooltip title="Logout" placement={collapsed ? 'right' : 'top'}>
-          <IconButton size="small" onClick={onLogout} sx={{ color: '#667085', flexShrink: 0, '&:hover': { color: '#DC2626', bgcolor: '#FEF2F2' } }}>
+          <IconButton size="small" onClick={onLogout} sx={{ color: '#6B6F63', flexShrink: 0, '&:hover': { color: '#DC2626', bgcolor: '#FEF2F2' } }}>
             <LogoutIcon fontSize="small" />
           </IconButton>
         </Tooltip>

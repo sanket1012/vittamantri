@@ -43,12 +43,12 @@ export default function MonthlyBarChart({ transactions = [], loading, selectedUs
 
   return (
     <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #EAECF0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E2DCC9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
         <Box>
-          <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#101828' }}>Monthly Overview</Typography>
-          <Typography sx={{ fontSize: '0.875rem', color: '#667085' }}>{selectedUser}</Typography>
+          <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#202421' }}>Monthly Overview</Typography>
+          <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>{selectedUser}</Typography>
         </Box>
-        <Typography sx={{ fontSize: '0.875rem', color: '#667085' }}>{currentMonth}</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>{currentMonth}</Typography>
       </Box>
       <CardContent sx={{ p: 3 }}>
         {loading ? (
@@ -57,10 +57,10 @@ export default function MonthlyBarChart({ transactions = [], loading, selectedUs
           <Box sx={{ height: 320 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
-                <CartesianGrid stroke="#EAECF0" vertical={false} />
-                <XAxis dataKey="month" stroke="#667085" tickLine={false} axisLine={false} />
-                <YAxis stroke="#667085" tickLine={false} axisLine={false} tickFormatter={(value) => `₹${Number(value) / 1000}k`} />
-                <Tooltip formatter={(value) => formatINR(value)} cursor={{ fill: '#F9FAFB' }} />
+                <CartesianGrid stroke="#E2DCC9" vertical={false} />
+                <XAxis dataKey="month" stroke="#6B6F63" tickLine={false} axisLine={false} />
+                <YAxis stroke="#6B6F63" tickLine={false} axisLine={false} tickFormatter={(value) => `₹${Number(value) / 1000}k`} />
+                <Tooltip formatter={(value) => formatINR(value)} cursor={{ fill: '#F1ECDD' }} />
                 <Legend />
                 <Bar dataKey="income" name="Income" fill="#059669" radius={[6, 6, 0, 0]} />
                 <Bar dataKey="expense" name="Expense" fill="#DC2626" radius={[6, 6, 0, 0]} />

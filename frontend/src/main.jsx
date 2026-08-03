@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <App />
-      <Toaster position="top-right" toastOptions={{ style: { background: '#FFFFFF', color: '#101828', border: '1px solid #EAECF0' } }} />
+      <Toaster position="top-right" toastOptions={{ style: { background: '#FFFFFF', color: '#202421', border: '1px solid #E2DCC9' } }} />
     </ThemeProvider>
   </React.StrictMode>,
 );

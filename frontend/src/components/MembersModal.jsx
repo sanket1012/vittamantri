@@ -22,8 +22,8 @@ import {
 import toast from 'react-hot-toast';
 import { addMember, deleteMember, getMembers, resetMemberPassword } from '../api/client.js';
 
-const ROLE_COLORS = { admin: '#004EEB', member: '#344054' };
-const ROLE_BG = { admin: '#EFF4FF', member: '#F2F4F7' };
+const ROLE_COLORS = { admin: '#173F35', member: '#454940' };
+const ROLE_BG = { admin: '#E6EFEA', member: '#EDE7D8' };
 
 function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -68,23 +68,23 @@ function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 1.25 }}>
-      <Avatar sx={{ width: 36, height: 36, bgcolor: ROLE_COLORS[member.role] || '#344054', fontSize: '0.8rem', fontWeight: 700 }}>
+      <Avatar sx={{ width: 36, height: 36, bgcolor: ROLE_COLORS[member.role] || '#454940', fontSize: '0.8rem', fontWeight: 700 }}>
         {initials}
       </Avatar>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontWeight: 600, color: '#101828', fontSize: '0.875rem' }}>
+        <Typography sx={{ fontWeight: 600, color: '#202421', fontSize: '0.875rem' }}>
           {member.display_name}
-          {isSelf && <Typography component="span" sx={{ ml: 0.75, fontSize: '0.75rem', color: '#667085' }}>(you)</Typography>}
+          {isSelf && <Typography component="span" sx={{ ml: 0.75, fontSize: '0.75rem', color: '#6B6F63' }}>(you)</Typography>}
         </Typography>
-        <Typography sx={{ fontSize: '0.75rem', color: '#667085' }}>@{member.username}</Typography>
+        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>@{member.username}</Typography>
       </Box>
       <Chip
         label={member.role}
         size="small"
-        sx={{ bgcolor: ROLE_BG[member.role] || '#F2F4F7', color: ROLE_COLORS[member.role] || '#344054', fontWeight: 600, fontSize: '0.7rem', height: 22 }}
+        sx={{ bgcolor: ROLE_BG[member.role] || '#EDE7D8', color: ROLE_COLORS[member.role] || '#454940', fontWeight: 600, fontSize: '0.7rem', height: 22 }}
       />
       <Tooltip title="Reset password">
-        <IconButton size="small" onClick={() => setResetOpen(true)} sx={{ color: '#667085' }}>
+        <IconButton size="small" onClick={() => setResetOpen(true)} sx={{ color: '#6B6F63' }}>
           <KeyIcon fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -100,7 +100,7 @@ function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)} maxWidth="xs" fullWidth>
         <DialogTitle sx={{ fontWeight: 600 }}>Remove {member.display_name}?</DialogTitle>
         <DialogContent>
-          <Typography sx={{ color: '#344054', fontSize: '0.875rem' }}>
+          <Typography sx={{ color: '#454940', fontSize: '0.875rem' }}>
             Their login will be removed. All their transactions remain in the household data.
           </Typography>
         </DialogContent>
@@ -183,9 +183,9 @@ export default function MembersModal({ open, onClose, currentUser }) {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 600, color: '#101828', borderBottom: '1px solid #EAECF0', pb: 2 }}>
+      <DialogTitle sx={{ fontWeight: 600, color: '#202421', borderBottom: '1px solid #E2DCC9', pb: 2 }}>
         Family Members
-        <Typography sx={{ fontSize: '0.875rem', color: '#667085', fontWeight: 400, mt: 0.25 }}>
+        <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', fontWeight: 400, mt: 0.25 }}>
           Manage who can log into VittaMantri
         </Typography>
       </DialogTitle>
@@ -198,7 +198,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
               <CircularProgress size={28} />
             </Box>
           ) : members.length === 0 ? (
-            <Typography sx={{ color: '#667085', fontSize: '0.875rem', py: 2 }}>No members yet.</Typography>
+            <Typography sx={{ color: '#6B6F63', fontSize: '0.875rem', py: 2 }}>No members yet.</Typography>
           ) : (
             members.map((m, i) => (
               <Box key={m.id}>
@@ -210,8 +210,8 @@ export default function MembersModal({ open, onClose, currentUser }) {
         </Box>
 
         {/* Add member form */}
-        <Box sx={{ px: 3, pt: 2, pb: 3, borderTop: '1px solid #EAECF0', mt: 2, bgcolor: '#F9FAFB' }}>
-          <Typography sx={{ fontWeight: 600, color: '#344054', fontSize: '0.875rem', mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+        <Box sx={{ px: 3, pt: 2, pb: 3, borderTop: '1px solid #E2DCC9', mt: 2, bgcolor: '#F1ECDD' }}>
+          <Typography sx={{ fontWeight: 600, color: '#454940', fontSize: '0.875rem', mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <AddIcon sx={{ fontSize: 16 }} /> Add Member
           </Typography>
           <Box component="form" onSubmit={handleAdd} sx={{ display: 'grid', gap: 1.5 }}>
@@ -259,7 +259,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
         </Box>
       </DialogContent>
 
-      <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid #EAECF0' }}>
+      <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid #E2DCC9' }}>
         <Button variant="outlined" onClick={onClose}>Close</Button>
       </DialogActions>
     </Dialog>

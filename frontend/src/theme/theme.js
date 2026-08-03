@@ -6,9 +6,9 @@ const theme = createTheme({
     fontSize: 14,
   },
   palette: {
-    primary: { main: '#004EEB', dark: '#155EEF' },
-    background: { default: '#F6F6F6', paper: '#FFFFFF' },
-    text: { primary: '#101828', secondary: '#344054' },
+    primary: { main: '#173F35', dark: '#0F2A23' },
+    background: { default: '#F6F1E7', paper: '#FFFFFF' },
+    text: { primary: '#202421', secondary: '#454940' },
     success: { main: '#059669', light: '#F0FDF4' },
     error: { main: '#DC2626', light: '#FEF2F2' },
     warning: { main: '#F59E0B', light: '#FFFBEB' },
@@ -32,9 +32,9 @@ const theme = createTheme({
           '&:hover': { boxShadow: 'none' },
         },
         outlined: {
-          borderColor: '#D0D5DD',
-          color: '#344054',
-          '&:hover': { borderColor: '#004EEB', backgroundColor: '#F9FAFB' },
+          borderColor: '#CFC7AE',
+          color: '#454940',
+          '&:hover': { borderColor: '#173F35', backgroundColor: '#F1ECDD' },
         },
       },
     },
@@ -42,20 +42,20 @@ const theme = createTheme({
       defaultProps: { variant: 'outlined', elevation: 0 },
       styleOverrides: {
         root: {
-          borderColor: '#EAECF0',
+          borderColor: '#E2DCC9',
           boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05)',
         },
       },
     },
     MuiTableHead: {
       styleOverrides: {
-        root: { backgroundColor: '#F2F4F7' },
+        root: { backgroundColor: '#EDE7D8' },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         head: {
-          color: '#475467',
+          color: '#5B5F54',
           fontWeight: 500,
           fontSize: '0.857rem',
           textTransform: 'uppercase',
@@ -63,7 +63,7 @@ const theme = createTheme({
         },
         body: {
           fontSize: '0.875rem',
-          color: '#101828',
+          color: '#202421',
           padding: '6px 16px',
           height: '60px',
         },
@@ -73,7 +73,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': { backgroundColor: '#FCF3DF' },
-          borderBottom: '1px solid #EAECF0',
+          borderBottom: '1px solid #E2DCC9',
         },
       },
     },
@@ -87,8 +87,8 @@ const theme = createTheme({
         root: {
           minHeight: '44px',
           borderRadius: '8px',
-          '& fieldset': { borderColor: '#D0D5DD' },
-          '&:hover fieldset': { borderColor: '#004EEB' },
+          '& fieldset': { borderColor: '#CFC7AE' },
+          '&:hover fieldset': { borderColor: '#173F35' },
           boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05)',
         },
       },
