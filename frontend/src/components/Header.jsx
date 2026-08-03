@@ -8,19 +8,23 @@ import { Box, Button, IconButton, MenuItem, TextField, Tooltip, Typography } fro
 export default function Header({ title, caption, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu, currentUser, onManageMembers }) {
   return (
     <Box sx={{ minHeight: 72, bgcolor: '#F8F4E9', borderBottom: '1px solid #E2DCC9', px: 2.5, py: 1.25, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
         {showMenu && (
-          <IconButton onClick={onMenuClick} sx={{ color: '#454940' }}>
+          <IconButton onClick={onMenuClick} sx={{ color: '#454940', flexShrink: 0 }}>
             <MenuIcon />
           </IconButton>
         )}
-        <Box>
-          <Typography sx={{ fontSize: '1.675rem', fontWeight: 600, color: '#202421', lineHeight: 1.2 }}>{title}</Typography>
-          {caption && <Typography sx={{ fontSize: '1rem', fontWeight: 400, color: '#6B6F63', mt: 0.25 }}>{caption}</Typography>}
+        <Box sx={{ minWidth: 0 }}>
+          <Typography sx={{ fontSize: '1.675rem', fontWeight: 600, color: '#202421', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Typography>
+          {caption && (
+            <Typography sx={{ fontSize: '1rem', fontWeight: 400, color: '#6B6F63', mt: 0.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {caption}
+            </Typography>
+          )}
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0 }}>
         <TextField select size="small" value={selectedUser} onChange={(event) => onUserChange(event.target.value)} sx={{ minWidth: 160 }}>
           <MenuItem value="All">All Users</MenuItem>
           {users.map((user) => (
