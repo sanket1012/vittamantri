@@ -4,6 +4,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import toast from 'react-hot-toast';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { cleanGarbage, csvExportUrl, deleteTransaction, fetchCategories, fetchCategoriesFull, fetchSummary, fetchTransactions, getUsers } from '../api/client.js';
+import { formatCompactINR } from '../utils/formatCurrency.js';
 import AddTransaction from '../components/AddTransaction.jsx';
 import CategoriesPage from '../components/CategoriesPage.jsx';
 import FilterBar from '../components/FilterBar.jsx';
