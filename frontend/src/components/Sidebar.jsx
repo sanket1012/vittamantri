@@ -8,6 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { Avatar, Box, Drawer, IconButton, Tooltip, Typography } from '@mui/material';
+import BrandMark from './BrandMark.jsx';
 
 const navItems = [
   { label: 'Dashboard', icon: DashboardIcon, target: 'dashboard' },
