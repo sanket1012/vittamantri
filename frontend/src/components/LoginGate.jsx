@@ -85,7 +85,10 @@ export default function LoginGate({ onUnlock, initialTab = 0, onBack }) {
             Back to home
           </Button>
         )}
-        <Typography variant="h5" fontWeight={600} mb={0.5}>वित्तमंत्री</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 0.5 }}>
+          <BrandMark size={36} radius="9px" />
+          <Typography variant="h5" fontWeight={600}>वित्तमंत्री</Typography>
+        </Box>
         <Typography variant="body2" color="text.secondary" mb={2}>Family Finance Tracker</Typography>
 
         <Tabs value={tab} onChange={(_, v) => { setTab(v); setForm({ username: '', password: '', displayName: '', confirm: '' }); setError(''); }} sx={{ mb: 2.5 }}>
