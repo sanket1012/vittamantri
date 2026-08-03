@@ -60,7 +60,7 @@ export default function MonthlyBarChart({ transactions = [], loading, selectedUs
               <BarChart data={data}>
                 <CartesianGrid stroke="#E2DCC9" vertical={false} />
                 <XAxis dataKey="month" stroke="#6B6F63" tickLine={false} axisLine={false} />
-                <YAxis stroke="#6B6F63" tickLine={false} axisLine={false} tickFormatter={(value) => `₹${Number(value) / 1000}k`} />
+                <YAxis stroke="#6B6F63" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
                 <Tooltip formatter={(value) => formatINR(value)} cursor={{ fill: '#F1ECDD' }} />
                 <Legend />
                 <Bar dataKey="income" name="Income" fill="#059669" radius={[6, 6, 0, 0]} />
