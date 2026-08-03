@@ -61,7 +61,19 @@ function StatCard({ title, value, helper, color, icon, loading }) {
             {loading ? (
               <Skeleton width={130} height={36} />
             ) : (
-              <Typography sx={{ fontSize: '1.714rem', fontWeight: 700, color: '#202421', wordBreak: 'break-word' }}>{value}</Typography>
+              <Typography
+                sx={{
+                  fontSize: valueFontSize(value),
+                  fontWeight: 700,
+                  color: '#202421',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+                title={value}
+              >
+                {value}
+              </Typography>
             )}
             <Typography sx={{ fontSize: '0.857rem', color: '#6B6F63', mt: 0.5 }}>{helper}</Typography>
           </Box>
