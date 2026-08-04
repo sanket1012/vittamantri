@@ -489,24 +489,33 @@ export default function Landing({ onGetStarted }) {
 
       {/* 10. Final CTA */}
       <SectionShell bgcolor="#173F35">
-        <Box sx={{ textAlign: 'center', maxWidth: 640, mx: 'auto' }}>
-          <Typography sx={{ fontSize: { xs: 26, md: 34 }, fontWeight: 700, color: '#FFFFFF', lineHeight: 1.25, mb: 2.5 }}>
-            One family. One financial picture.
-          </Typography>
-          <Typography sx={{ fontSize: '1.0625rem', color: '#D9E6DF', lineHeight: 1.7, mb: 4 }}>
-            From a ₹20 chai to the monthly electricity bill, every expense adds up to the bigger picture. वित्तमंत्री
-            helps your household capture it effortlessly, understand it clearly, and manage money better — together.
-          </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => onGetStarted(1)}
-            sx={{ px: 5, bgcolor: '#D89B45', color: '#202421', '&:hover': { bgcolor: '#C88B38' } }}
-          >
-            Create your household
-          </Button>
-          <Typography sx={{ fontSize: '0.875rem', color: '#AEC2B8', mt: 2 }}>No spreadsheets required.</Typography>
-        </Box>
+        <Reveal>
+          <Box sx={{ textAlign: 'center', maxWidth: 640, mx: 'auto' }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 34 }, fontWeight: 700, color: '#FFFFFF', lineHeight: 1.25, mb: 2.5 }}>
+              One family. One financial picture.
+            </Typography>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#D9E6DF', lineHeight: 1.7, mb: 4 }}>
+              From a ₹20 chai to the monthly electricity bill, every expense adds up to the bigger picture.
+              वित्तमंत्री helps your household capture it effortlessly, understand it clearly, and manage money
+              better — together.
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => onGetStarted(1)}
+              sx={{
+                px: 5,
+                bgcolor: '#D89B45',
+                color: '#202421',
+                transition: 'transform 200ms ease, background-color 200ms ease',
+                '&:hover': { bgcolor: '#C88B38', transform: 'translateY(-2px)' },
+              }}
+            >
+              Create your household
+            </Button>
+            <Typography sx={{ fontSize: '0.875rem', color: '#AEC2B8', mt: 2 }}>No spreadsheets required.</Typography>
+          </Box>
+        </Reveal>
       </SectionShell>
 
       {/* Footer */}
