@@ -252,31 +252,35 @@ export default function Landing({ onGetStarted }) {
       <SectionShell id="how-it-works" bgcolor="#FFFFFF">
         <Grid container spacing={6} alignItems="center">
           <Grid item xs={12} md={6}>
-            <Eyebrow>Fast expense entry</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
-              Just text your expenses.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
-              No forms. No complicated expense-entry screens. Send a natural message to the वित्तमंत्री Telegram bot
-              and the transaction is recorded for you — with amount, merchant, category, subcategory, family member,
-              and date and time all filled in.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>Text it. Done.</Typography>
+            <Reveal>
+              <Eyebrow>Fast expense entry</Eyebrow>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+                Just text your expenses.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+                No forms. No complicated expense-entry screens. Send a natural message to the वित्तमंत्री Telegram bot
+                and the transaction is recorded for you — with amount, merchant, category, subcategory, family member,
+                and date and time all filled in.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>Text it. Done.</Typography>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#F6F1E7', border: '1px solid #E2DCC9' }}>
-              <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 1.25 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                  <TelegramIcon sx={{ color: '#173F35', fontSize: 20 }} />
-                  <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#6B6F63' }}>वित्तमंत्री bot</Typography>
-                </Box>
-                {['₹450 groceries at Dmart', '2800 electricity bill', '650 petrol', '1200 dinner at Absolute Barbecue', '350 medicines'].map((msg) => (
-                  <ChatBubble key={msg} align="right">
-                    {msg}
-                  </ChatBubble>
-                ))}
-              </CardContent>
-            </Card>
+            <Reveal delay={0.15}>
+              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#F6F1E7', border: '1px solid #E2DCC9', ...cardHoverSx }}>
+                <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                    <TelegramIcon sx={{ color: '#173F35', fontSize: 20 }} />
+                    <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#6B6F63' }}>वित्तमंत्री bot</Typography>
+                  </Box>
+                  {['₹450 groceries at Dmart', '2800 electricity bill', '650 petrol', '1200 dinner at Absolute Barbecue', '350 medicines'].map((msg, index) => (
+                    <Reveal key={msg} delay={0.2 + index * 0.15} y={10} duration={0.4}>
+                      <ChatBubble align="right">{msg}</ChatBubble>
+                    </Reveal>
+                  ))}
+                </CardContent>
+              </Card>
+            </Reveal>
           </Grid>
         </Grid>
       </SectionShell>
