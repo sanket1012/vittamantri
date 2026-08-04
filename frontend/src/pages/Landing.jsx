@@ -200,46 +200,50 @@ export default function Landing({ onGetStarted }) {
       <SectionShell>
         <Grid container spacing={6} alignItems="center">
           <Grid item xs={12} md={5}>
-            <Eyebrow>Shared household</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
-              One family. One financial picture.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
-              Create a private household space and invite the people you manage money with. Everyone can record
-              expenses while the household gets one clear view of where the money is going.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
-              Everyone contributes. Everyone stays informed.
-            </Typography>
+            <Reveal>
+              <Eyebrow>Shared household</Eyebrow>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+                One family. One financial picture.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+                Create a private household space and invite the people you manage money with. Everyone can record
+                expenses while the household gets one clear view of where the money is going.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+                Everyone contributes. Everyone stays informed.
+              </Typography>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={7}>
-            <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF' }}>
-              <CardContent sx={{ p: 3.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <GroupsIcon />
+            <Reveal delay={0.15}>
+              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
+                <CardContent sx={{ p: 3.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
+                    <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <GroupsIcon />
+                    </Box>
+                    <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#202421' }}>What your household gets</Typography>
                   </Box>
-                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#202421' }}>What your household gets</Typography>
-                </Box>
-                <Grid container spacing={1.5}>
-                  {[
-                    'See who recorded each transaction',
-                    'Track household-wide spending',
-                    'Understand where your money goes',
-                    'Compare spending across months',
-                    'Review expenses by family member',
-                    'Keep everyone financially informed',
-                  ].map((point) => (
-                    <Grid item xs={12} sm={6} key={point}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                        <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
-                        <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </CardContent>
-            </Card>
+                  <Grid container spacing={1.5}>
+                    {[
+                      'See who recorded each transaction',
+                      'Track household-wide spending',
+                      'Understand where your money goes',
+                      'Compare spending across months',
+                      'Review expenses by family member',
+                      'Keep everyone financially informed',
+                    ].map((point) => (
+                      <Grid item xs={12} sm={6} key={point}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                          <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
+                          <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
+                        </Box>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Reveal>
           </Grid>
         </Grid>
       </SectionShell>
