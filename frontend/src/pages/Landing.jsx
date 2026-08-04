@@ -289,37 +289,41 @@ export default function Landing({ onGetStarted }) {
       <SectionShell>
         <Grid container spacing={6} alignItems="center">
           <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
-            <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF' }}>
-              <CardContent sx={{ p: 3.5 }}>
-                <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                  <AutoAwesomeIcon />
-                </Box>
-                <Grid container spacing={1.5}>
-                  {['Automatic transaction categorization', 'Custom categories', 'Custom subcategories', 'Easy category corrections', 'Consistent expense organization'].map((point) => (
-                    <Grid item xs={12} key={point}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                        <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
-                        <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </CardContent>
-            </Card>
+            <Reveal>
+              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
+                <CardContent sx={{ p: 3.5 }}>
+                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                    <AutoAwesomeIcon />
+                  </Box>
+                  <Grid container spacing={1.5}>
+                    {['Automatic transaction categorization', 'Custom categories', 'Custom subcategories', 'Easy category corrections', 'Consistent expense organization'].map((point) => (
+                      <Grid item xs={12} key={point}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                          <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
+                          <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
+                        </Box>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
-            <Eyebrow>Automatic organization</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
-              Smart enough to organize itself.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
-              Groceries stay under groceries. Fuel stays under transport. Bills stay where they belong. वित्तमंत्री
-              automatically categorizes transactions while giving your household complete control over categories and
-              subcategories.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
-              Your finances should adapt to your life — not the other way around.
-            </Typography>
+            <Reveal delay={0.15}>
+              <Eyebrow>Automatic organization</Eyebrow>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+                Smart enough to organize itself.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+                Groceries stay under groceries. Fuel stays under transport. Bills stay where they belong. वित्तमंत्री
+                automatically categorizes transactions while giving your household complete control over categories
+                and subcategories.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+                Your finances should adapt to your life — not the other way around.
+              </Typography>
+            </Reveal>
           </Grid>
         </Grid>
       </SectionShell>
