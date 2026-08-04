@@ -447,11 +447,13 @@ export default function Landing({ onGetStarted }) {
 
       {/* 9. Why वित्तमंत्री — comparison */}
       <SectionShell>
-        <Box sx={{ textAlign: 'center', mb: 5 }}>
-          <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25 }}>
-            Built around how families actually manage money.
-          </Typography>
-        </Box>
+        <Reveal>
+          <Box sx={{ textAlign: 'center', mb: 5 }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25 }}>
+              Built around how families actually manage money.
+            </Typography>
+          </Box>
+        </Reveal>
         <Card variant="outlined" sx={{ borderRadius: '1rem', maxWidth: 780, mx: 'auto', overflow: 'hidden', bgcolor: '#FFFFFF' }}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E2DCC9', borderRight: '1px solid #E2DCC9' }}>
@@ -466,16 +468,18 @@ export default function Landing({ onGetStarted }) {
             </Box>
           </Box>
           {COMPARISON_ROWS.map((row, index) => (
-            <Box key={row.old} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: index < COMPARISON_ROWS.length - 1 ? '1px solid #E2DCC9' : 'none' }}>
-              <Box sx={{ px: 3, py: 2, borderRight: '1px solid #E2DCC9', display: 'flex', alignItems: 'center', gap: 1 }}>
-                <CloseIcon sx={{ fontSize: 16, color: '#9A9C90' }} />
-                <Typography sx={{ fontSize: '0.9375rem', color: '#6B6F63' }}>{row.old}</Typography>
+            <Reveal key={row.old} delay={index * 0.06} y={12} duration={0.4}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: index < COMPARISON_ROWS.length - 1 ? '1px solid #E2DCC9' : 'none' }}>
+                <Box sx={{ px: 3, py: 2, borderRight: '1px solid #E2DCC9', display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CloseIcon sx={{ fontSize: 16, color: '#9A9C90' }} />
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#6B6F63' }}>{row.old}</Typography>
+                </Box>
+                <Box sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CheckIcon sx={{ fontSize: 16, color: '#173F35' }} />
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#202421', fontWeight: 500 }}>{row.vitta}</Typography>
+                </Box>
               </Box>
-              <Box sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <CheckIcon sx={{ fontSize: 16, color: '#173F35' }} />
-                <Typography sx={{ fontSize: '0.9375rem', color: '#202421', fontWeight: 500 }}>{row.vitta}</Typography>
-              </Box>
-            </Box>
+            </Reveal>
           ))}
         </Card>
         <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35', textAlign: 'center', mt: 4 }}>
