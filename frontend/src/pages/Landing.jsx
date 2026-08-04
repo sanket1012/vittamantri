@@ -330,16 +330,18 @@ export default function Landing({ onGetStarted }) {
 
       {/* 6. Analytics */}
       <SectionShell id="analytics" bgcolor="#FFFFFF">
-        <Box sx={{ textAlign: 'center', maxWidth: 680, mx: 'auto', mb: 5 }}>
-          <Eyebrow>Useful insights</Eyebrow>
-          <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2 }}>
-            See the story behind your spending.
-          </Typography>
-          <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7 }}>
-            Numbers are useful only when they help you understand something. वित्तमंत्री turns everyday transactions
-            into simple insights your family can actually use.
-          </Typography>
-        </Box>
+        <Reveal>
+          <Box sx={{ textAlign: 'center', maxWidth: 680, mx: 'auto', mb: 5 }}>
+            <Eyebrow>Useful insights</Eyebrow>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2 }}>
+              See the story behind your spending.
+            </Typography>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7 }}>
+              Numbers are useful only when they help you understand something. वित्तमंत्री turns everyday transactions
+              into simple insights your family can actually use.
+            </Typography>
+          </Box>
+        </Reveal>
         <Grid container spacing={2.5}>
           {[
             { title: 'Monthly spending trends', desc: 'See how household spending changes from month to month.' },
@@ -347,17 +349,19 @@ export default function Landing({ onGetStarted }) {
             { title: 'Member summaries', desc: 'See how expenses are distributed across household members.' },
             { title: 'Transaction history', desc: 'Search, review, and understand previous expenses whenever needed.' },
             { title: 'CSV export', desc: 'Download your transaction data whenever you want to analyze it elsewhere.' },
-          ].map((card) => (
+          ].map((card, index) => (
             <Grid item xs={12} sm={6} md={4} key={card.title}>
-              <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%', bgcolor: '#F6F1E7' }}>
-                <CardContent sx={{ p: 3 }}>
-                  <Box sx={{ width: 40, height: 40, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                    <BarChartIcon fontSize="small" />
-                  </Box>
-                  <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#202421', mb: 0.75 }}>{card.title}</Typography>
-                  <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', lineHeight: 1.6 }}>{card.desc}</Typography>
-                </CardContent>
-              </Card>
+              <Reveal delay={index * 0.08}>
+                <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%', bgcolor: '#F6F1E7', ...cardHoverSx }}>
+                  <CardContent sx={{ p: 3 }}>
+                    <Box sx={{ width: 40, height: 40, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                      <BarChartIcon fontSize="small" />
+                    </Box>
+                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#202421', mb: 0.75 }}>{card.title}</Typography>
+                    <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', lineHeight: 1.6 }}>{card.desc}</Typography>
+                  </CardContent>
+                </Card>
+              </Reveal>
             </Grid>
           ))}
         </Grid>
