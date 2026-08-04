@@ -102,62 +102,72 @@ export default function Landing({ onGetStarted }) {
       <SectionShell id="overview">
         <Grid container spacing={6} alignItems="center">
           <Grid item xs={12} md={6}>
-            <Eyebrow>Family finance, made simple</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 32, md: 46 }, fontWeight: 700, color: '#202421', lineHeight: 1.15, mb: 2.5 }}>
-              Your family's money, finally in one place.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 3 }}>
-              वित्तमंत्री helps your household track everyday spending, understand where the money goes, and manage
-              finances together — without maintaining another spreadsheet. Log expenses simply by messaging the
-              Telegram bot in natural language.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
-              <Button variant="contained" size="large" onClick={() => onGetStarted(1)} sx={{ px: 4 }}>
-                Start tracking
-              </Button>
-              <Button variant="outlined" size="large" component="a" href="#how-it-works" sx={{ px: 4 }}>
-                See how it works
-              </Button>
-            </Box>
-            <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', fontWeight: 500 }}>
-              Simple to use. Built for families. Private by design.
-            </Typography>
+            <Reveal>
+              <Eyebrow>Family finance, made simple</Eyebrow>
+              <Typography sx={{ fontSize: { xs: 32, md: 46 }, fontWeight: 700, color: '#202421', lineHeight: 1.15, mb: 2.5 }}>
+                Your family's money, finally in one place.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 3 }}>
+                वित्तमंत्री helps your household track everyday spending, understand where the money goes, and manage
+                finances together — without maintaining another spreadsheet. Log expenses simply by messaging the
+                Telegram bot in natural language.
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
+                <Button variant="contained" size="large" onClick={() => onGetStarted(1)} sx={{ px: 4 }}>
+                  Start tracking
+                </Button>
+                <Button variant="outlined" size="large" component="a" href="#how-it-works" sx={{ px: 4 }}>
+                  See how it works
+                </Button>
+              </Box>
+              <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', fontWeight: 500 }}>
+                Simple to use. Built for families. Private by design.
+              </Typography>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Card variant="outlined" sx={{ borderRadius: '1rem', p: 3, bgcolor: '#FFFFFF' }}>
-              <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
-                Telegram message
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, mb: 3 }}>
-                <ChatBubble align="right">₹450 groceries at Dmart</ChatBubble>
-              </Box>
-              <Box sx={{ borderTop: '1px dashed #E2DCC9', pt: 2.5, mb: 2.5 }}>
-                <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1.5 }}>
-                  Transaction recognized
+            <Reveal delay={0.1} y={28}>
+              <Card variant="outlined" sx={{ borderRadius: '1rem', p: 3, bgcolor: '#FFFFFF', ...cardHoverSx }}>
+                <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
+                  Telegram message
                 </Typography>
-                <Box sx={{ bgcolor: '#E6EFEA', borderRadius: '0.75rem', p: 2.25, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-                  <Box>
-                    <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Amount</Typography>
-                    <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#173F35' }}>₹450</Typography>
-                  </Box>
-                  <Box>
-                    <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Category</Typography>
-                    <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#202421' }}>Groceries</Typography>
-                  </Box>
-                  <Box>
-                    <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Merchant</Typography>
-                    <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#202421' }}>Dmart</Typography>
-                  </Box>
-                  <Box>
-                    <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Date</Typography>
-                    <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#202421' }}>Today</Typography>
-                  </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, mb: 3 }}>
+                  <Reveal delay={0.5} y={10} duration={0.4}>
+                    <ChatBubble align="right">₹450 groceries at Dmart</ChatBubble>
+                  </Reveal>
                 </Box>
-              </Box>
-              <Typography sx={{ fontSize: '0.9375rem', color: '#454940', fontWeight: 500 }}>
-                वित्तमंत्री understands it, categorizes it, and adds it to your household automatically.
-              </Typography>
-            </Card>
+                <Reveal delay={1.1} y={10} duration={0.4}>
+                  <Box sx={{ borderTop: '1px dashed #E2DCC9', pt: 2.5, mb: 2.5 }}>
+                    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1.5 }}>
+                      Transaction recognized
+                    </Typography>
+                    <Box sx={{ bgcolor: '#E6EFEA', borderRadius: '0.75rem', p: 2.25, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+                      <Box>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Amount</Typography>
+                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#173F35' }}>₹450</Typography>
+                      </Box>
+                      <Box>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Category</Typography>
+                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#202421' }}>Groceries</Typography>
+                      </Box>
+                      <Box>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Merchant</Typography>
+                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#202421' }}>Dmart</Typography>
+                      </Box>
+                      <Box>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Date</Typography>
+                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#202421' }}>Today</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Reveal>
+                <Reveal delay={1.7} y={8} duration={0.4}>
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#454940', fontWeight: 500 }}>
+                    वित्तमंत्री understands it, categorizes it, and adds it to your household automatically.
+                  </Typography>
+                </Reveal>
+              </Card>
+            </Reveal>
           </Grid>
         </Grid>
       </SectionShell>
