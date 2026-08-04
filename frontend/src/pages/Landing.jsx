@@ -174,24 +174,26 @@ export default function Landing({ onGetStarted }) {
 
       {/* 2. Problem / Value proposition */}
       <SectionShell bgcolor="#FFFFFF">
-        <Box sx={{ maxWidth: 720 }}>
-          <Eyebrow>Why वित्तमंत्री</Eyebrow>
-          <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
-            Money management shouldn't feel like accounting.
-          </Typography>
-          <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.75, mb: 2 }}>
-            Most families already talk about expenses in messages, remember purchases mentally, save receipts, or
-            maintain spreadsheets that eventually stop getting updated.
-          </Typography>
-          <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.75, mb: 3 }}>
-            वित्तमंत्री turns everyday expense tracking into something as simple as sending a message. Your household
-            contributes to one shared financial picture while smart categorization and analytics take care of the
-            repetitive work.
-          </Typography>
-          <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
-            Less tracking effort. More financial clarity.
-          </Typography>
-        </Box>
+        <Reveal>
+          <Box sx={{ maxWidth: 720 }}>
+            <Eyebrow>Why वित्तमंत्री</Eyebrow>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+              Money management shouldn't feel like accounting.
+            </Typography>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.75, mb: 2 }}>
+              Most families already talk about expenses in messages, remember purchases mentally, save receipts, or
+              maintain spreadsheets that eventually stop getting updated.
+            </Typography>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.75, mb: 3 }}>
+              वित्तमंत्री turns everyday expense tracking into something as simple as sending a message. Your household
+              contributes to one shared financial picture while smart categorization and analytics take care of the
+              repetitive work.
+            </Typography>
+            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+              Less tracking effort. More financial clarity.
+            </Typography>
+          </Box>
+        </Reveal>
       </SectionShell>
 
       {/* 3. Built for the whole family */}
