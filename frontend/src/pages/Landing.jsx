@@ -414,25 +414,29 @@ export default function Landing({ onGetStarted }) {
 
       {/* 8. How it works — 3 steps */}
       <SectionShell bgcolor="#FFFFFF">
-        <Box sx={{ textAlign: 'center', mb: 5 }}>
-          <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25 }}>
-            Expense tracking in three simple steps.
-          </Typography>
-        </Box>
+        <Reveal>
+          <Box sx={{ textAlign: 'center', mb: 5 }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25 }}>
+              Expense tracking in three simple steps.
+            </Typography>
+          </Box>
+        </Reveal>
         <Grid container spacing={3}>
           {[
             { step: '1', title: 'Create your household', desc: 'Set up your private family space and invite household members.' },
             { step: '2', title: 'Send an expense', desc: 'Message the Telegram bot naturally — "₹850 groceries at Reliance Smart".' },
             { step: '3', title: 'See the bigger picture', desc: 'वित्तमंत्री records, categorizes, and reflects it in your household dashboard automatically.' },
-          ].map((item) => (
+          ].map((item, index) => (
             <Grid item xs={12} md={4} key={item.step}>
-              <Box sx={{ textAlign: 'center', px: 2 }}>
-                <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: '#173F35', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700, mx: 'auto', mb: 2 }}>
-                  {item.step}
+              <Reveal delay={index * 0.12}>
+                <Box sx={{ textAlign: 'center', px: 2 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: '#173F35', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700, mx: 'auto', mb: 2 }}>
+                    {item.step}
+                  </Box>
+                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#202421', mb: 1 }}>{item.title}</Typography>
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#6B6F63', lineHeight: 1.6 }}>{item.desc}</Typography>
                 </Box>
-                <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#202421', mb: 1 }}>{item.title}</Typography>
-                <Typography sx={{ fontSize: '0.9375rem', color: '#6B6F63', lineHeight: 1.6 }}>{item.desc}</Typography>
-              </Box>
+              </Reveal>
             </Grid>
           ))}
         </Grid>
