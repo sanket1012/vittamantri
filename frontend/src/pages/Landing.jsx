@@ -7,6 +7,12 @@ import LockIcon from '@mui/icons-material/Lock';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import BrandMark from '../components/BrandMark.jsx';
+import Reveal from '../components/Reveal.jsx';
+
+const cardHoverSx = {
+  transition: 'transform 220ms ease, box-shadow 220ms ease',
+  '&:hover': { transform: 'translateY(-4px)', boxShadow: '0px 12px 28px rgba(23,63,53,0.12)' },
+};
 
 const NAV_LINKS = [
   { label: 'Overview', href: '#overview' },
