@@ -649,6 +649,9 @@ def parse_text():
         all_categories = get_categories_with_subcategories(hid)
         result = extract_from_text(message, all_categories=all_categories)
         return jsonify({"transactions": result.get("transactions", []), "query": result.get("query")})
+    except GroqUnavailableError:
+        logger.exception("parse_text: Groq service unavailable")
+        return error_response("Service is currently down or under maintenance. Please try again shortly.", 503)
     except Exception:
         logger.exception("parse_text failed")
         return _internal_error()
