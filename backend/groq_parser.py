@@ -224,7 +224,7 @@ Examples:
         logger.info("LLM parsed result: %s", parsed)
     except Exception as exc:
         logger.warning("Groq API call failed for %r: %s", user_message[:60], exc)
-        return {"query": None, "transactions": []}
+        raise GroqUnavailableError(str(exc)) from exc
 
     if not parsed:
         return {"query": None, "transactions": []}
