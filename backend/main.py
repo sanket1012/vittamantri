@@ -44,7 +44,7 @@ from data_manager import (
     update_transaction_fields,
 )
 from gemini_parser import extract_from_image, extract_from_pdf
-from groq_parser import extract_from_text
+from groq_parser import GroqUnavailableError, extract_from_text
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
