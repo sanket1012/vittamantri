@@ -38,10 +38,8 @@ GREETING_REPLY = (
 )
 AMOUNT_NOT_FOUND_REPLY = "❓ No amount found.\nTry: Petrol 500  or  Salary 45000"
 GROQ_FAILED_REPLY = (
-    "⚠️ I couldn't understand that.\n\n"
-    "• Log:    Zomato 280  ·  Petrol 500\n"
-    "• Check:  my balance  ·  today  ·  this month\n"
-    "• Update: update last to Food"
+    "🛠️ Service is currently down or under maintenance.\n"
+    "Please try again in a few minutes."
 )
 
 
