@@ -19,7 +19,10 @@ frontend/dist/
 # Data files (contain personal financial records)
 data/transactions.csv
 data/transactions_old.csv
+data/transactions_backup_*.csv
 data/summary.json
+data/users.json
+data/h_*/
 
 # OS
 .DS_Store
