@@ -20,6 +20,7 @@ _IST = pytz.timezone("Asia/Kolkata")
 class GroqUnavailableError(RuntimeError):
     """Raised when the Groq API call itself fails (auth, rate limit, model retired, network, etc.)."""
 
+
 _MONTH_MAP = {
     "jan": 1, "january": 1, "feb": 2, "february": 2,
     "mar": 3, "march": 3, "apr": 4, "april": 4,
