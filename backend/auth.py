@@ -90,54 +90,6 @@ def find_user_by_telegram_id(telegram_id: int) -> Optional[dict]:
     return _row_to_dict(row) if row else None
 
 
-_TELEGRAM_LINK_TOKEN_TTL_MINUTES = 15
-
-
-def create_telegram_link_token(user_id: int) -> str:
-    """Generates a one-time deep-link token for /start-based Telegram linking.
-
-    Uses token_urlsafe (alphabet: A-Z a-z 0-9 - _) since Telegram's /start
-    payload only accepts that character set and caps it at 64 characters.
-    """
-    token = secrets.token_urlsafe(24)
-    expires_at = datetime.now(timezone.utc) + timedelta(minutes=_TELEGRAM_LINK_TOKEN_TTL_MINUTES)
-    with engine.begin() as conn:
-        conn.execute(
-            users_table.update()
-            .where(users_table.c.id == user_id)
-            .values(telegram_link_token=token, telegram_link_token_expires_at=expires_at)
-        )
-    return token
-
-
-def consume_telegram_link_token(token: str, telegram_id: int) -> Optional[dict]:
-    """Validates a Telegram deep-link token and links telegram_id to its owning user.
-
-    Returns the linked user dict, or None if the token is invalid/expired.
-    Raises ValueError if telegram_id already belongs to a different user.
-    """
-    with engine.begin() as conn:
-        row = conn.execute(select(users_table).where(users_table.c.telegram_link_token == token)).first()
-        if not row:
-            return None
-        user = _row_to_dict(row)
-        expires_at = row.telegram_link_token_expires_at
-        if not expires_at or expires_at < datetime.now(timezone.utc):
-            return None
-
-        existing = conn.execute(select(users_table).where(users_table.c.telegram_id == telegram_id)).first()
-        if existing and existing.id != user["id"]:
-            raise ValueError("This Telegram account is already linked to another user.")
-
-        conn.execute(
-            users_table.update()
-            .where(users_table.c.id == user["id"])
-            .values(telegram_id=telegram_id, telegram_link_token=None, telegram_link_token_expires_at=None)
-        )
-    user["telegram_id"] = telegram_id
-    return user
-
-
 def hash_password(password: str) -> str:
     salt = secrets.token_hex(16)
     hashed = hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 260_000).hex()
