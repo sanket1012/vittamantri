@@ -64,8 +64,6 @@ users = Table(
     Column("telegram_id", BigInteger, unique=True),
     Column("role", Text, nullable=False),
     Column("created_at", TIMESTAMP(timezone=True), nullable=False, server_default=func.now()),
-    Column("telegram_link_token", Text, unique=True),
-    Column("telegram_link_token_expires_at", TIMESTAMP(timezone=True)),
 )
 
 transactions = Table(
