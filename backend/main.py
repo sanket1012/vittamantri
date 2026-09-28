@@ -284,6 +284,40 @@ def create_telegram_link():
     })
 
 
+@app.route("/api/me/telegram/verify", methods=["POST"])
+@require_auth
+def verify_telegram_widget():
+    """Links Telegram via the official Login Widget (HMAC-verified server-side),
+    so linking never requires leaving our own domain or a /start deep link."""
+    try:
+        payload = request.get_json(silent=True) or {}
+        if not verify_telegram_login(payload):
+            return error_response("Could not verify Telegram login. Please try again.", 400)
+
+        try:
+            telegram_id = int(payload.get("id"))
+        except (TypeError, ValueError):
+            return error_response("Invalid Telegram user id.", 400)
+
+        current_user_id = g.current_user.get("user_id")
+        users = load_users()
+        user = next((u for u in users if u["id"] == current_user_id), None)
+        if not user:
+            return error_response("User not found.", 404)
+
+        existing = next((u for u in users if u.get("telegram_id") == telegram_id and u["id"] != current_user_id), None)
+        if existing:
+            return error_response("This Telegram account is already linked to another user.", 409)
+
+        user["telegram_id"] = telegram_id
+        save_users(users)
+        _send_telegram_welcome(telegram_id, user.get("display_name") or user["username"].title())
+        return jsonify({"message": "Telegram account linked.", "telegram_id": telegram_id})
+    except Exception:
+        logger.exception("verify_telegram_widget failed")
+        return _internal_error()
+
+
 @app.route("/api/telegram/link", methods=["POST"])
 @require_bot_key
 def confirm_telegram_link():
