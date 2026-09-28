@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  Alert,
   Avatar,
   Box,
   Button,
@@ -11,7 +10,8 @@ import {
   Typography,
 } from '@mui/material';
 import toast from 'react-hot-toast';
-import { changePassword, getMe, linkTelegram, unlinkTelegram } from '../api/client.js';
+import { changePassword, getMe, unlinkTelegram } from '../api/client.js';
+import ConnectTelegram from '../components/ConnectTelegram.jsx';
 
 const ROLE_COLOR = { admin: '#173F35', member: '#454940' };
 const ROLE_BG = { admin: '#E6EFEA', member: '#EDE7D8' };
