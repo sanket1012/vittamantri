@@ -259,6 +259,32 @@ def require_auth(f):
     return decorated
 
 
+_TELEGRAM_LOGIN_MAX_AGE_SECONDS = 300
+
+
+def verify_telegram_login(data: dict) -> bool:
+    """Verifies a Telegram Login Widget payload's authenticity and freshness.
+    See https://core.telegram.org/widgets/login#checking-authorization"""
+    bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    received_hash = data.get("hash")
+    if not bot_token or not received_hash:
+        return False
+
+    check_fields = {k: v for k, v in data.items() if k != "hash"}
+    data_check_string = "\n".join(f"{k}={check_fields[k]}" for k in sorted(check_fields))
+    secret_key = hashlib.sha256(bot_token.encode()).digest()
+    computed_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(computed_hash, str(received_hash)):
+        return False
+
+    try:
+        auth_date = int(data.get("auth_date", 0))
+    except (TypeError, ValueError):
+        return False
+    age = datetime.now(timezone.utc).timestamp() - auth_date
+    return 0 <= age <= _TELEGRAM_LOGIN_MAX_AGE_SECONDS
+
+
 def require_bot_key(f):
     """For bot-to-backend calls that happen before a Telegram account is linked
     (e.g. confirming a /start deep link), where there's no telegram_id to
