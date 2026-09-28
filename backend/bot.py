@@ -337,25 +337,6 @@ def compact_transaction_row(row: dict) -> str:
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if context.args:
-        token = context.args[0]
-        telegram_id = update.effective_user.id
-        try:
-            result = api_post(
-                "/api/telegram/link",
-                {"token": token, "telegram_id": telegram_id},
-                headers={"X-Bot-Key": _BOT_KEY},
-            )
-        except Exception as exc:
-            logger.warning("Telegram link failed for token %r: %s", token, exc)
-            await update.message.reply_text(
-                "⚠️ This connect link is invalid, expired, or already used.\n"
-                "Go back to the वित्तमंत्री web app and tap \"Connect Telegram\" again."
-            )
-            return
-        name = result.get("display_name") or "there"
-        await update.message.reply_text(f"✅ Connected! Hi {name}, you're all set.\n\n{GREETING_REPLY}")
-        return
     await update.message.reply_text(GREETING_REPLY)
 
 
