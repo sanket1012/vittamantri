@@ -135,25 +135,9 @@ export default function Profile({ currentUser: initialUser }) {
         ) : (
           <>
             <Typography sx={{ color: '#454940', fontSize: '0.875rem', mb: 1.5 }}>
-              Link your Telegram account so the bot routes messages to your household.
-              Send <code>/start</code> to the bot, then forward your Telegram user ID here.
+              Connect your Telegram account so the bot routes messages to your household — one tap, no ID to look up.
             </Typography>
-            <Alert severity="info" sx={{ mb: 2, fontSize: '0.8rem' }}>
-              To find your Telegram ID: message <strong>@userinfobot</strong> on Telegram — it will reply with your numeric ID.
-            </Alert>
-            <Box component="form" onSubmit={handleLinkTelegram} sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
-              <TextField
-                size="small"
-                label="Telegram User ID"
-                placeholder="e.g. 5997163595"
-                value={telegramId}
-                onChange={(e) => setTelegramId(e.target.value)}
-                sx={{ flex: 1 }}
-              />
-              <Button type="submit" variant="contained" disabled={telegramSaving} sx={{ mt: 0.25 }}>
-                {telegramSaving ? <CircularProgress size={18} color="inherit" /> : 'Link'}
-              </Button>
-            </Box>
+            <ConnectTelegram onLinked={refreshProfile} />
           </>
         )}
       </Section>
