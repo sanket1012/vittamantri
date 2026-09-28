@@ -29,6 +29,12 @@ export default function App() {
     setUnlocked(true);
   };
 
+  const handleRegistered = (user) => {
+    setCurrentUser(user);
+    setUnlocked(true);
+    setJustRegistered(true);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
     delete api.defaults.headers.common['Authorization'];
