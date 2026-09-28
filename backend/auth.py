@@ -237,20 +237,6 @@ def verify_telegram_login(data: dict) -> bool:
     return 0 <= age <= _TELEGRAM_LOGIN_MAX_AGE_SECONDS
 
 
-def require_bot_key(f):
-    """For bot-to-backend calls that happen before a Telegram account is linked
-    (e.g. confirming a /start deep link), where there's no telegram_id to
-    authenticate through require_auth's normal X-Bot-Key + X-Telegram-Id path."""
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        bot_key = request.headers.get("X-Bot-Key", "")
-        expected_bot_key = _bot_api_key()
-        if not (bot_key and expected_bot_key and secrets.compare_digest(bot_key, expected_bot_key)):
-            return jsonify({"error": "Unauthorized"}), 401
-        return f(*args, **kwargs)
-    return decorated
-
-
 def require_admin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
