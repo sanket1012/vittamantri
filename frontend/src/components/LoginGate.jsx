@@ -65,7 +65,7 @@ export default function LoginGate({ onUnlock, onRegistered, initialTab = 0, onBa
       });
       localStorage.setItem('jwt_token', data.token);
       api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-      onUnlock(data.user);
+      (onRegistered || onUnlock)(data.user);
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Try a different username.');
     } finally {
