@@ -53,7 +53,16 @@ export default function App() {
         />
       );
     }
-    return <LoginGate onUnlock={handleUnlock} initialTab={authTab} onBack={() => setShowAuth(false)} />;
+    return <LoginGate onUnlock={handleUnlock} onRegistered={handleRegistered} initialTab={authTab} onBack={() => setShowAuth(false)} />;
+  }
+
+  if (justRegistered) {
+    return (
+      <WelcomeConnectTelegram
+        displayName={currentUser?.display_name}
+        onDone={() => setJustRegistered(false)}
+      />
+    );
   }
 
   return <Dashboard onLogout={handleLogout} currentUser={currentUser} />;
