@@ -45,28 +45,7 @@ export default function Profile({ currentUser: initialUser }) {
     : '?';
 
   // Telegram linking
-  const [telegramId, setTelegramId] = useState('');
   const [telegramSaving, setTelegramSaving] = useState(false);
-
-  const handleLinkTelegram = async (e) => {
-    e.preventDefault();
-    const id = parseInt(telegramId.trim(), 10);
-    if (!id || isNaN(id)) {
-      toast.error('Enter a valid Telegram ID (numeric).');
-      return;
-    }
-    setTelegramSaving(true);
-    try {
-      await linkTelegram(id);
-      toast.success('Telegram account linked!');
-      setTelegramId('');
-      await refreshProfile();
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Could not link Telegram account.');
-    } finally {
-      setTelegramSaving(false);
-    }
-  };
 
   const handleUnlinkTelegram = async () => {
     setTelegramSaving(true);
