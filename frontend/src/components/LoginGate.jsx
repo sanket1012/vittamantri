@@ -13,7 +13,7 @@ import {
 import api, { registerUser } from '../api/client.js';
 import BrandMark from './BrandMark.jsx';
 
-export default function LoginGate({ onUnlock, initialTab = 0, onBack }) {
+export default function LoginGate({ onUnlock, onRegistered, initialTab = 0, onBack }) {
   const [tab, setTab] = useState(initialTab); // 0 = Sign In, 1 = Register
   const [form, setForm] = useState({ username: '', password: '', displayName: '', confirm: '' });
   const [error, setError] = useState('');
