@@ -3,12 +3,14 @@ import api, { getMe } from './api/client.js';
 import Dashboard from './pages/Dashboard.jsx';
 import Landing from './pages/Landing.jsx';
 import LoginGate from './components/LoginGate.jsx';
+import WelcomeConnectTelegram from './components/WelcomeConnectTelegram.jsx';
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => !!localStorage.getItem('jwt_token'));
   const [currentUser, setCurrentUser] = useState(null);
   const [showAuth, setShowAuth] = useState(false);
   const [authTab, setAuthTab] = useState(0);
+  const [justRegistered, setJustRegistered] = useState(false);
 
   useEffect(() => {
     if (!unlocked) return;
