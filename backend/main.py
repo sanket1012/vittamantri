@@ -58,6 +58,30 @@ logger = logging.getLogger("vittamantri.api")
 _DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 _FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 _TELEGRAM_BOT_USERNAME = os.getenv("TELEGRAM_BOT_USERNAME", "")
+_TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+
+
+def _send_telegram_welcome(telegram_id: int, display_name: str) -> None:
+    """Best-effort proactive welcome via the Login Widget's granted write access.
+    Never raises — a failed welcome message shouldn't fail the link itself."""
+    if not _TELEGRAM_BOT_TOKEN:
+        return
+    text = (
+        f"✅ Connected! Hi {display_name}, you're all set.\n\n"
+        "👋 Here's what I can do:\n\n"
+        "💸 Log a transaction\n"
+        "   Zomato 280  ·  Petrol 500  ·  Salary 45000\n\n"
+        "📊 Check your finances\n"
+        "   my balance  ·  today's spending  ·  this month"
+    )
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{_TELEGRAM_BOT_TOKEN}/sendMessage",
+            json={"chat_id": telegram_id, "text": text},
+            timeout=10,
+        )
+    except Exception:
+        logger.exception("Could not send Telegram welcome message to %s", telegram_id)
 _STATIC_DIR = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
 _ALLOWED_ORIGINS = [_FRONTEND_URL]
