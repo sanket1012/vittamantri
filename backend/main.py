@@ -54,7 +54,6 @@ logger = logging.getLogger("vittamantri.api")
 
 _DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 _FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
-_TELEGRAM_BOT_USERNAME = os.getenv("TELEGRAM_BOT_USERNAME", "")
 _TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 
 
