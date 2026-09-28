@@ -8,6 +8,8 @@ from flask import Flask, Response, g, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 from auth import (
+    consume_telegram_link_token,
+    create_telegram_link_token,
     create_token,
     create_user,
     find_user_by_telegram_id,
@@ -17,6 +19,7 @@ from auth import (
     load_users,
     require_admin,
     require_auth,
+    require_bot_key,
     save_users,
     verify_password,
 )
