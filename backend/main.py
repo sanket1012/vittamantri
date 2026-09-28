@@ -3,6 +3,7 @@ import os
 import pathlib
 from datetime import datetime, timezone
 
+import requests
 from dotenv import load_dotenv
 from flask import Flask, Response, g, jsonify, request, send_from_directory
 from flask_cors import CORS
@@ -22,6 +23,7 @@ from auth import (
     require_bot_key,
     save_users,
     verify_password,
+    verify_telegram_login,
 )
 from data_manager import (
     bulk_update_transactions,
