@@ -241,6 +241,53 @@ def link_telegram():
         return _internal_error()
 
 
+@app.route("/api/me/telegram/link-token", methods=["POST"])
+@require_auth
+def create_telegram_link():
+    """Issues a one-time /start deep-link token so the user can connect Telegram
+    with a single tap instead of manually looking up and pasting their numeric ID."""
+    user_id = g.current_user.get("user_id")
+    if not user_id:
+        return error_response("User not found.", 404)
+    if not _TELEGRAM_BOT_USERNAME:
+        return error_response("Telegram bot is not configured.", 500)
+    token = create_telegram_link_token(user_id)
+    return jsonify({
+        "deep_link": f"https://t.me/{_TELEGRAM_BOT_USERNAME}?start={token}",
+        "expires_in_minutes": 15,
+    })
+
+
+@app.route("/api/telegram/link", methods=["POST"])
+@require_bot_key
+def confirm_telegram_link():
+    """Called by the bot when a user opens a /start deep link, before their
+    Telegram account is linked (so require_auth's normal bot-key path, which
+    needs an already-linked telegram_id, doesn't apply here)."""
+    try:
+        payload = request.get_json(silent=True) or {}
+        token = payload.get("token")
+        telegram_id_raw = payload.get("telegram_id")
+        if not token or telegram_id_raw is None:
+            return error_response("token and telegram_id are required.", 400)
+        try:
+            telegram_id = int(telegram_id_raw)
+        except (TypeError, ValueError):
+            return error_response("telegram_id must be a number.", 400)
+
+        try:
+            user = consume_telegram_link_token(token, telegram_id)
+        except ValueError as exc:
+            return error_response(str(exc), 409)
+        if not user:
+            return error_response("This link has expired or was already used.", 400)
+
+        return jsonify({"display_name": user.get("display_name"), "household_id": user.get("household_id")})
+    except Exception:
+        logger.exception("confirm_telegram_link failed")
+        return _internal_error()
+
+
 # ── Members (admin-only management within same household) ─────────────────────
 
 @app.route("/api/members", methods=["GET"])
