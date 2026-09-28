@@ -1,74 +1,48 @@
-import { useEffect, useRef, useState } from 'react';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import { useEffect, useRef } from 'react';
+import { Box, Typography } from '@mui/material';
 import toast from 'react-hot-toast';
-import { createTelegramLinkToken, getMe } from '../api/client.js';
+import api from '../api/client.js';
 
-const POLL_INTERVAL_MS = 3000;
-const POLL_TIMEOUT_MS = 2 * 60 * 1000;
+const BOT_USERNAME = 'MyChancellorBot';
 
-/** "Connect Telegram" button: opens a one-tap /start deep link, then polls
- * /api/me until the bot confirms the link, so the user never has to look up
- * or paste their numeric Telegram ID. */
+/** Telegram's official "Log in with Telegram" widget: verified server-side via
+ * HMAC, no redirect away from our own domain, and (with data-request-access)
+ * grants the bot permission to message the user immediately — no /start needed. */
 export default function ConnectTelegram({ onLinked }) {
-  const [status, setStatus] = useState('idle'); // idle | opening | waiting | linked | error
-  const pollRef = useRef(null);
+  const containerRef = useRef(null);
 
-  useEffect(() => () => clearInterval(pollRef.current), []);
+  useEffect(() => {
+    window.onTelegramAuth = async (telegramUser) => {
+      try {
+        const { data } = await api.post('/me/telegram/verify', telegramUser);
+        toast.success('Telegram connected! Check Telegram for a welcome message.');
+        onLinked?.(data);
+      } catch (err) {
+        toast.error(err.response?.data?.error || 'Could not verify Telegram login.');
+      }
+    };
 
-  const handleConnect = async () => {
-    setStatus('opening');
-    try {
-      const { deep_link: deepLink } = await createTelegramLinkToken();
-      if (!deepLink) throw new Error('no_deep_link');
-      window.open(deepLink, '_blank', 'noopener');
-      setStatus('waiting');
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.async = true;
+    script.setAttribute('data-telegram-login', BOT_USERNAME);
+    script.setAttribute('data-size', 'large');
+    script.setAttribute('data-radius', '8');
+    script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+    script.setAttribute('data-request-access', 'write');
+    containerRef.current?.appendChild(script);
 
-      const startedAt = Date.now();
-      pollRef.current = setInterval(async () => {
-        if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
-          clearInterval(pollRef.current);
-          setStatus('idle');
-          return;
-        }
-        try {
-          const me = await getMe();
-          if (me.telegram_id) {
-            clearInterval(pollRef.current);
-            setStatus('linked');
-            toast.success('Telegram connected!');
-            onLinked?.(me);
-          }
-        } catch {
-          // ignore transient poll failures
-        }
-      }, POLL_INTERVAL_MS);
-    } catch {
-      setStatus('error');
-      toast.error('Could not start Telegram connection. Try again.');
-    }
-  };
-
-  if (status === 'linked') {
-    return <Typography sx={{ color: '#173F35', fontWeight: 600, fontSize: '0.875rem' }}>✅ Telegram connected!</Typography>;
-  }
+    return () => {
+      delete window.onTelegramAuth;
+    };
+  }, []);
 
   return (
     <Box>
-      <Button
-        variant="contained"
-        startIcon={status === 'waiting' ? <CircularProgress size={16} color="inherit" /> : <TelegramIcon />}
-        onClick={handleConnect}
-        disabled={status === 'opening' || status === 'waiting'}
-        sx={{ bgcolor: '#229ED9', '&:hover': { bgcolor: '#1b87ba' } }}
-      >
-        {status === 'waiting' ? 'Waiting for Telegram…' : 'Connect Telegram'}
-      </Button>
-      {status === 'waiting' && (
-        <Typography sx={{ color: '#6B6F63', fontSize: '0.8rem', mt: 1 }}>
-          A Telegram tab just opened — tap "Start" there. This page will update automatically once it's connected.
-        </Typography>
-      )}
+      <Box ref={containerRef} sx={{ display: 'flex', justifyContent: 'center', minHeight: 40 }} />
+      <Typography sx={{ color: '#6B6F63', fontSize: '0.75rem', mt: 1, textAlign: 'center' }}>
+        Verified directly by Telegram — you'll get a welcome message as soon as you approve.
+      </Typography>
     </Box>
   );
 }
