@@ -301,36 +301,6 @@ def verify_telegram_widget():
         return _internal_error()
 
 
-@app.route("/api/telegram/link", methods=["POST"])
-@require_bot_key
-def confirm_telegram_link():
-    """Called by the bot when a user opens a /start deep link, before their
-    Telegram account is linked (so require_auth's normal bot-key path, which
-    needs an already-linked telegram_id, doesn't apply here)."""
-    try:
-        payload = request.get_json(silent=True) or {}
-        token = payload.get("token")
-        telegram_id_raw = payload.get("telegram_id")
-        if not token or telegram_id_raw is None:
-            return error_response("token and telegram_id are required.", 400)
-        try:
-            telegram_id = int(telegram_id_raw)
-        except (TypeError, ValueError):
-            return error_response("telegram_id must be a number.", 400)
-
-        try:
-            user = consume_telegram_link_token(token, telegram_id)
-        except ValueError as exc:
-            return error_response(str(exc), 409)
-        if not user:
-            return error_response("This link has expired or was already used.", 400)
-
-        return jsonify({"display_name": user.get("display_name"), "household_id": user.get("household_id")})
-    except Exception:
-        logger.exception("confirm_telegram_link failed")
-        return _internal_error()
-
-
 # ── Members (admin-only management within same household) ─────────────────────
 
 @app.route("/api/members", methods=["GET"])
