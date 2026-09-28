@@ -97,11 +97,6 @@ export const registerUser = async ({ username, displayName, password }) => {
   return data;
 };
 
-export const linkTelegram = async (telegramId) => {
-  const { data } = await api.patch('/me/telegram', { telegram_id: telegramId });
-  return data;
-};
-
 export const unlinkTelegram = async () => {
   const { data } = await api.patch('/me/telegram', { telegram_id: null });
   return data;
