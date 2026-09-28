@@ -267,23 +267,6 @@ def link_telegram():
         return _internal_error()
 
 
-@app.route("/api/me/telegram/link-token", methods=["POST"])
-@require_auth
-def create_telegram_link():
-    """Issues a one-time /start deep-link token so the user can connect Telegram
-    with a single tap instead of manually looking up and pasting their numeric ID."""
-    user_id = g.current_user.get("user_id")
-    if not user_id:
-        return error_response("User not found.", 404)
-    if not _TELEGRAM_BOT_USERNAME:
-        return error_response("Telegram bot is not configured.", 500)
-    token = create_telegram_link_token(user_id)
-    return jsonify({
-        "deep_link": f"https://t.me/{_TELEGRAM_BOT_USERNAME}?start={token}",
-        "expires_in_minutes": 15,
-    })
-
-
 @app.route("/api/me/telegram/verify", methods=["POST"])
 @require_auth
 def verify_telegram_widget():
