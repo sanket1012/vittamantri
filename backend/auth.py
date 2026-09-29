@@ -157,6 +157,111 @@ def create_user(username: str, display_name: str, password: str) -> tuple[dict, 
     return new_user, token
 
 
+def create_user_in_household(username: str, display_name: str, password: str, household_id: int, role: str = "member") -> tuple[dict, str]:
+    """Create a user joining an existing household (invite acceptance). Returns (user_dict, token)."""
+    try:
+        with engine.begin() as conn:
+            new_id = conn.execute(
+                insert(users_table)
+                .values(
+                    household_id=household_id,
+                    username=username,
+                    display_name=display_name or username.title(),
+                    password_hash=hash_password(password),
+                    telegram_id=None,
+                    role=role,
+                )
+                .returning(users_table.c.id)
+            ).scalar_one()
+    except IntegrityError as exc:
+        raise ValueError(f"Username '{username}' is already taken.") from exc
+
+    new_user = get_user_by_id(new_id)
+    token = create_token(new_user)
+    logger.info("New user %s joined household=%d via invite", username, household_id)
+    return new_user, token
+
+
+_INVITE_TTL_DAYS = 7
+
+
+def create_member_invite(household_id: int, phone_number: str, display_name: str, created_by: int) -> dict:
+    token = secrets.token_urlsafe(24)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=_INVITE_TTL_DAYS)
+    with engine.begin() as conn:
+        new_id = conn.execute(
+            insert(member_invites)
+            .values(
+                household_id=household_id,
+                phone_number=phone_number,
+                display_name=display_name,
+                token=token,
+                status="pending",
+                created_by=created_by,
+                expires_at=expires_at,
+            )
+            .returning(member_invites.c.id)
+        ).scalar_one()
+    return {"id": new_id, "token": token, "expires_at": expires_at}
+
+
+def list_pending_invites(household_id: int) -> list[dict]:
+    with engine.connect() as conn:
+        rows = conn.execute(
+            select(member_invites)
+            .where(member_invites.c.household_id == household_id, member_invites.c.status == "pending")
+            .order_by(member_invites.c.created_at.desc())
+        ).all()
+    return [
+        {
+            "id": r.id,
+            "phone_number": r.phone_number,
+            "display_name": r.display_name,
+            "created_at": r.created_at.strftime("%Y-%m-%d") if r.created_at else None,
+            "expires_at": r.expires_at.strftime("%Y-%m-%d") if r.expires_at else None,
+        }
+        for r in rows
+    ]
+
+
+def cancel_member_invite(invite_id: int, household_id: int) -> bool:
+    with engine.begin() as conn:
+        result = conn.execute(
+            member_invites.update()
+            .where(member_invites.c.id == invite_id, member_invites.c.household_id == household_id, member_invites.c.status == "pending")
+            .values(status="cancelled")
+        )
+    return result.rowcount > 0
+
+
+def get_invite_preview(token: str) -> Optional[dict]:
+    """Public-facing preview for the accept-invite page. None if invalid/expired/consumed."""
+    with engine.connect() as conn:
+        row = conn.execute(select(member_invites).where(member_invites.c.token == token)).first()
+        if not row or row.status != "pending" or row.expires_at < datetime.now(timezone.utc):
+            return None
+        inviter = conn.execute(select(users_table.c.display_name).where(users_table.c.id == row.created_by)).first()
+    return {
+        "display_name": row.display_name,
+        "inviter_name": inviter.display_name if inviter else "your household",
+    }
+
+
+def consume_member_invite(token: str) -> Optional[dict]:
+    """Validates and marks an invite consumed. Returns the invite row dict, or None if invalid."""
+    with engine.begin() as conn:
+        row = conn.execute(select(member_invites).where(member_invites.c.token == token)).first()
+        if not row or row.status != "pending" or row.expires_at < datetime.now(timezone.utc):
+            return None
+        conn.execute(member_invites.update().where(member_invites.c.id == row.id).values(status="accepted"))
+    return {"household_id": row.household_id, "id": row.id}
+
+
+def mark_invite_accepted_user(invite_id: int, user_id: int) -> None:
+    with engine.begin() as conn:
+        conn.execute(member_invites.update().where(member_invites.c.id == invite_id).values(accepted_user_id=user_id))
+
+
 def _bot_api_key() -> str:
     return os.getenv("BOT_API_KEY", os.getenv("DASHBOARD_API_KEY", ""))
 
