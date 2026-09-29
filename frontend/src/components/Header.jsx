@@ -1,23 +1,34 @@
+import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import DownloadIcon from '@mui/icons-material/Download';
 import GroupIcon from '@mui/icons-material/Group';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Button, IconButton, MenuItem, TextField, Tooltip, Typography } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box, Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Tooltip, Typography } from '@mui/material';
+
+const currentMonthLabel = () => new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 
 export default function Header({ title, caption, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu, currentUser, onManageMembers }) {
+  const [menuAnchor, setMenuAnchor] = useState(null);
+
+  const handleMenuAction = (action) => {
+    setMenuAnchor(null);
+    action?.();
+  };
+
   return (
-    <Box sx={{ minHeight: 72, bgcolor: '#F8F4E9', borderBottom: '1px solid #E2DCC9', px: 2.5, py: 1.25, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
+    <Box sx={{ minHeight: 76, bgcolor: '#FFFFFF', borderBottom: '1px solid #E7E9E5', px: 2.5, py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
         {showMenu && (
-          <IconButton onClick={onMenuClick} sx={{ color: '#454940', flexShrink: 0 }}>
+          <IconButton onClick={onMenuClick} sx={{ color: '#17211E', flexShrink: 0 }}>
             <MenuIcon />
           </IconButton>
         )}
         <Box sx={{ minWidth: 0 }}>
-          <Typography sx={{ fontSize: '1.675rem', fontWeight: 600, color: '#202421', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Typography>
+          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#17211E', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Typography>
           {caption && (
-            <Typography sx={{ fontSize: '1rem', fontWeight: 400, color: '#6B6F63', mt: 0.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <Typography sx={{ fontSize: '0.9375rem', fontWeight: 400, color: '#737B77', mt: 0.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {caption}
             </Typography>
           )}
@@ -25,7 +36,9 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0 }}>
-        <TextField select size="small" value={selectedUser} onChange={(event) => onUserChange(event.target.value)} sx={{ minWidth: 160 }}>
+        <Typography sx={{ fontSize: '0.875rem', color: '#737B77', display: { xs: 'none', sm: 'block' } }}>{currentMonthLabel()}</Typography>
+
+        <TextField select size="small" value={selectedUser} onChange={(event) => onUserChange(event.target.value)} sx={{ minWidth: 150 }}>
           <MenuItem value="All">All Users</MenuItem>
           {users.map((user) => (
             <MenuItem key={user.logged_by_id} value={String(user.logged_by_id)}>
@@ -34,25 +47,31 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
           ))}
         </TextField>
 
-        {currentUser?.role === 'admin' && (
-          <Tooltip title="Manage family members">
-            <Button variant="outlined" startIcon={<GroupIcon />} onClick={onManageMembers} size="small">
-              Members
-            </Button>
-          </Tooltip>
-        )}
-
-        <Button variant="outlined" startIcon={<DownloadIcon />} onClick={onExport}>
-          Export CSV
-        </Button>
-        <Tooltip title={`Remove invalid transactions${invalidCount ? ` (${invalidCount} found)` : ''}`}>
-          <Button variant="outlined" startIcon={<DeleteSweepIcon />} onClick={onClean} sx={{ color: '#B54708', borderColor: '#F59E0B', '&:hover': { borderColor: '#F59E0B', bgcolor: '#FFFBEB' } }}>
-            Clean Garbage
-          </Button>
-        </Tooltip>
         <Button variant="contained" startIcon={<AddIcon />} onClick={onAdd}>
           Add
         </Button>
+
+        <Tooltip title="More options">
+          <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)} sx={{ color: '#17211E' }}>
+            <MoreVertIcon />
+          </IconButton>
+        </Tooltip>
+        <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={() => setMenuAnchor(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
+          {currentUser?.role === 'admin' && (
+            <MenuItem onClick={() => handleMenuAction(onManageMembers)}>
+              <ListItemIcon><GroupIcon fontSize="small" /></ListItemIcon>
+              <ListItemText>Manage Members</ListItemText>
+            </MenuItem>
+          )}
+          <MenuItem onClick={() => handleMenuAction(onExport)}>
+            <ListItemIcon><DownloadIcon fontSize="small" /></ListItemIcon>
+            <ListItemText>Export CSV</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuAction(onClean)}>
+            <ListItemIcon><CleaningServicesIcon fontSize="small" /></ListItemIcon>
+            <ListItemText>Data Cleanup{invalidCount ? ` (${invalidCount})` : ''}</ListItemText>
+          </MenuItem>
+        </Menu>
       </Box>
     </Box>
   );
