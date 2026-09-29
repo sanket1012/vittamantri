@@ -4,6 +4,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import GroupsIcon from '@mui/icons-material/Groups';
 import LockIcon from '@mui/icons-material/Lock';
+import PersonIcon from '@mui/icons-material/Person';
+import ShieldIcon from '@mui/icons-material/Shield';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import BrandMark from '../components/BrandMark.jsx';
