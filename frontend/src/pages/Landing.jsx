@@ -189,120 +189,116 @@ function TrendChart() {
 export default function Landing({ onGetStarted }) {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: C.ivory, display: 'flex', flexDirection: 'column' }}>
-      {/* ── Hero — cinematic photography, oversized wordmark, one floating card. */}
-      <Box sx={{ position: 'relative', minHeight: { xs: '100vh', md: '100vh' }, display: 'flex', flexDirection: 'column', color: '#FFFFFF', overflow: 'hidden' }}>
+      {/* ── Hero — cinematic photography (right), editorial wordmark + one
+          floating card (left, on midnight). Split rather than full-bleed so
+          the photo is used cleanly, cropped tight on the family. */}
+      <Box sx={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, overflow: 'hidden' }}>
+        {/* Photo panel */}
         <Box
           sx={{
-            position: 'absolute',
-            inset: 0,
+            order: { xs: 1, md: 2 },
+            width: { xs: '100%', md: '42%' },
+            height: { xs: '38vh', md: 'auto' },
+            position: 'relative',
             backgroundImage: `url(${heroImage})`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center right',
-            filter: 'brightness(0.52) saturate(0.7)',
+            backgroundPosition: 'center',
           }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            background: `linear-gradient(115deg, rgba(21,23,28,0.97) 0%, rgba(21,23,28,0.88) 30%, rgba(21,23,28,0.55) 55%, rgba(21,23,28,0.28) 78%, rgba(21,23,28,0.35) 100%)`,
-          }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(to top, rgba(21,23,28,0.75) 0%, rgba(21,23,28,0) 38%)',
-          }}
-        />
+        >
+          <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(21,23,28,0.35) 0%, rgba(21,23,28,0) 22%, rgba(21,23,28,0) 78%, rgba(21,23,28,0.4) 100%)' }} />
+          <Box sx={{ position: 'absolute', inset: 0, display: { xs: 'block', md: 'none' }, background: 'linear-gradient(to top, rgba(21,23,28,1) 0%, rgba(21,23,28,0) 30%)' }} />
+        </Box>
 
-        {/* Nav */}
-        <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2.5, md: 6 }, py: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-            <BrandMark size={36} radius="9px" bgcolor="rgba(255,255,255,0.12)" color={C.champagne} />
-            <Typography sx={{ fontFamily: serif, fontSize: 22, color: '#FFFFFF', letterSpacing: '0.01em' }}>Samvitta</Typography>
-          </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 4 }}>
-            {NAV_LINKS.map((link) => (
+        {/* Text panel */}
+        <Box sx={{ order: { xs: 2, md: 1 }, width: { xs: '100%', md: '58%' }, bgcolor: C.midnight, display: 'flex', flexDirection: 'column', color: '#FFFFFF' }}>
+          {/* Nav */}
+          <Box sx={{ px: { xs: 2.5, md: 6 }, py: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+              <BrandMark size={36} radius="9px" bgcolor="rgba(255,255,255,0.12)" color={C.champagne} />
+              <Typography sx={{ fontFamily: serif, fontSize: 22, color: '#FFFFFF', letterSpacing: '0.01em' }}>Samvitta</Typography>
+            </Box>
+            <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 4 }}>
+              {NAV_LINKS.map((link) => (
+                <Typography
+                  key={link.label}
+                  component="a"
+                  href={link.href}
+                  sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', '&:hover': { color: '#FFFFFF' } }}
+                >
+                  {link.label}
+                </Typography>
+              ))}
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Typography
-                key={link.label}
                 component="a"
-                href={link.href}
-                sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', '&:hover': { color: '#FFFFFF' } }}
+                onClick={() => onGetStarted(0)}
+                sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgba(255,255,255,0.85)', cursor: 'pointer', display: { xs: 'none', sm: 'block' } }}
               >
-                {link.label}
+                Sign in
               </Typography>
-            ))}
+              <Button
+                variant="contained"
+                onClick={() => onGetStarted(1)}
+                sx={{ bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#BE9A5A' } }}
+              >
+                Get started
+              </Button>
+            </Box>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography
-              component="a"
-              onClick={() => onGetStarted(0)}
-              sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgba(255,255,255,0.85)', cursor: 'pointer', display: { xs: 'none', sm: 'block' } }}
-            >
-              Sign in
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={() => onGetStarted(1)}
-              sx={{ bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#BE9A5A' } }}
-            >
-              Get started
-            </Button>
+
+          {/* Hero copy */}
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', px: { xs: 2.5, md: 6 }, py: { xs: 4, md: 0 } }}>
+            <Reveal>
+              <Typography
+                sx={{
+                  fontFamily: serif,
+                  fontSize: { xs: 56, sm: 76, md: 96, lg: 112 },
+                  lineHeight: 1,
+                  color: '#FFFFFF',
+                  mb: { xs: 2, md: 3 },
+                }}
+              >
+                Samvitta
+              </Typography>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <Typography
+                sx={{
+                  fontFamily: serif,
+                  fontSize: { xs: 22, sm: 26, md: 30 },
+                  lineHeight: 1.3,
+                  color: 'rgba(255,255,255,0.92)',
+                  maxWidth: 520,
+                  mb: 2.5,
+                }}
+              >
+                Smart Financial Analytics for the Whole Family
+              </Typography>
+            </Reveal>
+            <Reveal delay={0.18}>
+              <Typography sx={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.68)', lineHeight: 1.7, maxWidth: 460, mb: 4 }}>
+                Understand where your household money goes, why it changed, and what comes next.
+              </Typography>
+            </Reveal>
+            <Reveal delay={0.26}>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => onGetStarted(1)}
+                sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, alignSelf: 'flex-start', '&:hover': { bgcolor: '#BE9A5A' } }}
+              >
+                Explore Samvitta
+              </Button>
+            </Reveal>
           </Box>
-        </Box>
 
-        {/* Hero copy */}
-        <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', px: { xs: 2.5, md: 6 }, py: { xs: 4, md: 0 } }}>
-          <Reveal>
-            <Typography
-              sx={{
-                fontFamily: serif,
-                fontSize: { xs: 56, sm: 84, md: 118 },
-                lineHeight: 1,
-                color: '#FFFFFF',
-                mb: { xs: 2, md: 3 },
-              }}
-            >
-              Samvitta
-            </Typography>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <Typography
-              sx={{
-                fontFamily: serif,
-                fontSize: { xs: 22, sm: 28, md: 34 },
-                lineHeight: 1.3,
-                color: 'rgba(255,255,255,0.92)',
-                maxWidth: 620,
-                mb: 2.5,
-              }}
-            >
-              Smart Financial Analytics for the Whole Family
-            </Typography>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <Typography sx={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.68)', lineHeight: 1.7, maxWidth: 480, mb: 4 }}>
-              Understand where your household money goes, why it changed, and what comes next.
-            </Typography>
-          </Reveal>
-          <Reveal delay={0.26}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => onGetStarted(1)}
-              sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, alignSelf: 'flex-start', '&:hover': { bgcolor: '#BE9A5A' } }}
-            >
-              Explore Samvitta
-            </Button>
-          </Reveal>
-        </Box>
-
-        {/* The one floating card */}
-        <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2.5, md: 6 }, pb: { xs: 4, md: 6 } }}>
-          <Reveal delay={0.35} y={24}>
-            <HouseholdOverviewCard />
-          </Reveal>
+          {/* The one floating card */}
+          <Box sx={{ px: { xs: 2.5, md: 6 }, pb: { xs: 4, md: 6 } }}>
+            <Reveal delay={0.35} y={24}>
+              <HouseholdOverviewCard />
+            </Reveal>
+          </Box>
         </Box>
       </Box>
 
