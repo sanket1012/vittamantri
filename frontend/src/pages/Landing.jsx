@@ -104,7 +104,7 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={6}>
             <Reveal>
               <Eyebrow>Family finance, made simple</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 32, md: 46 }, fontWeight: 700, color: '#17211E', lineHeight: 1.15, mb: 2.5 }}>
+              <Typography sx={{ fontSize: { xs: 38, md: 58 }, fontWeight: 800, color: '#17211E', lineHeight: 1.08, letterSpacing: '-0.02em', mb: 2.5 }}>
                 Your family's money, finally in one place.
               </Typography>
               <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 3 }}>
