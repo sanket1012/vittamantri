@@ -1,28 +1,14 @@
 import { Box } from '@mui/material';
+import logoMark from '../assets/logo-mark.png';
 
-// Geometric "S" monogram for Samvitta — abstract rather than a
-// wallet/coin/₹/leaf icon, and simple enough to read at 24px.
-export default function BrandMark({ size = 40, radius, fontSize, bgcolor = '#15171C', color = '#CDAA6A' }) {
+// Samvitta's house + "S" monogram.
+export default function BrandMark({ size = 40 }) {
   return (
     <Box
-      sx={{
-        width: size,
-        height: size,
-        flexShrink: 0,
-        borderRadius: radius || `${Math.round(size * 0.28)}px`,
-        bgcolor,
-        color,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: '"Instrument Serif", Georgia, serif',
-        fontStyle: 'italic',
-        fontSize: fontSize || Math.round(size * 0.62),
-        lineHeight: 1,
-        userSelect: 'none',
-      }}
-    >
-      S
-    </Box>
+      component="img"
+      src={logoMark}
+      alt="Samvitta"
+      sx={{ width: size, height: size, flexShrink: 0, display: 'block', userSelect: 'none' }}
+    />
   );
 }
