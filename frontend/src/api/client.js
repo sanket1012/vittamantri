@@ -135,6 +135,27 @@ export const resetMemberPassword = async (id, password) => {
   return data;
 };
 
+// Phone-number invites (admin generates a link, shares it themselves via Telegram)
+export const getMemberInvites = async () => {
+  const { data } = await api.get('/members/invites');
+  return data;
+};
+
+export const createMemberInvite = async ({ phoneNumber, displayName }) => {
+  const { data } = await api.post('/members/invite', { phone_number: phoneNumber, display_name: displayName });
+  return data;
+};
+
+export const cancelMemberInvite = async (id) => {
+  const { data } = await api.delete(`/members/invites/${id}`);
+  return data;
+};
+
+export const getInvitePreview = async (token) => {
+  const { data } = await api.get(`/invites/${token}`);
+  return data;
+};
+
 export const csvExportUrl = '/api/export/csv';
 
 export default api;
