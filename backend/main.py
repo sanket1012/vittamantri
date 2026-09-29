@@ -424,6 +424,60 @@ def update_member_password(member_id):
         return _internal_error()
 
 
+@app.route("/api/members/invites", methods=["GET"])
+@require_admin
+def list_invites():
+    try:
+        return jsonify(list_pending_invites(_hid()))
+    except Exception:
+        logger.exception("list_invites failed")
+        return _internal_error()
+
+
+@app.route("/api/members/invite", methods=["POST"])
+@require_admin
+def create_invite():
+    """Generates a shareable invite link for a new household member. Delivery is
+    manual (admin taps "Share via Telegram") — the Bot API can't message an
+    arbitrary phone number that hasn't started a conversation with the bot."""
+    try:
+        payload = request.get_json(silent=True) or {}
+        phone_number = (payload.get("phone_number") or "").strip()
+        display_name = (payload.get("display_name") or "").strip()
+        if not phone_number or not display_name:
+            return error_response("phone_number and display_name are required.", 400)
+
+        invite = create_member_invite(_hid(), phone_number, display_name, g.current_user.get("user_id"))
+        invite_link = f"{_FRONTEND_URL}/join/{invite['token']}"
+        share_text = f"Join our वित्तमंत्री household — track family expenses together: {invite_link}"
+        telegram_share_url = f"https://t.me/share/url?url={quote(invite_link, safe='')}&text={quote(share_text, safe='')}"
+        return jsonify({"invite_link": invite_link, "telegram_share_url": telegram_share_url}), 201
+    except Exception:
+        logger.exception("create_invite failed")
+        return _internal_error()
+
+
+@app.route("/api/members/invites/<int:invite_id>", methods=["DELETE"])
+@require_admin
+def cancel_invite(invite_id):
+    try:
+        if not cancel_member_invite(invite_id, _hid()):
+            return error_response("Invite not found.", 404)
+        return jsonify({"message": "Invite cancelled."})
+    except Exception:
+        logger.exception("cancel_invite failed")
+        return _internal_error()
+
+
+@app.route("/api/invites/<token>", methods=["GET"])
+def preview_invite(token):
+    """Public — lets the accept-invite page show who's inviting before signup."""
+    preview = get_invite_preview(token)
+    if not preview:
+        return error_response("This invite link is invalid or has expired.", 404)
+    return jsonify(preview)
+
+
 # ── Transactions ──────────────────────────────────────────────────────────────
 
 @app.route("/api/transactions", methods=["GET"])
