@@ -32,7 +32,6 @@ export const SUBCATEGORY_OPTIONS = {
 const isGarbage = (item) => !item.date || !item.category || !item.type || !Number(item.amount || 0);
 
 const PAGE_TITLES = {
-  dashboard: 'Dashboard',
   transactions: 'Transactions',
   analytics: 'Analytics',
   categories: 'Categories',
@@ -41,13 +40,19 @@ const PAGE_TITLES = {
 };
 
 const PAGE_CAPTIONS = {
-  dashboard: 'Quick view of income, expense, balance, and recent patterns.',
   transactions: 'Review, filter, and manage every logged transaction.',
   analytics: 'Study category mix, monthly movement, and recent money trends.',
   categories: 'Manage expense categories and subcategories.',
   export: 'Download a clean CSV copy of your finance records.',
   profile: 'Manage your account, Telegram link, and password.',
 };
+
+function greeting(displayName) {
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+  const firstName = (displayName || '').split(' ')[0];
+  return `Good ${timeOfDay}${firstName ? `, ${firstName}` : ''} 👋`;
+}
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
