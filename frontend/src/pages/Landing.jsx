@@ -46,6 +46,68 @@ function SectionShell({ id, bgcolor, children }) {
   );
 }
 
+function MiniSparkline({ path, color, height = 40 }) {
+  return (
+    <Box component="svg" viewBox="0 0 100 32" preserveAspectRatio="none" sx={{ width: '100%', height, display: 'block' }}>
+      <path d={path} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </Box>
+  );
+}
+
+function ProductPreviewMock() {
+  return (
+    <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: '#FFFFFF', p: { xs: 2, md: 3 }, ...cardHoverSx }}>
+      <Grid container spacing={1.5}>
+        <Grid item xs={12} sm={6}>
+          <Box sx={{ bgcolor: '#123F36', color: '#FFFFFF', borderRadius: '1rem', p: 2.25, height: '100%' }}>
+            <Typography sx={{ fontSize: '0.6875rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
+              Available Balance
+            </Typography>
+            <Typography sx={{ fontSize: '1.75rem', fontWeight: 700, mb: 1.5 }}>₹1,24,500</Typography>
+            <MiniSparkline path="M0,24 L15,22 L30,25 L45,12 L60,16 L75,6 L100,2" color="#7CE8C3" height={36} />
+          </Box>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2, height: '100%' }}>
+            <Typography sx={{ fontSize: '0.6875rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>Income</Typography>
+            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 700, color: '#17211E', mb: 1.5 }}>₹78,000</Typography>
+            <MiniSparkline path="M0,20 L20,18 L40,20 L60,10 L80,14 L100,4" color="#16A477" height={28} />
+          </Box>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2, height: '100%' }}>
+            <Typography sx={{ fontSize: '0.6875rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>Expense</Typography>
+            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 700, color: '#17211E', mb: 1.5 }}>₹53,500</Typography>
+            <MiniSparkline path="M0,10 L15,8 L30,22 L45,14 L60,26 L80,12 L100,18" color="#E5534B" height={28} />
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={7}>
+          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2.25, height: '100%' }}>
+            <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#17211E', mb: 1.5 }}>Cash Flow</Typography>
+            <MiniSparkline path="M0,26 L15,25 L30,24 L45,20 L60,16 L75,9 L100,2" color="#16A477" height={52} />
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2.25, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#17211E', mb: 0.5 }}>Spending</Typography>
+            {[
+              { label: 'Groceries', pct: 32, color: '#16A34A' },
+              { label: 'Rent', pct: 28, color: '#7C3AED' },
+              { label: 'Transport', pct: 14, color: '#0891B2' },
+            ].map((row) => (
+              <Box key={row.label} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: row.color, flexShrink: 0 }} />
+                <Typography sx={{ fontSize: '0.75rem', color: '#737B77', flex: 1 }}>{row.label}</Typography>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#17211E' }}>{row.pct}%</Typography>
+              </Box>
+            ))}
+          </Box>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+}
+
 function ChatBubble({ children, align = 'left' }) {
   return (
     <Box
