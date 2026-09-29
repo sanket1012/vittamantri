@@ -447,46 +447,65 @@ export default function Landing({ onGetStarted }) {
         </Typography>
       </SectionShell>
 
-      {/* 7. Privacy */}
-      <SectionShell id="privacy">
-        <Grid container spacing={6} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Reveal>
-              <Eyebrow>Private by design</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
-                Your family's finances stay your family's finances.
-              </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
-                Privacy is part of the foundation of वित्तमंत्री. Every household has its own isolated workspace.
-                Transactions, categories, members, and financial information belong only to that household.
-              </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
-                Your household. Your data. Your numbers.
-              </Typography>
-            </Reveal>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Reveal delay={0.15}>
-              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
-                <CardContent sx={{ p: 3.5 }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                    <LockIcon />
-                  </Box>
-                  <Grid container spacing={1.5}>
-                    {['Separate household workspaces', 'Household-level data isolation', 'Private transaction history', 'Controlled family membership', 'Your financial data stays within your household'].map((point) => (
-                      <Grid item xs={12} key={point}>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <CheckIcon sx={{ fontSize: 18, color: '#123F36', mt: 0.25 }} />
-                          <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{point}</Typography>
-                        </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Reveal>
-          </Grid>
+      {/* 7. Privacy — Privacy Center */}
+      <SectionShell id="privacy" bgcolor="#FFFFFF">
+        <Reveal>
+          <Box sx={{ textAlign: 'center', maxWidth: 640, mx: 'auto', mb: 5 }}>
+            <Eyebrow>Privacy</Eyebrow>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2 }}>
+              Your financial data belongs to you.
+            </Typography>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7 }}>
+              We designed वित्तमंत्री to keep your household's information private, understandable, and under your control.
+            </Typography>
+          </Box>
+        </Reveal>
+
+        <Grid container spacing={2.5} sx={{ mb: 6 }}>
+          {[
+            { icon: LockIcon, title: 'Your data', desc: 'Financial data stays private to your household — never shared or shown across workspaces.' },
+            { icon: PersonIcon, title: 'Your control', desc: 'View, export, or delete your records whenever you want. Nothing is locked away.' },
+            { icon: ShieldIcon, title: 'Security', desc: 'Access is authenticated per household, with encrypted connections end to end.' },
+          ].map((pillar, index) => {
+            const Icon = pillar.icon;
+            return (
+              <Grid item xs={12} sm={4} key={pillar.title}>
+                <Reveal delay={index * 0.08}>
+                  <Card variant="outlined" sx={{ borderRadius: '1rem', height: '100%', ...cardHoverSx }}>
+                    <CardContent sx={{ p: 3 }}>
+                      <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                        <Icon />
+                      </Box>
+                      <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E', mb: 0.75 }}>{pillar.title}</Typography>
+                      <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', lineHeight: 1.6 }}>{pillar.desc}</Typography>
+                    </CardContent>
+                  </Card>
+                </Reveal>
+              </Grid>
+            );
+          })}
         </Grid>
+
+        <Box sx={{ maxWidth: 760, mx: 'auto', display: 'grid', gap: 3 }}>
+          {[
+            { n: '01', title: 'What we collect', desc: 'Account information, transaction records, and the information necessary to operate the service — nothing more.' },
+            { n: '02', title: 'Why we collect it', desc: 'To provide financial tracking, analytics, and account functionality for your household.' },
+            { n: '03', title: 'How your data is used', desc: "Your information is used to run वित्तमंत्री and improve your experience — never sold or shared with advertisers." },
+            { n: '04', title: 'Your controls', desc: 'View, export, or delete your data at any time from your Profile settings.' },
+            { n: '05', title: 'Data retention', desc: "Your records are kept for as long as your household account is active, and removed on request." },
+            { n: '06', title: 'Contact', desc: 'Questions about your data? Reach out to your household admin or the person who set up your वित्तमंत्री account.' },
+          ].map((item, index) => (
+            <Reveal key={item.n} delay={index * 0.05} y={12} duration={0.4}>
+              <Box sx={{ display: 'flex', gap: 2.5, pb: 3, borderBottom: index < 5 ? '1px solid #E7E9E5' : 'none' }}>
+                <Typography sx={{ fontSize: '0.9375rem', fontWeight: 700, color: '#9AA09B', minWidth: 32, flexShrink: 0 }}>{item.n}</Typography>
+                <Box>
+                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E', mb: 0.5 }}>{item.title}</Typography>
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', lineHeight: 1.6 }}>{item.desc}</Typography>
+                </Box>
+              </Box>
+            </Reveal>
+          ))}
+        </Box>
       </SectionShell>
 
       {/* 8. How it works — 3 steps */}
