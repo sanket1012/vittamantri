@@ -339,7 +339,7 @@ export default function Dashboard({ onLogout, currentUser }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F6F1E7' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F7F8F5' }}>
       <Sidebar
         userCount={users.length}
         mobileOpen={mobileOpen}
@@ -353,8 +353,8 @@ export default function Dashboard({ onLogout, currentUser }) {
       />
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Header
-          title={PAGE_TITLES[activeSection] || 'Dashboard'}
-          caption={PAGE_CAPTIONS[activeSection]}
+          title={activeSection === 'dashboard' ? greeting(currentUser?.display_name) : (PAGE_TITLES[activeSection] || 'Dashboard')}
+          caption={activeSection === 'dashboard' ? "Here's how your money is looking this month" : PAGE_CAPTIONS[activeSection]}
           users={users}
           selectedUser={filters.user}
           onUserChange={handleUserChange}
@@ -372,15 +372,23 @@ export default function Dashboard({ onLogout, currentUser }) {
           {activeSection === 'dashboard' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <StatsCards summary={summary} transactions={transactions} selectedUserId={filters.user} activeMonth={filters.month} loading={loading} />
-              {filters.user === 'All' && <UserBreakdownSection transactions={transactions} users={users} loading={loading} />}
               <Grid container spacing={2}>
-                <Grid item xs={12} md={5}>
-                  <SpendingPieChart transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} />
-                </Grid>
                 <Grid item xs={12} md={7}>
                   <MonthlyBarChart transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} />
                 </Grid>
+                <Grid item xs={12} md={5}>
+                  <SpendingPieChart transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} onAddExpense={() => setAddOpen(true)} />
+                </Grid>
               </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={7}>
+                  <RecentTransactions transactions={filteredTransactions} loading={loading} onViewAll={() => handleSidebarNavigate('transactions')} />
+                </Grid>
+                <Grid item xs={12} md={5}>
+                  <FinancialInsights transactions={transactions} summary={summary} loading={loading} />
+                </Grid>
+              </Grid>
+              {filters.user === 'All' && <UserBreakdownSection transactions={transactions} users={users} loading={loading} />}
             </Box>
           )}
 
