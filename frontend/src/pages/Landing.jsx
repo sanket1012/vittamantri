@@ -214,7 +214,7 @@ export default function Landing({ onGetStarted }) {
           {/* Nav */}
           <Box sx={{ px: { xs: 2.5, md: 6 }, py: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-              <BrandMark size={36} radius="9px" bgcolor="rgba(255,255,255,0.12)" color={C.champagne} />
+              <BrandMark size={36} />
               <Typography sx={{ fontFamily: serif, fontSize: 22, color: '#FFFFFF', letterSpacing: '0.01em' }}>Samvitta</Typography>
             </Box>
             <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 4 }}>
