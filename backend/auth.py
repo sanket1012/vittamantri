@@ -13,7 +13,7 @@ from sqlalchemy import delete, insert, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.exc import IntegrityError
 
-from db import engine, households, users as users_table
+from db import engine, households, member_invites, users as users_table
 
 logger = logging.getLogger("vittamantri.auth")
 
