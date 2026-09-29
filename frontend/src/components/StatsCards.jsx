@@ -1,8 +1,10 @@
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import { useMemo } from 'react';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { Box, Card, CardContent, Grid, Skeleton, Typography } from '@mui/material';
+import { buildDailyTrend, percentChange } from '../utils/trends.js';
+import Sparkline from './Sparkline.jsx';
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', {
@@ -30,56 +32,89 @@ function buildStats(summary, transactions, selectedUserId, activeMonth) {
   };
 }
 
-// Shrinks the KPI value font as the formatted string gets longer, so amounts
-// up to 9+ digits (with currency symbol and Indian comma grouping) always
-// stay on one line instead of wrapping mid-number.
-function valueFontSize(value) {
-  const len = String(value).length;
-  if (len <= 9) return '1.714rem';
-  if (len <= 12) return '1.35rem';
-  return '1.05rem';
+// Only meaningful for the unfiltered, all-time/current-month view — a
+// specific user or historical month doesn't have a comparable prior-month
+// total from the API, so callers should treat a null return as "hide it".
+function previousMonthTotals(summary, selectedUserId, activeMonth) {
+  if (selectedUserId !== 'All' || activeMonth) return null;
+  const monthly = summary?.monthly_totals;
+  if (!monthly) return null;
+  const now = new Date();
+  const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const key = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
+  return monthly[key] || null;
 }
 
-function StatCard({ title, value, helper, color, icon, loading }) {
+function DeltaBadge({ direction, label }) {
+  if (direction === null) return null;
+  const positive = direction === 'up';
+  const Icon = positive ? ArrowUpwardIcon : ArrowDownwardIcon;
+  const color = positive ? '#16A477' : '#E5534B';
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        borderRadius: '0.75rem',
-        border: '1px solid #E2DCC9',
-        boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05)',
-        borderTop: `3px solid ${color}`,
-        height: '100%',
-      }}
-    >
-      <CardContent sx={{ p: '1.71rem', '&:last-child': { pb: '1.71rem' } }}>
-        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-          <Box sx={{ minWidth: 0 }}>
-            <Typography sx={{ fontSize: '0.857rem', fontWeight: 500, color: '#5B5F54', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
-              {title}
-            </Typography>
-            {loading ? (
-              <Skeleton width={130} height={36} />
-            ) : (
-              <Typography
-                sx={{
-                  fontSize: valueFontSize(value),
-                  fontWeight: 700,
-                  color: '#202421',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-                title={value}
-              >
-                {value}
-              </Typography>
-            )}
-            <Typography sx={{ fontSize: '0.857rem', color: '#6B6F63', mt: 0.5 }}>{helper}</Typography>
-          </Box>
-          <Box sx={{ width: 44, height: 44, borderRadius: '10px', backgroundColor: `${color}10`, color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            {icon}
-          </Box>
+    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25, color, fontSize: '0.8125rem', fontWeight: 600 }}>
+      <Icon sx={{ fontSize: 15 }} />
+      {label}
+    </Box>
+  );
+}
+
+function HeroBalanceCard({ balance, prevTotals, trend, loading }) {
+  const prevBalance = prevTotals ? prevTotals.income - prevTotals.expense : null;
+  const delta = prevBalance !== null ? balance - prevBalance : null;
+
+  return (
+    <Card sx={{ height: '100%', bgcolor: '#123F36', color: '#FFFFFF', border: 'none' }}>
+      <CardContent sx={{ p: '1.75rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
+          Available Balance
+        </Typography>
+        {loading ? (
+          <Skeleton width={180} height={48} sx={{ bgcolor: 'rgba(255,255,255,0.15)' }} />
+        ) : (
+          <Typography sx={{ fontSize: '2.25rem', fontWeight: 700, lineHeight: 1.15, mb: 1 }}>{formatINR(balance)}</Typography>
+        )}
+        {delta !== null && (
+          <DeltaBadgeLight direction={delta >= 0 ? 'up' : 'down'} label={`${formatINR(Math.abs(delta))} vs last month`} />
+        )}
+        <Box sx={{ mt: 'auto', pt: 2, mx: -1 }}>
+          <Sparkline data={trend} dataKey="balance" color="#7CE8C3" height={56} />
+        </Box>
+      </CardContent>
+    </Card>
+  );
+}
+
+function DeltaBadgeLight({ direction, label }) {
+  const positive = direction === 'up';
+  const Icon = positive ? ArrowUpwardIcon : ArrowDownwardIcon;
+  return (
+    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25, color: positive ? '#7CE8C3' : '#F5B7B2', fontSize: '0.8125rem', fontWeight: 600 }}>
+      <Icon sx={{ fontSize: 15 }} />
+      {label}
+    </Box>
+  );
+}
+
+function MetricCard({ title, value, trendKey, trend, color, deltaPct, favorableWhenUp, loading }) {
+  const direction = deltaPct === null ? null : deltaPct >= 0 ? 'up' : 'down';
+  const favorable = direction === null ? null : favorableWhenUp ? direction === 'up' : direction === 'down';
+
+  return (
+    <Card sx={{ height: '100%' }}>
+      <CardContent sx={{ p: '1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
+          {title}
+        </Typography>
+        {loading ? (
+          <Skeleton width={110} height={34} />
+        ) : (
+          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#17211E', lineHeight: 1.15, mb: 0.75 }}>{formatINR(value)}</Typography>
+        )}
+        {deltaPct !== null && (
+          <DeltaBadge direction={favorable ? 'up' : 'down'} label={`${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(1)}%`} />
+        )}
+        <Box sx={{ mt: 'auto', pt: 1, mx: -1 }}>
+          <Sparkline data={trend} dataKey={trendKey} color={color} height={40} />
         </Box>
       </CardContent>
     </Card>
@@ -88,23 +123,40 @@ function StatCard({ title, value, helper, color, icon, loading }) {
 
 export default function StatsCards({ summary, transactions = [], selectedUserId = 'All', activeMonth = '', loading }) {
   const stats = buildStats(summary, transactions, selectedUserId, activeMonth);
-  const balanceColor = stats.balance >= 0 ? '#173F35' : '#DC2626';
-  const scope = activeMonth ? `${activeMonth}` : 'All time';
+  const prevTotals = previousMonthTotals(summary, selectedUserId, activeMonth);
 
-  const cards = [
-    { title: 'Total Income', value: formatINR(stats.income), helper: `${scope} earnings`, color: '#059669', icon: <TrendingUpIcon /> },
-    { title: 'Total Expense', value: formatINR(stats.expense), helper: `${scope} spending`, color: '#DC2626', icon: <TrendingDownIcon /> },
-    { title: 'Net Balance', value: formatINR(stats.balance), helper: 'Income minus expense', color: balanceColor, icon: <AccountBalanceWalletIcon /> },
-    { title: 'Transactions', value: String(stats.count), helper: `${scope} records`, color: '#7C3AED', icon: <ReceiptLongIcon /> },
-  ];
+  const scopedTransactions = useMemo(
+    () => (selectedUserId !== 'All' ? transactions.filter((item) => String(item.logged_by_id || '0') === String(selectedUserId)) : transactions),
+    [transactions, selectedUserId],
+  );
+  const trend = useMemo(() => buildDailyTrend(scopedTransactions, 14), [scopedTransactions]);
+
+  const incomeDeltaPct = prevTotals ? percentChange(stats.income, prevTotals.income) : null;
+  const expenseDeltaPct = prevTotals ? percentChange(stats.expense, prevTotals.expense) : null;
 
   return (
     <Grid container spacing={2}>
-      {cards.map((card) => (
-        <Grid item xs={12} sm={6} md={3} key={card.title}>
-          <StatCard {...card} loading={loading} />
-        </Grid>
-      ))}
+      <Grid item xs={12} md={6}>
+        <HeroBalanceCard balance={stats.balance} prevTotals={prevTotals} trend={trend} loading={loading} />
+      </Grid>
+      <Grid item xs={6} md={3}>
+        <MetricCard title="Income" value={stats.income} trendKey="income" trend={trend} color="#16A477" deltaPct={incomeDeltaPct} favorableWhenUp loading={loading} />
+      </Grid>
+      <Grid item xs={6} md={3}>
+        <MetricCard title="Expense" value={stats.expense} trendKey="expense" trend={trend} color="#E5534B" deltaPct={expenseDeltaPct} favorableWhenUp={false} loading={loading} />
+      </Grid>
+      <Grid item xs={12}>
+        <Card>
+          <CardContent sx={{ p: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ width: 36, height: 36, borderRadius: '10px', bgcolor: '#F0F3F1', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ReceiptLongIcon sx={{ fontSize: 19 }} />
+            </Box>
+            <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>
+              <Box component="span" sx={{ fontWeight: 700, color: '#17211E' }}>{stats.count}</Box> transaction{stats.count === 1 ? '' : 's'} {activeMonth ? `in ${activeMonth}` : 'recorded all time'}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
     </Grid>
   );
 }
