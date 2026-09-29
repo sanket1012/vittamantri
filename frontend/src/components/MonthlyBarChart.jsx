@@ -1,71 +1,50 @@
 import { useMemo } from 'react';
 import { Box, Card, CardContent, Skeleton, Typography } from '@mui/material';
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { formatCompactINR } from '../utils/formatCurrency.js';
+import { buildMonthlyTrend } from '../utils/trends.js';
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
 
-const monthKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
-const monthLabel = (key) => {
-  const [year, month] = key.split('-').map(Number);
-  return new Date(year, month - 1, 1).toLocaleDateString('en-IN', { month: 'short' });
-};
-
 export default function MonthlyBarChart({ transactions = [], loading, selectedUser = 'All Users' }) {
-  const data = useMemo(() => {
-    const now = new Date();
-    // Indian financial year starts April (month index 3)
-    const fyStartYear = now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1;
-    const fyStart = new Date(fyStartYear, 3, 1);
-
-    const keys = [];
-    let cursor = new Date(fyStart);
-    while (
-      cursor.getFullYear() < now.getFullYear() ||
-      (cursor.getFullYear() === now.getFullYear() && cursor.getMonth() <= now.getMonth())
-    ) {
-      keys.push(monthKey(cursor));
-      cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
-    }
-
-    const totals = Object.fromEntries(keys.map((key) => [key, { month: monthLabel(key), income: 0, expense: 0 }]));
-    transactions.forEach((item) => {
-      const key = (item.date || '').slice(0, 7);
-      if (!totals[key]) return;
-      if (item.type === 'income') totals[key].income += Number(item.amount || 0);
-      if (item.type === 'expense') totals[key].expense += Number(item.amount || 0);
-    });
-    return keys.map((key) => totals[key]);
-  }, [transactions]);
-
+  const data = useMemo(() => buildMonthlyTrend(transactions, 6), [transactions]);
   const currentMonth = new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E2DCC9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+    <Card sx={{ height: '100%' }}>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E7E9E5', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
         <Box>
-          <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#202421' }}>Monthly Overview</Typography>
-          <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>{selectedUser}</Typography>
+          <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#17211E' }}>Cash Flow</Typography>
+          <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>{selectedUser}</Typography>
         </Box>
-        <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>{currentMonth}</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>{currentMonth}</Typography>
       </Box>
       <CardContent sx={{ p: 3 }}>
         {loading ? (
-          <Skeleton variant="rounded" height={320} />
+          <Skeleton variant="rounded" height={280} />
         ) : (
-          <Box sx={{ height: 320 }}>
+          <Box sx={{ height: 280 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data}>
-                <CartesianGrid stroke="#E2DCC9" vertical={false} />
-                <XAxis dataKey="month" stroke="#6B6F63" tickLine={false} axisLine={false} />
-                <YAxis stroke="#6B6F63" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
-                <Tooltip formatter={(value) => formatINR(value)} cursor={{ fill: '#F1ECDD' }} />
+              <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="cashflowIncome" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#16A477" stopOpacity={0.28} />
+                    <stop offset="100%" stopColor="#16A477" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="cashflowExpense" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#E5534B" stopOpacity={0.22} />
+                    <stop offset="100%" stopColor="#E5534B" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="#E7E9E5" vertical={false} />
+                <XAxis dataKey="month" stroke="#737B77" tickLine={false} axisLine={false} />
+                <YAxis stroke="#737B77" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
+                <Tooltip formatter={(value) => formatINR(value)} contentStyle={{ borderRadius: 10, border: '1px solid #E7E9E5' }} />
                 <Legend />
-                <Bar dataKey="income" name="Income" fill="#059669" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="expense" name="Expense" fill="#DC2626" radius={[6, 6, 0, 0]} />
-              </BarChart>
+                <Area type="monotone" dataKey="income" name="Income" stroke="#16A477" strokeWidth={2.5} fill="url(#cashflowIncome)" />
+                <Area type="monotone" dataKey="expense" name="Expense" stroke="#E5534B" strokeWidth={2.5} fill="url(#cashflowExpense)" />
+              </AreaChart>
             </ResponsiveContainer>
           </Box>
         )}
