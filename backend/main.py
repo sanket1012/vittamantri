@@ -140,7 +140,7 @@ def _hid() -> int:
 
 @app.route("/api/health")
 def health_check():
-    return jsonify({"status": "वित्तमंत्री is running"})
+    return jsonify({"status": "Samvitta is running"})
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
@@ -450,7 +450,7 @@ def create_invite():
 
         invite = create_member_invite(_hid(), phone_number, display_name, g.current_user.get("user_id"))
         invite_link = f"{_FRONTEND_URL}/join/{invite['token']}"
-        share_text = f"Join our वित्तमंत्री household — track family expenses together: {invite_link}"
+        share_text = f"Join our Samvitta household — track family expenses together: {invite_link}"
         telegram_share_url = f"https://t.me/share/url?url={quote(invite_link, safe='')}&text={quote(share_text, safe='')}"
         return jsonify({"invite_link": invite_link, "telegram_share_url": telegram_share_url}), 201
     except Exception:

@@ -82,7 +82,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
           <BrandMark size={40} />
           {!collapsed && (
             <Box sx={{ minWidth: 0 }}>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#17211E', lineHeight: 1.2 }}>वित्तमंत्री</Typography>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#17211E', lineHeight: 1.2 }}>Samvitta</Typography>
               <Typography sx={{ fontSize: 12, color: '#737B77' }}>Finance Tracker</Typography>
             </Box>
           )}

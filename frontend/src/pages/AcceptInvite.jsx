@@ -60,7 +60,7 @@ export default function AcceptInvite({ token, onJoined, onGoHome }) {
       <Paper elevation={3} sx={{ p: 4, maxWidth: 420, width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 2 }}>
           <BrandMark size={36} />
-          <Typography variant="h5" fontWeight={600}>वित्तमंत्री</Typography>
+          <Typography variant="h5" fontWeight={600}>Samvitta</Typography>
         </Box>
 
         {status === 'loading' && (
@@ -75,14 +75,14 @@ export default function AcceptInvite({ token, onJoined, onGoHome }) {
             <Typography sx={{ color: '#737B77', fontSize: '0.875rem', mb: 3 }}>
               Ask whoever invited you to send a new link, or create your own household instead.
             </Typography>
-            <Button variant="contained" onClick={onGoHome}>Go to वित्तमंत्री</Button>
+            <Button variant="contained" onClick={onGoHome}>Go to Samvitta</Button>
           </Box>
         )}
 
         {status === 'valid' && (
           <>
             <Typography sx={{ color: '#737B77', fontSize: '0.9375rem', mb: 3 }}>
-              <Box component="span" sx={{ fontWeight: 600, color: '#17211E' }}>{preview.inviter_name}</Box> invited you to join their household on वित्तमंत्री.
+              <Box component="span" sx={{ fontWeight: 600, color: '#17211E' }}>{preview.inviter_name}</Box> invited you to join their household on Samvitta.
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
               <TextField fullWidth label="Display Name" value={form.displayName} onChange={update('displayName')} sx={{ mb: 2 }} />

@@ -87,7 +87,7 @@ export default function LoginGate({ onUnlock, onRegistered, initialTab = 0, onBa
         )}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 0.5 }}>
           <BrandMark size={36} />
-          <Typography variant="h5" fontWeight={600}>वित्तमंत्री</Typography>
+          <Typography variant="h5" fontWeight={600}>Samvitta</Typography>
         </Box>
         <Typography variant="body2" color="text.secondary" mb={2}>Family Finance Tracker</Typography>
 

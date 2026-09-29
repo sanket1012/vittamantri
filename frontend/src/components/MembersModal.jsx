@@ -324,7 +324,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
       <DialogTitle sx={{ fontWeight: 600, color: '#17211E', borderBottom: '1px solid #E7E9E5', pb: 2 }}>
         Family Members
         <Typography sx={{ fontSize: '0.875rem', color: '#737B77', fontWeight: 400, mt: 0.25 }}>
-          Manage who can log into VittaMantri
+          Manage who can log into Samvitta
         </Typography>
       </DialogTitle>
 
