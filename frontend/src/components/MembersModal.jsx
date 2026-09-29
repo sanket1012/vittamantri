@@ -336,7 +336,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
               <CircularProgress size={28} />
             </Box>
           ) : members.length === 0 ? (
-            <Typography sx={{ color: '#6B6F63', fontSize: '0.875rem', py: 2 }}>No members yet.</Typography>
+            <Typography sx={{ color: '#737B77', fontSize: '0.875rem', py: 2 }}>No members yet.</Typography>
           ) : (
             members.map((m, i) => (
               <Box key={m.id}>
@@ -347,53 +347,75 @@ export default function MembersModal({ open, onClose, currentUser }) {
           )}
         </Box>
 
-        {/* Add member form */}
-        <Box sx={{ px: 3, pt: 2, pb: 3, borderTop: '1px solid #E2DCC9', mt: 2, bgcolor: '#F1ECDD' }}>
-          <Typography sx={{ fontWeight: 600, color: '#454940', fontSize: '0.875rem', mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <AddIcon sx={{ fontSize: 16 }} /> Add Member
-          </Typography>
-          <Box component="form" onSubmit={handleAdd} sx={{ display: 'grid', gap: 1.5 }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-              <TextField
-                size="small"
-                label="Display Name"
-                placeholder="Vaishnavi"
-                value={addForm.displayName}
-                onChange={(e) => { setAddForm((f) => ({ ...f, displayName: e.target.value })); setAddError(''); }}
-              />
-              <TextField
-                size="small"
-                label="Username *"
-                placeholder="vaishnavi"
-                value={addForm.username}
-                onChange={(e) => { setAddForm((f) => ({ ...f, username: e.target.value })); setAddError(''); }}
-              />
-            </Box>
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-              <TextField
-                size="small"
-                type="password"
-                label="Password *"
-                value={addForm.password}
-                onChange={(e) => { setAddForm((f) => ({ ...f, password: e.target.value })); setAddError(''); }}
-                helperText={addError || 'Min 6 characters'}
-                error={!!addError}
-              />
-              <TextField
-                select
-                size="small"
-                label="Role"
-                value={addForm.role}
-                onChange={(e) => setAddForm((f) => ({ ...f, role: e.target.value }))}
-              >
-                <MenuItem value="member">Member</MenuItem>
-                <MenuItem value="admin">Admin</MenuItem>
-              </TextField>
-            </Box>
-            <Button type="submit" variant="contained" disabled={saving} startIcon={saving ? <CircularProgress size={16} color="inherit" /> : <AddIcon />} sx={{ justifySelf: 'flex-start' }}>
-              {saving ? 'Adding…' : 'Add Member'}
-            </Button>
+        {/* Pending invites */}
+        {!loading && invites.length > 0 && (
+          <Box sx={{ px: 3, pt: 1 }}>
+            <Divider sx={{ my: 1.5 }} />
+            <Typography sx={{ fontWeight: 600, color: '#737B77', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
+              Pending Invites
+            </Typography>
+            {invites.map((inv, i) => (
+              <Box key={inv.id}>
+                <PendingInviteRow invite={inv} onCancelled={(id) => setInvites((prev) => prev.filter((x) => x.id !== id))} />
+                {i < invites.length - 1 && <Divider />}
+              </Box>
+            ))}
           </Box>
+        )}
+
+        {/* Add / Invite member */}
+        <Box sx={{ px: 3, pt: 1.5, pb: 3, borderTop: '1px solid #E7E9E5', mt: 2, bgcolor: '#F0F3F1' }}>
+          <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2, minHeight: 36 }}>
+            <Tab label="Invite by Phone" sx={{ minHeight: 36, py: 0.5 }} />
+            <Tab label="Add Directly" sx={{ minHeight: 36, py: 0.5 }} />
+          </Tabs>
+
+          {tab === 0 ? (
+            <InviteByPhoneForm onInvited={loadInvites} />
+          ) : (
+            <Box component="form" onSubmit={handleAdd} sx={{ display: 'grid', gap: 1.5 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+                <TextField
+                  size="small"
+                  label="Display Name"
+                  placeholder="Vaishnavi"
+                  value={addForm.displayName}
+                  onChange={(e) => { setAddForm((f) => ({ ...f, displayName: e.target.value })); setAddError(''); }}
+                />
+                <TextField
+                  size="small"
+                  label="Username *"
+                  placeholder="vaishnavi"
+                  value={addForm.username}
+                  onChange={(e) => { setAddForm((f) => ({ ...f, username: e.target.value })); setAddError(''); }}
+                />
+              </Box>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+                <TextField
+                  size="small"
+                  type="password"
+                  label="Password *"
+                  value={addForm.password}
+                  onChange={(e) => { setAddForm((f) => ({ ...f, password: e.target.value })); setAddError(''); }}
+                  helperText={addError || 'Min 6 characters'}
+                  error={!!addError}
+                />
+                <TextField
+                  select
+                  size="small"
+                  label="Role"
+                  value={addForm.role}
+                  onChange={(e) => setAddForm((f) => ({ ...f, role: e.target.value }))}
+                >
+                  <MenuItem value="member">Member</MenuItem>
+                  <MenuItem value="admin">Admin</MenuItem>
+                </TextField>
+              </Box>
+              <Button type="submit" variant="contained" disabled={saving} startIcon={saving ? <CircularProgress size={16} color="inherit" /> : <AddIcon />} sx={{ justifySelf: 'flex-start' }}>
+                {saving ? 'Adding…' : 'Add Member'}
+              </Button>
+            </Box>
+          )}
         </Box>
       </DialogContent>
 
