@@ -2,6 +2,7 @@ import logging
 import os
 import pathlib
 from datetime import datetime, timezone
+from urllib.parse import quote
 
 import requests
 from dotenv import load_dotenv
