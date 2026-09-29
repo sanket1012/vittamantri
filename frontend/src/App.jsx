@@ -46,6 +46,21 @@ export default function App() {
     setCurrentUser(null);
   };
 
+  const clearInviteUrl = () => {
+    window.history.replaceState({}, '', '/');
+    setInviteToken(null);
+  };
+
+  if (inviteToken) {
+    return (
+      <AcceptInvite
+        token={inviteToken}
+        onJoined={(user) => { clearInviteUrl(); handleRegistered(user); }}
+        onGoHome={clearInviteUrl}
+      />
+    );
+  }
+
   if (!unlocked) {
     if (!showAuth) {
       return (
