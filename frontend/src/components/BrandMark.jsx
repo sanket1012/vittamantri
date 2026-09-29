@@ -1,11 +1,8 @@
 import { Box } from '@mui/material';
 
-/**
- * The "वि" household monogram — from वित्तमंत्री's opening syllables. Deliberately
- * typographic rather than a generic wallet/piggy-bank/₹ icon (see the brand
- * direction doc's "Logo Elements to Avoid" section).
- */
-export default function BrandMark({ size = 40, radius, fontSize, bgcolor = '#E6EFEA', color = '#173F35' }) {
+// Geometric "S" monogram for Samvitta — abstract rather than a
+// wallet/coin/₹/leaf icon, and simple enough to read at 24px.
+export default function BrandMark({ size = 40, radius, fontSize, bgcolor = '#15171C', color = '#CDAA6A' }) {
   return (
     <Box
       sx={{
@@ -18,13 +15,14 @@ export default function BrandMark({ size = 40, radius, fontSize, bgcolor = '#E6E
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontWeight: 800,
-        fontSize: fontSize || Math.round(size * 0.52),
+        fontFamily: '"Instrument Serif", Georgia, serif',
+        fontStyle: 'italic',
+        fontSize: fontSize || Math.round(size * 0.62),
         lineHeight: 1,
         userSelect: 'none',
       }}
     >
-      वि
+      S
     </Box>
   );
 }
