@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import toast from 'react-hot-toast';
 import api from '../api/client.js';
 
-const BOT_USERNAME = 'MyChancellorBot';
+const BOT_USERNAME = 'GharKaHisabBot';
 
 /** Telegram's official "Log in with Telegram" widget: verified server-side via
  * HMAC, no redirect away from our own domain, and (with data-request-access)
