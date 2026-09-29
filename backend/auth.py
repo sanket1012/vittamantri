@@ -157,31 +157,6 @@ def create_user(username: str, display_name: str, password: str) -> tuple[dict, 
     return new_user, token
 
 
-def create_user_in_household(username: str, display_name: str, password: str, household_id: int, role: str = "member") -> tuple[dict, str]:
-    """Create a user joining an existing household (invite acceptance). Returns (user_dict, token)."""
-    try:
-        with engine.begin() as conn:
-            new_id = conn.execute(
-                insert(users_table)
-                .values(
-                    household_id=household_id,
-                    username=username,
-                    display_name=display_name or username.title(),
-                    password_hash=hash_password(password),
-                    telegram_id=None,
-                    role=role,
-                )
-                .returning(users_table.c.id)
-            ).scalar_one()
-    except IntegrityError as exc:
-        raise ValueError(f"Username '{username}' is already taken.") from exc
-
-    new_user = get_user_by_id(new_id)
-    token = create_token(new_user)
-    logger.info("New user %s joined household=%d via invite", username, household_id)
-    return new_user, token
-
-
 _INVITE_TTL_DAYS = 7
 
 
