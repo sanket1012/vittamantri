@@ -37,9 +37,9 @@ const theme = createTheme({
           '&:hover': { boxShadow: 'none' },
         },
         outlined: {
-          borderColor: '#CFC7AE',
-          color: '#454940',
-          '&:hover': { borderColor: '#173F35', backgroundColor: '#F1ECDD' },
+          borderColor: '#E7E9E5',
+          color: '#17211E',
+          '&:hover': { borderColor: '#123F36', backgroundColor: '#F0F3F1' },
         },
       },
     },
@@ -47,20 +47,21 @@ const theme = createTheme({
       defaultProps: { variant: 'outlined', elevation: 0 },
       styleOverrides: {
         root: {
-          borderColor: '#E2DCC9',
-          boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05)',
+          borderColor: '#E7E9E5',
+          borderRadius: '1rem',
+          boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.04)',
         },
       },
     },
     MuiTableHead: {
       styleOverrides: {
-        root: { backgroundColor: '#EDE7D8' },
+        root: { backgroundColor: '#F0F3F1' },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         head: {
-          color: '#5B5F54',
+          color: '#737B77',
           fontWeight: 500,
           fontSize: '0.857rem',
           textTransform: 'uppercase',
@@ -68,7 +69,7 @@ const theme = createTheme({
         },
         body: {
           fontSize: '0.875rem',
-          color: '#202421',
+          color: '#17211E',
           padding: '6px 16px',
           height: '60px',
         },
@@ -77,8 +78,8 @@ const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '&:hover': { backgroundColor: '#FCF3DF' },
-          borderBottom: '1px solid #E2DCC9',
+          '&:hover': { backgroundColor: '#F7F8F5' },
+          borderBottom: '1px solid #E7E9E5',
         },
       },
     },
@@ -92,9 +93,9 @@ const theme = createTheme({
         root: {
           minHeight: '44px',
           borderRadius: '8px',
-          '& fieldset': { borderColor: '#CFC7AE' },
-          '&:hover fieldset': { borderColor: '#173F35' },
-          boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05)',
+          '& fieldset': { borderColor: '#E7E9E5' },
+          '&:hover fieldset': { borderColor: '#123F36' },
+          boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.04)',
         },
       },
     },
