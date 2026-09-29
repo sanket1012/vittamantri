@@ -11,10 +11,13 @@ import { Avatar, Box, Drawer, IconButton, Tooltip, Typography } from '@mui/mater
 import BrandMark from './BrandMark.jsx';
 
 const navItems = [
-  { label: 'Dashboard', icon: DashboardIcon, target: 'dashboard' },
+  { label: 'Overview', icon: DashboardIcon, target: 'dashboard' },
   { label: 'Transactions', icon: ReceiptLongIcon, target: 'transactions' },
   { label: 'Analytics', icon: BarChartIcon, target: 'analytics' },
   { label: 'Categories', icon: LabelIcon, target: 'categories' },
+];
+
+const secondaryNavItems = [
   { label: 'Export', icon: DownloadIcon, target: 'export' },
   { label: 'Profile', icon: PersonIcon, target: 'profile' },
 ];
