@@ -66,6 +66,21 @@ users = Table(
     Column("created_at", TIMESTAMP(timezone=True), nullable=False, server_default=func.now()),
 )
 
+member_invites = Table(
+    "member_invites",
+    metadata,
+    Column("id", BigInteger, Identity(always=False), primary_key=True),
+    Column("household_id", BigInteger, ForeignKey("households.id"), nullable=False),
+    Column("phone_number", Text, nullable=False),
+    Column("display_name", Text, nullable=False),
+    Column("token", Text, nullable=False, unique=True),
+    Column("status", Text, nullable=False, server_default=text("'pending'")),
+    Column("created_by", BigInteger, ForeignKey("users.id"), nullable=False),
+    Column("accepted_user_id", BigInteger, ForeignKey("users.id"), nullable=True),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False, server_default=func.now()),
+    Column("expires_at", TIMESTAMP(timezone=True), nullable=False),
+)
+
 transactions = Table(
     "transactions",
     metadata,
