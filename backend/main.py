@@ -189,13 +189,8 @@ def register():
         return error_response("Username must be at least 3 characters.", 400)
 
     try:
-        invite = None
         if invite_token:
-            invite = consume_member_invite(invite_token)
-            if not invite:
-                return error_response("This invite link is invalid or has expired.", 400)
-            new_user, token = create_user_in_household(username, display_name, password, invite["household_id"])
-            mark_invite_accepted_user(invite["id"], new_user["id"])
+            new_user, token = accept_member_invite(invite_token, username, display_name, password)
         else:
             new_user, token = create_user(username, display_name, password)
         ensure_data_files(new_user["household_id"])
