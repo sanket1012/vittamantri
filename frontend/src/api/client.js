@@ -92,8 +92,13 @@ export const getMe = async () => {
   return data;
 };
 
-export const registerUser = async ({ username, displayName, password }) => {
-  const { data } = await api.post('/register', { username, display_name: displayName, password });
+export const registerUser = async ({ username, displayName, password, inviteToken }) => {
+  const { data } = await api.post('/register', {
+    username,
+    display_name: displayName,
+    password,
+    ...(inviteToken ? { invite_token: inviteToken } : {}),
+  });
   return data;
 };
 
