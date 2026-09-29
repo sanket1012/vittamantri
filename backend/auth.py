@@ -247,19 +247,40 @@ def get_invite_preview(token: str) -> Optional[dict]:
     }
 
 
-def consume_member_invite(token: str) -> Optional[dict]:
-    """Validates and marks an invite consumed. Returns the invite row dict, or None if invalid."""
+def accept_member_invite(token: str, username: str, display_name: str, password: str) -> tuple[dict, str]:
+    """Validates an invite and creates the joining user atomically — if user
+    creation fails (e.g. duplicate username), the invite stays pending rather
+    than being burned with no user attached. Returns (user_dict, jwt_token).
+    Raises ValueError for an invalid/expired invite or a taken username."""
     with engine.begin() as conn:
         row = conn.execute(select(member_invites).where(member_invites.c.token == token)).first()
         if not row or row.status != "pending" or row.expires_at < datetime.now(timezone.utc):
-            return None
-        conn.execute(member_invites.update().where(member_invites.c.id == row.id).values(status="accepted"))
-    return {"household_id": row.household_id, "id": row.id}
+            raise ValueError("This invite link is invalid or has expired.")
 
+        try:
+            new_id = conn.execute(
+                insert(users_table)
+                .values(
+                    household_id=row.household_id,
+                    username=username,
+                    display_name=display_name or username.title(),
+                    password_hash=hash_password(password),
+                    telegram_id=None,
+                    role="member",
+                )
+                .returning(users_table.c.id)
+            ).scalar_one()
+        except IntegrityError as exc:
+            raise ValueError(f"Username '{username}' is already taken.") from exc
 
-def mark_invite_accepted_user(invite_id: int, user_id: int) -> None:
-    with engine.begin() as conn:
-        conn.execute(member_invites.update().where(member_invites.c.id == invite_id).values(accepted_user_id=user_id))
+        conn.execute(
+            member_invites.update().where(member_invites.c.id == row.id).values(status="accepted", accepted_user_id=new_id)
+        )
+
+    new_user = get_user_by_id(new_id)
+    token_jwt = create_token(new_user)
+    logger.info("New user %s joined household=%d via invite", username, row.household_id)
+    return new_user, token_jwt
 
 
 def _bot_api_key() -> str:
