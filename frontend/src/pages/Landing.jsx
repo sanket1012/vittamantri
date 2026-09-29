@@ -1,628 +1,610 @@
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import GroupsIcon from '@mui/icons-material/Groups';
-import LockIcon from '@mui/icons-material/Lock';
-import PersonIcon from '@mui/icons-material/Person';
-import ShieldIcon from '@mui/icons-material/Shield';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import DownloadIcon from '@mui/icons-material/DownloadOutlined';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { Box, Button, Card, Grid, Typography } from '@mui/material';
+import heroImage from '../assets/hero-family.jpg';
 import BrandMark from '../components/BrandMark.jsx';
 import Reveal from '../components/Reveal.jsx';
 
-const cardHoverSx = {
-  transition: 'transform 220ms ease, box-shadow 220ms ease',
-  '&:hover': { transform: 'translateY(-4px)', boxShadow: '0px 12px 28px rgba(23,63,53,0.12)' },
+// Samvitta design tokens (see theme/theme.js `tokens` for the shared version).
+const C = {
+  midnight: '#15171C',
+  navy: '#20242D',
+  ivory: '#F5F1E8',
+  card: '#FBFAF7',
+  champagne: '#CDAA6A',
+  amber: '#D99A3C',
+  ink: '#18191C',
+  warmGray: '#77736C',
+  stone: '#DDD7CD',
+  coral: '#D96767',
+  indigo: '#6F78C9',
+  mutedBlue: '#5E83A9',
 };
 
+const serif = '"Instrument Serif", Georgia, serif';
+
 const NAV_LINKS = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Analytics', href: '#analytics' },
+  { label: 'Product', href: '#household' },
+  { label: 'Intelligence', href: '#intelligence' },
+  { label: 'Family', href: '#family' },
   { label: 'Privacy', href: '#privacy' },
 ];
 
-const COMPARISON_ROWS = [
-  { old: 'Open a spreadsheet', vitta: 'Send a message' },
-  { old: 'Manually enter rows', vitta: 'Natural-language logging' },
-  { old: 'Remember categories', vitta: 'Automatic categorization' },
-  { old: 'Share files', vitta: 'Shared household workspace' },
-  { old: 'Build charts manually', vitta: 'Ready-to-use analytics' },
-  { old: 'Reconcile who paid', vitta: 'Member-level history' },
-];
-
-function Eyebrow({ children }) {
+function Eyebrow({ children, dark = false }) {
   return (
-    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#123F36', textTransform: 'uppercase', letterSpacing: '0.06em', mb: 1.5 }}>
+    <Typography
+      sx={{
+        fontSize: '0.8125rem',
+        fontWeight: 600,
+        color: dark ? C.champagne : '#9A8452',
+        textTransform: 'uppercase',
+        letterSpacing: '0.14em',
+        mb: 1.5,
+      }}
+    >
       {children}
     </Typography>
   );
 }
 
-function SectionShell({ id, bgcolor, children }) {
+function SectionShell({ id, bgcolor, children, py }) {
   return (
-    <Box id={id} sx={{ bgcolor: bgcolor || 'transparent', px: { xs: 2.5, md: 6 }, py: { xs: 7, md: 9 } }}>
-      <Box sx={{ maxWidth: 1100, mx: 'auto' }}>{children}</Box>
+    <Box id={id} sx={{ bgcolor: bgcolor || C.ivory, px: { xs: 2.5, md: 6 }, py: py || { xs: 8, md: 12 } }}>
+      <Box sx={{ maxWidth: 1160, mx: 'auto' }}>{children}</Box>
     </Box>
   );
 }
 
-function MiniSparkline({ path, color, height = 40 }) {
+// ── Intelligence mark — distinguishes Samvitta's interpretation from raw data.
+function InsightMark({ color = C.champagne, size = 18 }) {
+  return <Box component="span" sx={{ color, fontSize: size, lineHeight: 1, mr: 1 }}>✦</Box>;
+}
+
+function StatCell({ value, label, border = true }) {
   return (
-    <Box component="svg" viewBox="0 0 100 32" preserveAspectRatio="none" sx={{ width: '100%', height, display: 'block' }}>
-      <path d={path} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <Box sx={{ borderLeft: border ? `1px solid ${C.stone}` : 'none', pl: border ? { xs: 2, sm: 3 } : 0, flex: 1 }}>
+      <Typography sx={{ fontSize: { xs: '1.5rem', sm: '1.875rem' }, fontWeight: 700, color: C.ink, lineHeight: 1.1 }}>
+        {value}
+      </Typography>
+      <Typography sx={{ fontSize: '0.8125rem', color: C.warmGray, mt: 0.5 }}>{label}</Typography>
     </Box>
   );
 }
 
-function ProductPreviewMock() {
+// ── The one floating card in the hero — Household Overview + a single insight.
+function HouseholdOverviewCard() {
   return (
-    <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: '#FFFFFF', p: { xs: 2, md: 3 }, ...cardHoverSx }}>
-      <Grid container spacing={1.5}>
-        <Grid item xs={12} sm={6}>
-          <Box sx={{ bgcolor: '#123F36', color: '#FFFFFF', borderRadius: '1rem', p: 2.25, height: '100%' }}>
-            <Typography sx={{ fontSize: '0.6875rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
-              Available Balance
+    <Card
+      variant="outlined"
+      sx={{
+        maxWidth: 620,
+        borderRadius: '1.25rem',
+        bgcolor: 'rgba(251,250,247,0.94)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255,255,255,0.35)',
+        boxShadow: '0px 24px 60px rgba(0,0,0,0.35)',
+        p: { xs: 2.5, sm: 3.5 },
+      }}
+    >
+      <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 2 }}>
+        Household Overview
+      </Typography>
+      <Box sx={{ display: 'flex', gap: { xs: 2, sm: 3 }, mb: 2.5 }}>
+        <StatCell value="₹2,48,500" label="Balance" border={false} />
+        <StatCell value="₹67,320" label="Spending" />
+        <StatCell value="28%" label="Savings" />
+      </Box>
+      <Box sx={{ borderTop: `1px solid ${C.stone}`, pt: 2, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+          <InsightMark color={C.indigo} />
+          <Box>
+            <Typography sx={{ fontSize: '0.875rem', fontWeight: 700, color: C.ink, mb: 0.25 }}>Samvitta Insight</Typography>
+            <Typography sx={{ fontSize: '0.875rem', color: C.warmGray, lineHeight: 1.5 }}>
+              Dining spending is 12% higher than your 3-month average.
             </Typography>
-            <Typography sx={{ fontSize: '1.75rem', fontWeight: 700, mb: 1.5 }}>₹1,24,500</Typography>
-            <MiniSparkline path="M0,24 L15,22 L30,25 L45,12 L60,16 L75,6 L100,2" color="#7CE8C3" height={36} />
           </Box>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2, height: '100%' }}>
-            <Typography sx={{ fontSize: '0.6875rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>Income</Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 700, color: '#17211E', mb: 1.5 }}>₹78,000</Typography>
-            <MiniSparkline path="M0,20 L20,18 L40,20 L60,10 L80,14 L100,4" color="#16A477" height={28} />
-          </Box>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2, height: '100%' }}>
-            <Typography sx={{ fontSize: '0.6875rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>Expense</Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 700, color: '#17211E', mb: 1.5 }}>₹53,500</Typography>
-            <MiniSparkline path="M0,10 L15,8 L30,22 L45,14 L60,26 L80,12 L100,18" color="#E5534B" height={28} />
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={7}>
-          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2.25, height: '100%' }}>
-            <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#17211E', mb: 1.5 }}>Cash Flow</Typography>
-            <MiniSparkline path="M0,26 L15,25 L30,24 L45,20 L60,16 L75,9 L100,2" color="#16A477" height={52} />
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={5}>
-          <Box sx={{ border: '1px solid #E7E9E5', borderRadius: '1rem', p: 2.25, height: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#17211E', mb: 0.5 }}>Spending</Typography>
-            {[
-              { label: 'Groceries', pct: 32, color: '#16A34A' },
-              { label: 'Rent', pct: 28, color: '#7C3AED' },
-              { label: 'Transport', pct: 14, color: '#0891B2' },
-            ].map((row) => (
-              <Box key={row.label} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: row.color, flexShrink: 0 }} />
-                <Typography sx={{ fontSize: '0.75rem', color: '#737B77', flex: 1 }}>{row.label}</Typography>
-                <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#17211E' }}>{row.pct}%</Typography>
-              </Box>
-            ))}
-          </Box>
-        </Grid>
-      </Grid>
+        </Box>
+        <ArrowForwardIcon sx={{ fontSize: 18, color: C.warmGray, mt: 0.5, flexShrink: 0 }} />
+      </Box>
     </Card>
   );
 }
 
-function ChatBubble({ children, align = 'left' }) {
+function IntelligenceCard({ eyebrow, title, value, sub, delay = 0 }) {
   return (
-    <Box
-      sx={{
-        alignSelf: align === 'left' ? 'flex-start' : 'flex-end',
-        bgcolor: align === 'left' ? '#FFFFFF' : '#123F36',
-        color: align === 'left' ? '#17211E' : '#FFFFFF',
-        border: align === 'left' ? '1px solid #E7E9E5' : 'none',
-        borderRadius: '14px',
-        px: 2.25,
-        py: 1.25,
-        fontSize: '0.9375rem',
-        fontWeight: 500,
-        maxWidth: 320,
-      }}
-    >
-      {children}
+    <Reveal delay={delay} y={20}>
+      <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.card, borderColor: C.stone, height: '100%', p: 3 }}>
+        <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.indigo, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 2 }}>
+          {eyebrow}
+        </Typography>
+        <Typography sx={{ fontFamily: serif, fontSize: '1.75rem', color: C.ink, mb: 0.5, lineHeight: 1.15 }}>{title}</Typography>
+        {sub && <Typography sx={{ fontSize: '0.875rem', color: C.warmGray, lineHeight: 1.6 }}>{sub}</Typography>}
+        {value && (
+          <Box sx={{ mt: 2.5, pt: 2, borderTop: `1px solid ${C.stone}` }}>
+            {value.map((row) => (
+              <Box key={row.label} sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.75 }}>
+                <Typography sx={{ fontSize: '0.8125rem', color: C.warmGray }}>{row.label}</Typography>
+                <Typography sx={{ fontSize: '0.8125rem', fontWeight: 700, color: C.ink }}>{row.amount}</Typography>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Card>
+    </Reveal>
+  );
+}
+
+function ChatRow({ align, children }) {
+  const isAsk = align === 'right';
+  return (
+    <Box sx={{ display: 'flex', justifyContent: isAsk ? 'flex-end' : 'flex-start' }}>
+      <Box
+        sx={{
+          maxWidth: 480,
+          bgcolor: isAsk ? C.midnight : C.ivory,
+          color: isAsk ? '#FFFFFF' : C.ink,
+          border: isAsk ? 'none' : `1px solid ${C.stone}`,
+          borderRadius: '14px',
+          px: 2.5,
+          py: 1.75,
+        }}
+      >
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
+// ── Editorial trend chart — thin gridline, one annotated line, a callout.
+function TrendChart() {
+  const months = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+  return (
+    <Box>
+      <Box component="svg" viewBox="0 0 600 220" sx={{ width: '100%', height: 220, display: 'block' }}>
+        {[40, 100, 160].map((y) => (
+          <line key={y} x1="0" y1={y} x2="600" y2={y} stroke={C.stone} strokeWidth="1" />
+        ))}
+        <path
+          d="M0,150 L100,130 L200,140 L300,95 L400,70 L500,30 L580,18"
+          fill="none"
+          stroke={C.champagne}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="580" cy="18" r="5" fill={C.amber} />
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 0.5, mb: 1 }}>
+        {months.map((m) => (
+          <Typography key={m} sx={{ fontSize: '0.75rem', color: C.warmGray }}>{m}</Typography>
+        ))}
+      </Box>
+      <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#4F9D6E' }}>↑ 8.2% vs last month</Typography>
     </Box>
   );
 }
 
 export default function Landing({ onGetStarted }) {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#F7F8F5', display: 'flex', flexDirection: 'column' }}>
-      {/* Nav */}
-      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E7E9E5', position: 'sticky', top: 0, bgcolor: '#F7F8F5', zIndex: 10 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <BrandMark size={40} radius="10px" />
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#17211E' }}>वित्तमंत्री</Typography>
-        </Box>
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 3.5 }}>
-          {NAV_LINKS.map((link) => (
+    <Box sx={{ minHeight: '100vh', bgcolor: C.ivory, display: 'flex', flexDirection: 'column' }}>
+      {/* ── Hero — cinematic photography, oversized wordmark, one floating card. */}
+      <Box sx={{ position: 'relative', minHeight: { xs: '100vh', md: '100vh' }, display: 'flex', flexDirection: 'column', color: '#FFFFFF', overflow: 'hidden' }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `url(${heroImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center right',
+            filter: 'brightness(0.52) saturate(0.7)',
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(115deg, rgba(21,23,28,0.97) 0%, rgba(21,23,28,0.88) 30%, rgba(21,23,28,0.55) 55%, rgba(21,23,28,0.28) 78%, rgba(21,23,28,0.35) 100%)`,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to top, rgba(21,23,28,0.75) 0%, rgba(21,23,28,0) 38%)',
+          }}
+        />
+
+        {/* Nav */}
+        <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2.5, md: 6 }, py: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+            <BrandMark size={36} radius="9px" bgcolor="rgba(255,255,255,0.12)" color={C.champagne} />
+            <Typography sx={{ fontFamily: serif, fontSize: 22, color: '#FFFFFF', letterSpacing: '0.01em' }}>Samvitta</Typography>
+          </Box>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 4 }}>
+            {NAV_LINKS.map((link) => (
+              <Typography
+                key={link.label}
+                component="a"
+                href={link.href}
+                sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', '&:hover': { color: '#FFFFFF' } }}
+              >
+                {link.label}
+              </Typography>
+            ))}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Typography
-              key={link.label}
               component="a"
-              href={link.href}
-              sx={{ fontSize: '0.9375rem', fontWeight: 500, color: '#737B77', textDecoration: 'none', '&:hover': { color: '#123F36' } }}
+              onClick={() => onGetStarted(0)}
+              sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgba(255,255,255,0.85)', cursor: 'pointer', display: { xs: 'none', sm: 'block' } }}
             >
-              {link.label}
+              Sign in
             </Typography>
-          ))}
+            <Button
+              variant="contained"
+              onClick={() => onGetStarted(1)}
+              sx={{ bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#BE9A5A' } }}
+            >
+              Get started
+            </Button>
+          </Box>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1.5 }}>
-          <Button variant="outlined" onClick={() => onGetStarted(0)}>
-            Login
-          </Button>
-          <Button variant="contained" onClick={() => onGetStarted(1)} sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
-            Get started
-          </Button>
+
+        {/* Hero copy */}
+        <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', px: { xs: 2.5, md: 6 }, py: { xs: 4, md: 0 } }}>
+          <Reveal>
+            <Typography
+              sx={{
+                fontFamily: serif,
+                fontSize: { xs: 56, sm: 84, md: 118 },
+                lineHeight: 1,
+                color: '#FFFFFF',
+                mb: { xs: 2, md: 3 },
+              }}
+            >
+              Samvitta
+            </Typography>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Typography
+              sx={{
+                fontFamily: serif,
+                fontSize: { xs: 22, sm: 28, md: 34 },
+                lineHeight: 1.3,
+                color: 'rgba(255,255,255,0.92)',
+                maxWidth: 620,
+                mb: 2.5,
+              }}
+            >
+              Smart Financial Analytics for the Whole Family
+            </Typography>
+          </Reveal>
+          <Reveal delay={0.18}>
+            <Typography sx={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.68)', lineHeight: 1.7, maxWidth: 480, mb: 4 }}>
+              Understand where your household money goes, why it changed, and what comes next.
+            </Typography>
+          </Reveal>
+          <Reveal delay={0.26}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => onGetStarted(1)}
+              sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, alignSelf: 'flex-start', '&:hover': { bgcolor: '#BE9A5A' } }}
+            >
+              Explore Samvitta
+            </Button>
+          </Reveal>
+        </Box>
+
+        {/* The one floating card */}
+        <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2.5, md: 6 }, pb: { xs: 4, md: 6 } }}>
+          <Reveal delay={0.35} y={24}>
+            <HouseholdOverviewCard />
+          </Reveal>
         </Box>
       </Box>
 
-      {/* 1. Hero */}
-      <SectionShell id="overview">
-        <Grid container spacing={6} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Reveal>
-              <Eyebrow>Family finance, made simple</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 38, md: 58 }, fontWeight: 800, color: '#17211E', lineHeight: 1.08, letterSpacing: '-0.02em', mb: 2.5 }}>
-                Your family's money, finally in one place.
-              </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 3 }}>
-                वित्तमंत्री helps your household track everyday spending, understand where the money goes, and manage
-                finances together — without maintaining another spreadsheet. Log expenses simply by messaging the
-                Telegram bot in natural language.
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
-                <Button variant="contained" size="large" onClick={() => onGetStarted(1)} sx={{ px: 4 }}>
-                  Start tracking
-                </Button>
-                <Button variant="outlined" size="large" component="a" href="#how-it-works" sx={{ px: 4 }}>
-                  See how it works
-                </Button>
-              </Box>
-              <Typography sx={{ fontSize: '0.875rem', color: '#737B77', fontWeight: 500 }}>
-                Simple to use. Built for families. Private by design.
-              </Typography>
+      {/* ── Household View */}
+      <SectionShell id="household">
+        <Reveal>
+          <Eyebrow>Household View</Eyebrow>
+          <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 44 }, color: C.ink, lineHeight: 1.15, mb: 2, maxWidth: 640 }}>
+            See your family's finances as one picture.
+          </Typography>
+          <Typography sx={{ fontSize: '1.0625rem', color: C.warmGray, lineHeight: 1.7, maxWidth: 560, mb: 6 }}>
+            Income, expenses, balance, savings, and household activity — brought together in one shared view, instead
+            of scattered across statements and spreadsheets.
+          </Typography>
+        </Reveal>
+        <Grid container spacing={2.5}>
+          <Grid item xs={12} md={7}>
+            <Reveal delay={0.05} y={20}>
+              <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.midnight, border: 'none', p: 4, height: '100%' }}>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', mb: 1.5 }}>
+                  Household Balance
+                </Typography>
+                <Typography sx={{ fontFamily: serif, fontSize: { xs: 36, md: 48 }, color: '#FFFFFF', mb: 1 }}>₹2,48,500</Typography>
+                <Typography sx={{ fontSize: '0.9375rem', color: C.champagne, fontWeight: 600 }}>+₹18,400 this month</Typography>
+              </Card>
             </Reveal>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Reveal delay={0.1} y={28}>
-              <Card variant="outlined" sx={{ borderRadius: '1rem', p: 3, bgcolor: '#FFFFFF', ...cardHoverSx }}>
-                <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
-                  Telegram message
+          <Grid item xs={6} md={2.5}>
+            <Reveal delay={0.12} y={20}>
+              <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.card, borderColor: C.stone, p: 3, height: '100%' }}>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.08em', mb: 1.5 }}>
+                  Spending
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, mb: 3 }}>
-                  <Reveal delay={0.5} y={10} duration={0.4}>
-                    <ChatBubble align="right">₹450 groceries at Dmart</ChatBubble>
-                  </Reveal>
-                </Box>
-                <Reveal delay={1.1} y={10} duration={0.4}>
-                  <Box sx={{ borderTop: '1px dashed #E7E9E5', pt: 2.5, mb: 2.5 }}>
-                    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1.5 }}>
-                      Transaction recognized
-                    </Typography>
-                    <Box sx={{ bgcolor: '#EAF3EF', borderRadius: '0.75rem', p: 2.25, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-                      <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Amount</Typography>
-                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#123F36' }}>₹450</Typography>
-                      </Box>
-                      <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Category</Typography>
-                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#17211E' }}>Groceries</Typography>
-                      </Box>
-                      <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Merchant</Typography>
-                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#17211E' }}>Dmart</Typography>
-                      </Box>
-                      <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Date</Typography>
-                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#17211E' }}>Today</Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </Reveal>
-                <Reveal delay={1.7} y={8} duration={0.4}>
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', fontWeight: 500 }}>
-                    वित्तमंत्री understands it, categorizes it, and adds it to your household automatically.
-                  </Typography>
-                </Reveal>
+                <Typography sx={{ fontFamily: serif, fontSize: 30, color: C.ink }}>₹67,320</Typography>
+              </Card>
+            </Reveal>
+          </Grid>
+          <Grid item xs={6} md={2.5}>
+            <Reveal delay={0.18} y={20}>
+              <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.card, borderColor: C.stone, p: 3, height: '100%' }}>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.08em', mb: 1.5 }}>
+                  Savings Rate
+                </Typography>
+                <Typography sx={{ fontFamily: serif, fontSize: 30, color: C.ink }}>28%</Typography>
               </Card>
             </Reveal>
           </Grid>
         </Grid>
       </SectionShell>
 
-      {/* 1b. Product preview */}
-      <SectionShell>
+      {/* ── Intelligence */}
+      <SectionShell id="intelligence" bgcolor={C.navy}>
         <Reveal>
-          <Box sx={{ textAlign: 'center', maxWidth: 560, mx: 'auto', mb: 4 }}>
-            <Eyebrow>See it in action</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 24, md: 28 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25 }}>
-              One dashboard for your whole household's money.
-            </Typography>
-          </Box>
+          <Eyebrow dark>Intelligence</Eyebrow>
+          <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 44 }, color: '#FFFFFF', lineHeight: 1.2, mb: 2, maxWidth: 640 }}>
+            Your numbers tell a story. Samvitta helps you understand it.
+          </Typography>
+          <Typography sx={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, maxWidth: 560, mb: 6 }}>
+            Not another chart to read — an explanation of what changed and why, in plain language.
+          </Typography>
         </Reveal>
-        <Reveal delay={0.1} y={24}>
-          <ProductPreviewMock />
-        </Reveal>
+        <Grid container spacing={2.5}>
+          <Grid item xs={12} md={4}>
+            <IntelligenceCard
+              eyebrow="Unusual spending"
+              title="Dining is 23% higher than your 3-month average."
+              value={[
+                { label: 'This month', amount: '₹8,400' },
+                { label: 'Typical', amount: '₹6,820' },
+              ]}
+              delay={0}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <IntelligenceCard
+              eyebrow="Month-end forecast"
+              title="Estimated savings: ₹18,400"
+              sub="Based on your current income and spending pattern."
+              delay={0.1}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <IntelligenceCard
+              eyebrow="Recurring change"
+              title="Subscriptions are up ₹1,260 over 4 months."
+              sub="Samvitta tracks recurring charges so quiet increases don't go unnoticed."
+              delay={0.2}
+            />
+          </Grid>
+        </Grid>
       </SectionShell>
 
-      {/* 2. Problem / Value proposition */}
+      {/* ── Ask Samvitta */}
       <SectionShell bgcolor="#FFFFFF">
-        <Reveal>
-          <Box sx={{ maxWidth: 720 }}>
-            <Eyebrow>Why वित्तमंत्री</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
-              Money management shouldn't feel like accounting.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.75, mb: 2 }}>
-              Most families already talk about expenses in messages, remember purchases mentally, save receipts, or
-              maintain spreadsheets that eventually stop getting updated.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.75, mb: 3 }}>
-              वित्तमंत्री turns everyday expense tracking into something as simple as sending a message. Your household
-              contributes to one shared financial picture while smart categorization and analytics take care of the
-              repetitive work.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
-              Less tracking effort. More financial clarity.
-            </Typography>
-          </Box>
-        </Reveal>
-      </SectionShell>
-
-      {/* 3. Built for the whole family */}
-      <SectionShell>
         <Grid container spacing={6} alignItems="center">
           <Grid item xs={12} md={5}>
             <Reveal>
-              <Eyebrow>Shared household</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
-                One family. One financial picture.
+              <Eyebrow>Ask Samvitta</Eyebrow>
+              <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 40 }, color: C.ink, lineHeight: 1.2, mb: 2.5 }}>
+                Ask your finances.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
-                Create a private household space and invite the people you manage money with. Everyone can record
-                expenses while the household gets one clear view of where the money is going.
+              <Typography sx={{ fontSize: '1.0625rem', color: C.warmGray, lineHeight: 1.7, mb: 2 }}>
+                Skip the dashboard-hunting. Ask a plain question and get a household-specific answer, with the numbers
+                behind it.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {['Can we afford a ₹1 lakh vacation in December?', 'What subscriptions are recurring?', 'Are we likely to exceed our budget?'].map((q) => (
+                  <Typography key={q} sx={{ fontSize: '0.875rem', color: C.warmGray, '&::before': { content: '"— "', color: C.champagne } }}>
+                    {q}
+                  </Typography>
+                ))}
+              </Box>
+            </Reveal>
+          </Grid>
+          <Grid item xs={12} md={7}>
+            <Reveal delay={0.12} y={20}>
+              <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.ivory, borderColor: C.stone, p: { xs: 2.5, sm: 3.5 } }}>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 2.5 }}>
+                  Ask Samvitta
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                  <ChatRow align="right">
+                    <Typography sx={{ fontSize: '0.9375rem' }}>"Why did we spend more this month?"</Typography>
+                  </ChatRow>
+                  <ChatRow align="left">
+                    <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, mb: 1 }}>
+                      Your household spending increased by ₹8,420.
+                    </Typography>
+                    <Box sx={{ mb: 1 }}>
+                      {[
+                        { label: 'Dining', amount: '+₹3,100' },
+                        { label: 'Shopping', amount: '+₹2,450' },
+                        { label: 'Utilities', amount: '+₹1,320' },
+                      ].map((row) => (
+                        <Box key={row.label} sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: 280 }}>
+                          <Typography sx={{ fontSize: '0.875rem', color: C.warmGray }}>{row.label}</Typography>
+                          <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: C.coral }}>{row.amount}</Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                    <Typography sx={{ fontSize: '0.8125rem', color: C.warmGray }}>
+                      Dining is also 18% above your 3-month average.
+                    </Typography>
+                  </ChatRow>
+                </Box>
+              </Card>
+            </Reveal>
+          </Grid>
+        </Grid>
+      </SectionShell>
+
+      {/* ── Family */}
+      <SectionShell id="family">
+        <Grid container spacing={6} alignItems="center">
+          <Grid item xs={12} md={6}>
+            <Reveal>
+              <Eyebrow>Family</Eyebrow>
+              <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 40 }, color: C.ink, lineHeight: 1.2, mb: 2.5 }}>
+                Plan together, not around each other.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', color: C.warmGray, lineHeight: 1.7, mb: 2 }}>
+                Create a private household space and invite the people you manage money with. Everyone logs their own
+                spending; the household sees one shared, accurate picture.
+              </Typography>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: C.ink }}>
                 Everyone contributes. Everyone stays informed.
               </Typography>
             </Reveal>
           </Grid>
-          <Grid item xs={12} md={7}>
-            <Reveal delay={0.15}>
-              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
-                <CardContent sx={{ p: 3.5 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
-                    <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <GroupsIcon />
+          <Grid item xs={12} md={6}>
+            <Reveal delay={0.12} y={20}>
+              <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.card, borderColor: C.stone, p: 3.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
+                  {['S', 'V'].map((initial, i) => (
+                    <Box
+                      key={initial}
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: '50%',
+                        bgcolor: i === 0 ? C.midnight : C.champagne,
+                        color: i === 0 ? C.champagne : C.ink,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        ml: i === 0 ? 0 : -1.25,
+                        border: '2px solid #FBFAF7',
+                      }}
+                    >
+                      {initial}
                     </Box>
-                    <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E' }}>What your household gets</Typography>
-                  </Box>
-                  <Grid container spacing={1.5}>
-                    {[
-                      'See who recorded each transaction',
-                      'Track household-wide spending',
-                      'Understand where your money goes',
-                      'Compare spending across months',
-                      'Review expenses by family member',
-                      'Keep everyone financially informed',
-                    ].map((point) => (
-                      <Grid item xs={12} sm={6} key={point}>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <CheckIcon sx={{ fontSize: 18, color: '#123F36', mt: 0.25 }} />
-                          <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{point}</Typography>
-                        </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Reveal>
-          </Grid>
-        </Grid>
-      </SectionShell>
-
-      {/* 4. Telegram expense logging */}
-      <SectionShell id="how-it-works" bgcolor="#FFFFFF">
-        <Grid container spacing={6} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Reveal>
-              <Eyebrow>Fast expense entry</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
-                Just text your expenses.
-              </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
-                No forms. No complicated expense-entry screens. Send a natural message to the वित्तमंत्री Telegram bot
-                and the transaction is recorded for you — with amount, merchant, category, subcategory, family member,
-                and date and time all filled in.
-              </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>Text it. Done.</Typography>
-            </Reveal>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Reveal delay={0.15}>
-              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#F7F8F5', border: '1px solid #E7E9E5', ...cardHoverSx }}>
-                <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 1.25 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                    <TelegramIcon sx={{ color: '#123F36', fontSize: 20 }} />
-                    <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#737B77' }}>वित्तमंत्री bot</Typography>
-                  </Box>
-                  {['₹450 groceries at Dmart', '2800 electricity bill', '650 petrol', '1200 dinner at Absolute Barbecue', '350 medicines'].map((msg, index) => (
-                    <Reveal key={msg} delay={0.2 + index * 0.15} y={10} duration={0.4}>
-                      <ChatBubble align="right">{msg}</ChatBubble>
-                    </Reveal>
                   ))}
-                </CardContent>
-              </Card>
-            </Reveal>
-          </Grid>
-        </Grid>
-      </SectionShell>
-
-      {/* 5. Smart categorization */}
-      <SectionShell>
-        <Grid container spacing={6} alignItems="center">
-          <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
-            <Reveal>
-              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
-                <CardContent sx={{ p: 3.5 }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                    <AutoAwesomeIcon />
+                  <Box sx={{ width: 40, height: 40, borderRadius: '50%', border: `1px dashed ${C.stone}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.warmGray, ml: -1.25, fontSize: 18 }}>
+                    +
                   </Box>
-                  <Grid container spacing={1.5}>
-                    {['Automatic transaction categorization', 'Custom categories', 'Custom subcategories', 'Easy category corrections', 'Consistent expense organization'].map((point) => (
-                      <Grid item xs={12} key={point}>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <CheckIcon sx={{ fontSize: 18, color: '#123F36', mt: 0.25 }} />
-                          <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{point}</Typography>
-                        </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </CardContent>
+                </Box>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.08em', mb: 1.5 }}>
+                  Household
+                </Typography>
+                {['Everyone', 'Sanket', 'Vaishnavi'].map((name, i) => (
+                  <Box key={name} sx={{ display: 'flex', alignItems: 'center', gap: 1.25, py: 1, borderBottom: i < 2 ? `1px solid ${C.stone}` : 'none' }}>
+                    <Box sx={{ width: 16, height: 16, borderRadius: '50%', border: `1.5px solid ${i === 0 ? C.champagne : C.stone}`, bgcolor: i === 0 ? C.champagne : 'transparent', flexShrink: 0 }} />
+                    <Typography sx={{ fontSize: '0.9375rem', color: C.ink, fontWeight: i === 0 ? 600 : 400 }}>{name}</Typography>
+                  </Box>
+                ))}
               </Card>
             </Reveal>
           </Grid>
-          <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
-            <Reveal delay={0.15}>
-              <Eyebrow>Automatic organization</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
-                Smart enough to organize itself.
+        </Grid>
+      </SectionShell>
+
+      {/* ── Financial Story */}
+      <SectionShell bgcolor="#FFFFFF">
+        <Grid container spacing={6} alignItems="center">
+          <Grid item xs={12} md={5}>
+            <Reveal>
+              <Eyebrow>Financial Story</Eyebrow>
+              <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 40 }, color: C.ink, lineHeight: 1.2, mb: 2.5 }}>
+                Patterns, not just numbers.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
-                Groceries stay under groceries. Fuel stays under transport. Bills stay where they belong. वित्तमंत्री
-                automatically categorizes transactions while giving your household complete control over categories
-                and subcategories.
+              <Typography sx={{ fontSize: '1.0625rem', color: C.warmGray, lineHeight: 1.7 }}>
+                See how household spending moves month over month, and which categories are driving the change —
+                without building a single chart yourself.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
-                Your finances should adapt to your life — not the other way around.
-              </Typography>
+            </Reveal>
+          </Grid>
+          <Grid item xs={12} md={7}>
+            <Reveal delay={0.12} y={20}>
+              <Card variant="outlined" sx={{ borderRadius: '1.25rem', bgcolor: C.ivory, borderColor: C.stone, p: 3.5 }}>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 2 }}>
+                  Monthly Spending
+                </Typography>
+                <TrendChart />
+              </Card>
             </Reveal>
           </Grid>
         </Grid>
       </SectionShell>
 
-      {/* 6. Analytics */}
-      <SectionShell id="analytics" bgcolor="#FFFFFF">
+      {/* ── Privacy */}
+      <SectionShell id="privacy">
         <Reveal>
-          <Box sx={{ textAlign: 'center', maxWidth: 680, mx: 'auto', mb: 5 }}>
-            <Eyebrow>Useful insights</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2 }}>
-              See the story behind your spending.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7 }}>
-              Numbers are useful only when they help you understand something. वित्तमंत्री turns everyday transactions
-              into simple insights your family can actually use.
-            </Typography>
-          </Box>
-        </Reveal>
-        <Grid container spacing={2.5}>
-          {[
-            { title: 'Monthly spending trends', desc: 'See how household spending changes from month to month.' },
-            { title: 'Category breakdown', desc: 'Understand exactly where the money is going.' },
-            { title: 'Member summaries', desc: 'See how expenses are distributed across household members.' },
-            { title: 'Transaction history', desc: 'Search, review, and understand previous expenses whenever needed.' },
-            { title: 'CSV export', desc: 'Download your transaction data whenever you want to analyze it elsewhere.' },
-          ].map((card, index) => (
-            <Grid item xs={12} sm={6} md={4} key={card.title}>
-              <Reveal delay={index * 0.08}>
-                <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%', bgcolor: '#F7F8F5', ...cardHoverSx }}>
-                  <CardContent sx={{ p: 3 }}>
-                    <Box sx={{ width: 40, height: 40, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                      <BarChartIcon fontSize="small" />
-                    </Box>
-                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#17211E', mb: 0.75 }}>{card.title}</Typography>
-                    <Typography sx={{ fontSize: '0.875rem', color: '#737B77', lineHeight: 1.6 }}>{card.desc}</Typography>
-                  </CardContent>
-                </Card>
-              </Reveal>
-            </Grid>
-          ))}
-        </Grid>
-        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36', textAlign: 'center', mt: 4 }}>
-          No complicated financial reports. No spreadsheet maintenance. Just clarity.
-        </Typography>
-      </SectionShell>
-
-      {/* 7. Privacy — Privacy Center */}
-      <SectionShell id="privacy" bgcolor="#FFFFFF">
-        <Reveal>
-          <Box sx={{ textAlign: 'center', maxWidth: 640, mx: 'auto', mb: 5 }}>
+          <Box sx={{ textAlign: 'center', maxWidth: 620, mx: 'auto', mb: 6 }}>
             <Eyebrow>Privacy</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2 }}>
-              Your financial data belongs to you.
-            </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7 }}>
-              We designed वित्तमंत्री to keep your household's information private, understandable, and under your control.
-            </Typography>
-          </Box>
-        </Reveal>
-
-        <Grid container spacing={2.5} sx={{ mb: 6 }}>
-          {[
-            { icon: LockIcon, title: 'Your data', desc: 'Financial data stays private to your household — never shared or shown across workspaces.' },
-            { icon: PersonIcon, title: 'Your control', desc: 'View, export, or delete your records whenever you want. Nothing is locked away.' },
-            { icon: ShieldIcon, title: 'Security', desc: 'Access is authenticated per household, with encrypted connections end to end.' },
-          ].map((pillar, index) => {
-            const Icon = pillar.icon;
-            return (
-              <Grid item xs={12} sm={4} key={pillar.title}>
-                <Reveal delay={index * 0.08}>
-                  <Card variant="outlined" sx={{ borderRadius: '1rem', height: '100%', ...cardHoverSx }}>
-                    <CardContent sx={{ p: 3 }}>
-                      <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                        <Icon />
-                      </Box>
-                      <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E', mb: 0.75 }}>{pillar.title}</Typography>
-                      <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', lineHeight: 1.6 }}>{pillar.desc}</Typography>
-                    </CardContent>
-                  </Card>
-                </Reveal>
-              </Grid>
-            );
-          })}
-        </Grid>
-
-        <Box sx={{ maxWidth: 760, mx: 'auto', display: 'grid', gap: 3 }}>
-          {[
-            { n: '01', title: 'What we collect', desc: 'Account information, transaction records, and the information necessary to operate the service — nothing more.' },
-            { n: '02', title: 'Why we collect it', desc: 'To provide financial tracking, analytics, and account functionality for your household.' },
-            { n: '03', title: 'How your data is used', desc: "Your information is used to run वित्तमंत्री and improve your experience — never sold or shared with advertisers." },
-            { n: '04', title: 'Your controls', desc: 'View, export, or delete your data at any time from your Profile settings.' },
-            { n: '05', title: 'Data retention', desc: "Your records are kept for as long as your household account is active, and removed on request." },
-            { n: '06', title: 'Contact', desc: 'Questions about your data? Reach out to your household admin or the person who set up your वित्तमंत्री account.' },
-          ].map((item, index) => (
-            <Reveal key={item.n} delay={index * 0.05} y={12} duration={0.4}>
-              <Box sx={{ display: 'flex', gap: 2.5, pb: 3, borderBottom: index < 5 ? '1px solid #E7E9E5' : 'none' }}>
-                <Typography sx={{ fontSize: '0.9375rem', fontWeight: 700, color: '#9AA09B', minWidth: 32, flexShrink: 0 }}>{item.n}</Typography>
-                <Box>
-                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E', mb: 0.5 }}>{item.title}</Typography>
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', lineHeight: 1.6 }}>{item.desc}</Typography>
-                </Box>
-              </Box>
-            </Reveal>
-          ))}
-        </Box>
-      </SectionShell>
-
-      {/* 8. How it works — 3 steps */}
-      <SectionShell bgcolor="#FFFFFF">
-        <Reveal>
-          <Box sx={{ textAlign: 'center', mb: 5 }}>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25 }}>
-              Expense tracking in three simple steps.
+            <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 40 }, color: C.ink, lineHeight: 1.2 }}>
+              Your family's financial data stays yours.
             </Typography>
           </Box>
         </Reveal>
         <Grid container spacing={3}>
           {[
-            { step: '1', title: 'Create your household', desc: 'Set up your private family space and invite household members.' },
-            { step: '2', title: 'Send an expense', desc: 'Message the Telegram bot naturally — "₹850 groceries at Reliance Smart".' },
-            { step: '3', title: 'See the bigger picture', desc: 'वित्तमंत्री records, categorizes, and reflects it in your household dashboard automatically.' },
-          ].map((item, index) => (
-            <Grid item xs={12} md={4} key={item.step}>
-              <Reveal delay={index * 0.12}>
-                <Box sx={{ textAlign: 'center', px: 2 }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: '#123F36', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700, mx: 'auto', mb: 2 }}>
-                    {item.step}
+            { icon: LockOutlinedIcon, title: 'Private by design', desc: 'Financial data stays private to your household — never shared or shown across workspaces.' },
+            { icon: GroupsOutlinedIcon, title: 'Controlled family access', desc: 'You decide who joins your household and what they can see.' },
+            { icon: DownloadIcon, title: 'Export when you want', desc: 'View, export, or delete your records whenever you want. Nothing is locked away.' },
+          ].map((pillar, index) => {
+            const Icon = pillar.icon;
+            return (
+              <Grid item xs={12} sm={4} key={pillar.title}>
+                <Reveal delay={index * 0.08}>
+                  <Box sx={{ textAlign: 'center', px: 2 }}>
+                    <Icon sx={{ fontSize: 26, color: C.champagne, mb: 1.5 }} />
+                    <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: C.ink, mb: 0.75 }}>{pillar.title}</Typography>
+                    <Typography sx={{ fontSize: '0.9375rem', color: C.warmGray, lineHeight: 1.6 }}>{pillar.desc}</Typography>
                   </Box>
-                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E', mb: 1 }}>{item.title}</Typography>
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', lineHeight: 1.6 }}>{item.desc}</Typography>
-                </Box>
-              </Reveal>
-            </Grid>
-          ))}
+                </Reveal>
+              </Grid>
+            );
+          })}
         </Grid>
-        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36', textAlign: 'center', mt: 5 }}>
-          From message to insight in seconds.
-        </Typography>
       </SectionShell>
 
-      {/* 9. Why वित्तमंत्री — comparison */}
-      <SectionShell>
-        <Reveal>
-          <Box sx={{ textAlign: 'center', mb: 5 }}>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25 }}>
-              Built around how families actually manage money.
-            </Typography>
-          </Box>
-        </Reveal>
-        <Card variant="outlined" sx={{ borderRadius: '1rem', maxWidth: 780, mx: 'auto', overflow: 'hidden', bgcolor: '#FFFFFF' }}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E7E9E5', borderRight: '1px solid #E7E9E5' }}>
-              <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Traditional tracking
-              </Typography>
-            </Box>
-            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E7E9E5', bgcolor: '#EAF3EF' }}>
-              <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#123F36', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                वित्तमंत्री
-              </Typography>
-            </Box>
-          </Box>
-          {COMPARISON_ROWS.map((row, index) => (
-            <Reveal key={row.old} delay={index * 0.06} y={12} duration={0.4}>
-              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: index < COMPARISON_ROWS.length - 1 ? '1px solid #E7E9E5' : 'none' }}>
-                <Box sx={{ px: 3, py: 2, borderRight: '1px solid #E7E9E5', display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CloseIcon sx={{ fontSize: 16, color: '#9AA09B' }} />
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{row.old}</Typography>
-                </Box>
-                <Box sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CheckIcon sx={{ fontSize: 16, color: '#123F36' }} />
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#17211E', fontWeight: 500 }}>{row.vitta}</Typography>
-                </Box>
-              </Box>
-            </Reveal>
-          ))}
-        </Card>
-        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36', textAlign: 'center', mt: 4 }}>
-          Expense tracking should fit into your family's life, not become another task.
-        </Typography>
-      </SectionShell>
-
-      {/* 10. Final CTA */}
-      <SectionShell bgcolor="#123F36">
+      {/* ── Final CTA */}
+      <SectionShell bgcolor={C.midnight}>
         <Reveal>
           <Box sx={{ textAlign: 'center', maxWidth: 640, mx: 'auto' }}>
-            <Typography sx={{ fontSize: { xs: 26, md: 34 }, fontWeight: 700, color: '#FFFFFF', lineHeight: 1.25, mb: 2.5 }}>
-              One family. One financial picture.
+            <Typography sx={{ fontFamily: serif, fontSize: { xs: 32, md: 44 }, color: '#FFFFFF', lineHeight: 1.2, mb: 2.5 }}>
+              Plan together. Make better money decisions as a family.
             </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#BFE3D2', lineHeight: 1.7, mb: 4 }}>
-              From a ₹20 chai to the monthly electricity bill, every expense adds up to the bigger picture.
-              वित्तमंत्री helps your household capture it effortlessly, understand it clearly, and manage money
-              better — together.
+            <Typography sx={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, mb: 4 }}>
+              See where your money goes. Understand what changed. Know what's coming next.
             </Typography>
             <Button
               variant="contained"
               size="large"
               onClick={() => onGetStarted(1)}
-              sx={{
-                px: 5,
-                bgcolor: '#16A477',
-                color: '#17211E',
-                transition: 'transform 200ms ease, background-color 200ms ease',
-                '&:hover': { bgcolor: '#12885F', transform: 'translateY(-2px)' },
-              }}
+              sx={{ px: 5, bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#BE9A5A' } }}
             >
               Create your household
             </Button>
-            <Typography sx={{ fontSize: '0.875rem', color: '#A9D9C4', mt: 2 }}>No spreadsheets required.</Typography>
           </Box>
         </Reveal>
       </SectionShell>
 
       {/* Footer */}
-      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 4, borderTop: '1px solid #E7E9E5', bgcolor: '#F7F8F5' }}>
-        <Box sx={{ maxWidth: 1100, mx: 'auto', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
+      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 4, borderTop: `1px solid ${C.stone}`, bgcolor: C.ivory }}>
+        <Box sx={{ maxWidth: 1160, mx: 'auto', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
           <Box>
-            <Typography sx={{ fontSize: '0.9375rem', fontWeight: 700, color: '#17211E' }}>वित्तमंत्री</Typography>
-            <Typography sx={{ fontSize: '0.8125rem', color: '#737B77' }}>
-              वित्तमंत्री is a personal project built to make family expense tracking simpler, faster, and more collaborative.
+            <Typography sx={{ fontFamily: serif, fontSize: '1.25rem', color: C.ink }}>Samvitta</Typography>
+            <Typography sx={{ fontSize: '0.8125rem', color: C.warmGray, mt: 0.5 }}>
+              Smart financial analytics for the whole family.
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 3 }}>
@@ -631,7 +613,7 @@ export default function Landing({ onGetStarted }) {
                 key={link.label}
                 component="a"
                 href={link.href}
-                sx={{ fontSize: '0.8125rem', color: '#737B77', textDecoration: 'none', '&:hover': { color: '#123F36' } }}
+                sx={{ fontSize: '0.8125rem', color: C.warmGray, textDecoration: 'none', '&:hover': { color: C.ink } }}
               >
                 {link.label}
               </Typography>
