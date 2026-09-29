@@ -1,28 +1,48 @@
 import { createTheme } from '@mui/material/styles';
 
+// Samvitta design tokens — Midnight + Champagne + Ivory.
+// Deliberately not the standard "green = money" fintech palette.
+export const tokens = {
+  midnight: '#15171C',
+  navy: '#20242D',
+  ivory: '#F5F1E8',
+  cardWhite: '#FBFAF7',
+  champagne: '#CDAA6A',
+  amber: '#D99A3C',
+  ink: '#18191C',
+  warmGray: '#77736C',
+  stone: '#DDD7CD',
+  coral: '#D96767',
+  indigo: '#6F78C9',
+  mutedBlue: '#5E83A9',
+};
+
+// Editorial serif for headlines/brand moments; Inter stays the UI workhorse.
+export const displayFontFamily = '"Instrument Serif", Georgia, serif';
+
 const theme = createTheme({
   typography: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 14,
   },
   palette: {
-    primary: { main: '#123F36', dark: '#0B2B24' },
-    // Emerald accent — used for positive figures, active states, and
-    // highlights. Not a MUI-standard palette key, referenced explicitly as
-    // theme.palette.accent.main.
-    accent: { main: '#16A477', contrastText: '#FFFFFF' },
-    background: { default: '#F7F8F5', paper: '#FFFFFF' },
-    text: { primary: '#17211E', secondary: '#737B77' },
-    success: { main: '#16A477', light: '#E5F5EF' },
-    error: { main: '#E5534B', light: '#FDF0EF' },
-    warning: { main: '#F59E0B', light: '#FFFBEB' },
-    divider: '#E7E9E5',
+    primary: { main: tokens.midnight, dark: '#0B0C0F' },
+    // Champagne accent — used sparingly (3-5% of the UI) for premium moments,
+    // not as a dominant color. Referenced as theme.palette.accent.main.
+    accent: { main: tokens.champagne, contrastText: tokens.ink },
+    background: { default: tokens.ivory, paper: tokens.cardWhite },
+    text: { primary: tokens.ink, secondary: tokens.warmGray },
+    success: { main: '#4F9D6E', light: '#E9F2EB' },
+    error: { main: tokens.coral, light: '#FBEDED' },
+    warning: { main: tokens.amber, light: '#FBF1E2' },
+    info: { main: tokens.mutedBlue, light: '#EAF0F5' },
+    divider: tokens.stone,
   },
   shape: { borderRadius: 12 },
   shadows: [
     'none',
-    '0px 1px 2px 0px rgba(16,24,40,0.05)',
-    '0px 4px 12px rgba(0,0,0,0.08)',
+    '0px 1px 2px 0px rgba(21,23,28,0.05)',
+    '0px 4px 12px rgba(21,23,28,0.08)',
     ...Array(23).fill('none'),
   ],
   components: {
@@ -37,9 +57,9 @@ const theme = createTheme({
           '&:hover': { boxShadow: 'none' },
         },
         outlined: {
-          borderColor: '#E7E9E5',
-          color: '#17211E',
-          '&:hover': { borderColor: '#123F36', backgroundColor: '#F0F3F1' },
+          borderColor: tokens.stone,
+          color: tokens.ink,
+          '&:hover': { borderColor: tokens.midnight, backgroundColor: '#F0EEE7' },
         },
       },
     },
@@ -47,21 +67,21 @@ const theme = createTheme({
       defaultProps: { variant: 'outlined', elevation: 0 },
       styleOverrides: {
         root: {
-          borderColor: '#E7E9E5',
-          borderRadius: '1rem',
-          boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.04)',
+          borderColor: tokens.stone,
+          borderRadius: '1.25rem',
+          boxShadow: '0px 1px 2px 0px rgba(21,23,28,0.04)',
         },
       },
     },
     MuiTableHead: {
       styleOverrides: {
-        root: { backgroundColor: '#F0F3F1' },
+        root: { backgroundColor: '#F0EEE7' },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         head: {
-          color: '#737B77',
+          color: tokens.warmGray,
           fontWeight: 500,
           fontSize: '0.857rem',
           textTransform: 'uppercase',
@@ -69,7 +89,7 @@ const theme = createTheme({
         },
         body: {
           fontSize: '0.875rem',
-          color: '#17211E',
+          color: tokens.ink,
           padding: '6px 16px',
           height: '60px',
         },
@@ -78,8 +98,8 @@ const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '&:hover': { backgroundColor: '#F7F8F5' },
-          borderBottom: '1px solid #E7E9E5',
+          '&:hover': { backgroundColor: tokens.ivory },
+          borderBottom: `1px solid ${tokens.stone}`,
         },
       },
     },
@@ -93,9 +113,9 @@ const theme = createTheme({
         root: {
           minHeight: '44px',
           borderRadius: '8px',
-          '& fieldset': { borderColor: '#E7E9E5' },
-          '&:hover fieldset': { borderColor: '#123F36' },
-          boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.04)',
+          '& fieldset': { borderColor: tokens.stone },
+          '&:hover fieldset': { borderColor: tokens.midnight },
+          boxShadow: '0px 1px 2px 0px rgba(21,23,28,0.04)',
         },
       },
     },
