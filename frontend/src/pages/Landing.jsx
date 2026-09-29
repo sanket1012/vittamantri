@@ -32,7 +32,7 @@ const COMPARISON_ROWS = [
 
 function Eyebrow({ children }) {
   return (
-    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#173F35', textTransform: 'uppercase', letterSpacing: '0.06em', mb: 1.5 }}>
+    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#123F36', textTransform: 'uppercase', letterSpacing: '0.06em', mb: 1.5 }}>
       {children}
     </Typography>
   );
@@ -51,9 +51,9 @@ function ChatBubble({ children, align = 'left' }) {
     <Box
       sx={{
         alignSelf: align === 'left' ? 'flex-start' : 'flex-end',
-        bgcolor: align === 'left' ? '#FFFFFF' : '#173F35',
-        color: align === 'left' ? '#202421' : '#FFFFFF',
-        border: align === 'left' ? '1px solid #E2DCC9' : 'none',
+        bgcolor: align === 'left' ? '#FFFFFF' : '#123F36',
+        color: align === 'left' ? '#17211E' : '#FFFFFF',
+        border: align === 'left' ? '1px solid #E7E9E5' : 'none',
         borderRadius: '14px',
         px: 2.25,
         py: 1.25,
@@ -69,12 +69,12 @@ function ChatBubble({ children, align = 'left' }) {
 
 export default function Landing({ onGetStarted }) {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#F6F1E7', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#F7F8F5', display: 'flex', flexDirection: 'column' }}>
       {/* Nav */}
-      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2DCC9', position: 'sticky', top: 0, bgcolor: '#F6F1E7', zIndex: 10 }}>
+      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E7E9E5', position: 'sticky', top: 0, bgcolor: '#F7F8F5', zIndex: 10 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <BrandMark size={40} radius="10px" />
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#202421' }}>वित्तमंत्री</Typography>
+          <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#17211E' }}>वित्तमंत्री</Typography>
         </Box>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 3.5 }}>
           {NAV_LINKS.map((link) => (
@@ -82,7 +82,7 @@ export default function Landing({ onGetStarted }) {
               key={link.label}
               component="a"
               href={link.href}
-              sx={{ fontSize: '0.9375rem', fontWeight: 500, color: '#454940', textDecoration: 'none', '&:hover': { color: '#173F35' } }}
+              sx={{ fontSize: '0.9375rem', fontWeight: 500, color: '#737B77', textDecoration: 'none', '&:hover': { color: '#123F36' } }}
             >
               {link.label}
             </Typography>
@@ -104,10 +104,10 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={6}>
             <Reveal>
               <Eyebrow>Family finance, made simple</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 32, md: 46 }, fontWeight: 700, color: '#202421', lineHeight: 1.15, mb: 2.5 }}>
+              <Typography sx={{ fontSize: { xs: 32, md: 46 }, fontWeight: 700, color: '#17211E', lineHeight: 1.15, mb: 2.5 }}>
                 Your family's money, finally in one place.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 3 }}>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 3 }}>
                 वित्तमंत्री helps your household track everyday spending, understand where the money goes, and manage
                 finances together — without maintaining another spreadsheet. Log expenses simply by messaging the
                 Telegram bot in natural language.
@@ -120,7 +120,7 @@ export default function Landing({ onGetStarted }) {
                   See how it works
                 </Button>
               </Box>
-              <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', fontWeight: 500 }}>
+              <Typography sx={{ fontSize: '0.875rem', color: '#737B77', fontWeight: 500 }}>
                 Simple to use. Built for families. Private by design.
               </Typography>
             </Reveal>
@@ -128,7 +128,7 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={6}>
             <Reveal delay={0.1} y={28}>
               <Card variant="outlined" sx={{ borderRadius: '1rem', p: 3, bgcolor: '#FFFFFF', ...cardHoverSx }}>
-                <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
+                <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 2 }}>
                   Telegram message
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, mb: 3 }}>
@@ -137,32 +137,32 @@ export default function Landing({ onGetStarted }) {
                   </Reveal>
                 </Box>
                 <Reveal delay={1.1} y={10} duration={0.4}>
-                  <Box sx={{ borderTop: '1px dashed #E2DCC9', pt: 2.5, mb: 2.5 }}>
-                    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1.5 }}>
+                  <Box sx={{ borderTop: '1px dashed #E7E9E5', pt: 2.5, mb: 2.5 }}>
+                    <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1.5 }}>
                       Transaction recognized
                     </Typography>
-                    <Box sx={{ bgcolor: '#E6EFEA', borderRadius: '0.75rem', p: 2.25, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+                    <Box sx={{ bgcolor: '#EAF3EF', borderRadius: '0.75rem', p: 2.25, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
                       <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Amount</Typography>
-                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#173F35' }}>₹450</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Amount</Typography>
+                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#123F36' }}>₹450</Typography>
                       </Box>
                       <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Category</Typography>
-                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#202421' }}>Groceries</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Category</Typography>
+                        <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: '#17211E' }}>Groceries</Typography>
                       </Box>
                       <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Merchant</Typography>
-                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#202421' }}>Dmart</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Merchant</Typography>
+                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#17211E' }}>Dmart</Typography>
                       </Box>
                       <Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63' }}>Date</Typography>
-                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#202421' }}>Today</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>Date</Typography>
+                        <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#17211E' }}>Today</Typography>
                       </Box>
                     </Box>
                   </Box>
                 </Reveal>
                 <Reveal delay={1.7} y={8} duration={0.4}>
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#454940', fontWeight: 500 }}>
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', fontWeight: 500 }}>
                     वित्तमंत्री understands it, categorizes it, and adds it to your household automatically.
                   </Typography>
                 </Reveal>
@@ -177,19 +177,19 @@ export default function Landing({ onGetStarted }) {
         <Reveal>
           <Box sx={{ maxWidth: 720 }}>
             <Eyebrow>Why वित्तमंत्री</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
               Money management shouldn't feel like accounting.
             </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.75, mb: 2 }}>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.75, mb: 2 }}>
               Most families already talk about expenses in messages, remember purchases mentally, save receipts, or
               maintain spreadsheets that eventually stop getting updated.
             </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.75, mb: 3 }}>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.75, mb: 3 }}>
               वित्तमंत्री turns everyday expense tracking into something as simple as sending a message. Your household
               contributes to one shared financial picture while smart categorization and analytics take care of the
               repetitive work.
             </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+            <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
               Less tracking effort. More financial clarity.
             </Typography>
           </Box>
@@ -202,14 +202,14 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={5}>
             <Reveal>
               <Eyebrow>Shared household</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
                 One family. One financial picture.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
                 Create a private household space and invite the people you manage money with. Everyone can record
                 expenses while the household gets one clear view of where the money is going.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
                 Everyone contributes. Everyone stays informed.
               </Typography>
             </Reveal>
@@ -219,10 +219,10 @@ export default function Landing({ onGetStarted }) {
               <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
                 <CardContent sx={{ p: 3.5 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
-                    <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <GroupsIcon />
                     </Box>
-                    <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#202421' }}>What your household gets</Typography>
+                    <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E' }}>What your household gets</Typography>
                   </Box>
                   <Grid container spacing={1.5}>
                     {[
@@ -235,8 +235,8 @@ export default function Landing({ onGetStarted }) {
                     ].map((point) => (
                       <Grid item xs={12} sm={6} key={point}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
-                          <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
+                          <CheckIcon sx={{ fontSize: 18, color: '#123F36', mt: 0.25 }} />
+                          <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{point}</Typography>
                         </Box>
                       </Grid>
                     ))}
@@ -254,24 +254,24 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={6}>
             <Reveal>
               <Eyebrow>Fast expense entry</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
                 Just text your expenses.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
                 No forms. No complicated expense-entry screens. Send a natural message to the वित्तमंत्री Telegram bot
                 and the transaction is recorded for you — with amount, merchant, category, subcategory, family member,
                 and date and time all filled in.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>Text it. Done.</Typography>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>Text it. Done.</Typography>
             </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
             <Reveal delay={0.15}>
-              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#F6F1E7', border: '1px solid #E2DCC9', ...cardHoverSx }}>
+              <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#F7F8F5', border: '1px solid #E7E9E5', ...cardHoverSx }}>
                 <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 1.25 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                    <TelegramIcon sx={{ color: '#173F35', fontSize: 20 }} />
-                    <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#6B6F63' }}>वित्तमंत्री bot</Typography>
+                    <TelegramIcon sx={{ color: '#123F36', fontSize: 20 }} />
+                    <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#737B77' }}>वित्तमंत्री bot</Typography>
                   </Box>
                   {['₹450 groceries at Dmart', '2800 electricity bill', '650 petrol', '1200 dinner at Absolute Barbecue', '350 medicines'].map((msg, index) => (
                     <Reveal key={msg} delay={0.2 + index * 0.15} y={10} duration={0.4}>
@@ -292,15 +292,15 @@ export default function Landing({ onGetStarted }) {
             <Reveal>
               <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
                 <CardContent sx={{ p: 3.5 }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                     <AutoAwesomeIcon />
                   </Box>
                   <Grid container spacing={1.5}>
                     {['Automatic transaction categorization', 'Custom categories', 'Custom subcategories', 'Easy category corrections', 'Consistent expense organization'].map((point) => (
                       <Grid item xs={12} key={point}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
-                          <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
+                          <CheckIcon sx={{ fontSize: 18, color: '#123F36', mt: 0.25 }} />
+                          <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{point}</Typography>
                         </Box>
                       </Grid>
                     ))}
@@ -312,15 +312,15 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
             <Reveal delay={0.15}>
               <Eyebrow>Automatic organization</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
                 Smart enough to organize itself.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
                 Groceries stay under groceries. Fuel stays under transport. Bills stay where they belong. वित्तमंत्री
                 automatically categorizes transactions while giving your household complete control over categories
                 and subcategories.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
                 Your finances should adapt to your life — not the other way around.
               </Typography>
             </Reveal>
@@ -333,10 +333,10 @@ export default function Landing({ onGetStarted }) {
         <Reveal>
           <Box sx={{ textAlign: 'center', maxWidth: 680, mx: 'auto', mb: 5 }}>
             <Eyebrow>Useful insights</Eyebrow>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2 }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2 }}>
               See the story behind your spending.
             </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7 }}>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7 }}>
               Numbers are useful only when they help you understand something. वित्तमंत्री turns everyday transactions
               into simple insights your family can actually use.
             </Typography>
@@ -352,20 +352,20 @@ export default function Landing({ onGetStarted }) {
           ].map((card, index) => (
             <Grid item xs={12} sm={6} md={4} key={card.title}>
               <Reveal delay={index * 0.08}>
-                <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%', bgcolor: '#F6F1E7', ...cardHoverSx }}>
+                <Card variant="outlined" sx={{ borderRadius: '0.75rem', height: '100%', bgcolor: '#F7F8F5', ...cardHoverSx }}>
                   <CardContent sx={{ p: 3 }}>
-                    <Box sx={{ width: 40, height: 40, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                    <Box sx={{ width: 40, height: 40, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                       <BarChartIcon fontSize="small" />
                     </Box>
-                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#202421', mb: 0.75 }}>{card.title}</Typography>
-                    <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63', lineHeight: 1.6 }}>{card.desc}</Typography>
+                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#17211E', mb: 0.75 }}>{card.title}</Typography>
+                    <Typography sx={{ fontSize: '0.875rem', color: '#737B77', lineHeight: 1.6 }}>{card.desc}</Typography>
                   </CardContent>
                 </Card>
               </Reveal>
             </Grid>
           ))}
         </Grid>
-        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35', textAlign: 'center', mt: 4 }}>
+        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36', textAlign: 'center', mt: 4 }}>
           No complicated financial reports. No spreadsheet maintenance. Just clarity.
         </Typography>
       </SectionShell>
@@ -376,14 +376,14 @@ export default function Landing({ onGetStarted }) {
           <Grid item xs={12} md={6}>
             <Reveal>
               <Eyebrow>Private by design</Eyebrow>
-              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25, mb: 2.5 }}>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25, mb: 2.5 }}>
                 Your family's finances stay your family's finances.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', color: '#454940', lineHeight: 1.7, mb: 2 }}>
+              <Typography sx={{ fontSize: '1.0625rem', color: '#737B77', lineHeight: 1.7, mb: 2 }}>
                 Privacy is part of the foundation of वित्तमंत्री. Every household has its own isolated workspace.
                 Transactions, categories, members, and financial information belong only to that household.
               </Typography>
-              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35' }}>
+              <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36' }}>
                 Your household. Your data. Your numbers.
               </Typography>
             </Reveal>
@@ -392,15 +392,15 @@ export default function Landing({ onGetStarted }) {
             <Reveal delay={0.15}>
               <Card variant="outlined" sx={{ borderRadius: '1rem', bgcolor: '#FFFFFF', ...cardHoverSx }}>
                 <CardContent sx={{ p: 3.5 }}>
-                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#E6EFEA', color: '#173F35', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                  <Box sx={{ width: 44, height: 44, borderRadius: '10px', bgcolor: '#EAF3EF', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                     <LockIcon />
                   </Box>
                   <Grid container spacing={1.5}>
                     {['Separate household workspaces', 'Household-level data isolation', 'Private transaction history', 'Controlled family membership', 'Your financial data stays within your household'].map((point) => (
                       <Grid item xs={12} key={point}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                          <CheckIcon sx={{ fontSize: 18, color: '#173F35', mt: 0.25 }} />
-                          <Typography sx={{ fontSize: '0.9375rem', color: '#454940' }}>{point}</Typography>
+                          <CheckIcon sx={{ fontSize: 18, color: '#123F36', mt: 0.25 }} />
+                          <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{point}</Typography>
                         </Box>
                       </Grid>
                     ))}
@@ -416,7 +416,7 @@ export default function Landing({ onGetStarted }) {
       <SectionShell bgcolor="#FFFFFF">
         <Reveal>
           <Box sx={{ textAlign: 'center', mb: 5 }}>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25 }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25 }}>
               Expense tracking in three simple steps.
             </Typography>
           </Box>
@@ -430,17 +430,17 @@ export default function Landing({ onGetStarted }) {
             <Grid item xs={12} md={4} key={item.step}>
               <Reveal delay={index * 0.12}>
                 <Box sx={{ textAlign: 'center', px: 2 }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: '#173F35', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700, mx: 'auto', mb: 2 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: '#123F36', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700, mx: 'auto', mb: 2 }}>
                     {item.step}
                   </Box>
-                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#202421', mb: 1 }}>{item.title}</Typography>
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#6B6F63', lineHeight: 1.6 }}>{item.desc}</Typography>
+                  <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#17211E', mb: 1 }}>{item.title}</Typography>
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77', lineHeight: 1.6 }}>{item.desc}</Typography>
                 </Box>
               </Reveal>
             </Grid>
           ))}
         </Grid>
-        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35', textAlign: 'center', mt: 5 }}>
+        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36', textAlign: 'center', mt: 5 }}>
           From message to insight in seconds.
         </Typography>
       </SectionShell>
@@ -449,52 +449,52 @@ export default function Landing({ onGetStarted }) {
       <SectionShell>
         <Reveal>
           <Box sx={{ textAlign: 'center', mb: 5 }}>
-            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#202421', lineHeight: 1.25 }}>
+            <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25 }}>
               Built around how families actually manage money.
             </Typography>
           </Box>
         </Reveal>
         <Card variant="outlined" sx={{ borderRadius: '1rem', maxWidth: 780, mx: 'auto', overflow: 'hidden', bgcolor: '#FFFFFF' }}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E2DCC9', borderRight: '1px solid #E2DCC9' }}>
-              <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#6B6F63', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E7E9E5', borderRight: '1px solid #E7E9E5' }}>
+              <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Traditional tracking
               </Typography>
             </Box>
-            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E2DCC9', bgcolor: '#E6EFEA' }}>
-              <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#173F35', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid #E7E9E5', bgcolor: '#EAF3EF' }}>
+              <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#123F36', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 वित्तमंत्री
               </Typography>
             </Box>
           </Box>
           {COMPARISON_ROWS.map((row, index) => (
             <Reveal key={row.old} delay={index * 0.06} y={12} duration={0.4}>
-              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: index < COMPARISON_ROWS.length - 1 ? '1px solid #E2DCC9' : 'none' }}>
-                <Box sx={{ px: 3, py: 2, borderRight: '1px solid #E2DCC9', display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CloseIcon sx={{ fontSize: 16, color: '#9A9C90' }} />
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#6B6F63' }}>{row.old}</Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: index < COMPARISON_ROWS.length - 1 ? '1px solid #E7E9E5' : 'none' }}>
+                <Box sx={{ px: 3, py: 2, borderRight: '1px solid #E7E9E5', display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CloseIcon sx={{ fontSize: 16, color: '#9AA09B' }} />
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#737B77' }}>{row.old}</Typography>
                 </Box>
                 <Box sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CheckIcon sx={{ fontSize: 16, color: '#173F35' }} />
-                  <Typography sx={{ fontSize: '0.9375rem', color: '#202421', fontWeight: 500 }}>{row.vitta}</Typography>
+                  <CheckIcon sx={{ fontSize: 16, color: '#123F36' }} />
+                  <Typography sx={{ fontSize: '0.9375rem', color: '#17211E', fontWeight: 500 }}>{row.vitta}</Typography>
                 </Box>
               </Box>
             </Reveal>
           ))}
         </Card>
-        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#173F35', textAlign: 'center', mt: 4 }}>
+        <Typography sx={{ fontSize: '1.0625rem', fontWeight: 600, color: '#123F36', textAlign: 'center', mt: 4 }}>
           Expense tracking should fit into your family's life, not become another task.
         </Typography>
       </SectionShell>
 
       {/* 10. Final CTA */}
-      <SectionShell bgcolor="#173F35">
+      <SectionShell bgcolor="#123F36">
         <Reveal>
           <Box sx={{ textAlign: 'center', maxWidth: 640, mx: 'auto' }}>
             <Typography sx={{ fontSize: { xs: 26, md: 34 }, fontWeight: 700, color: '#FFFFFF', lineHeight: 1.25, mb: 2.5 }}>
               One family. One financial picture.
             </Typography>
-            <Typography sx={{ fontSize: '1.0625rem', color: '#D9E6DF', lineHeight: 1.7, mb: 4 }}>
+            <Typography sx={{ fontSize: '1.0625rem', color: '#BFE3D2', lineHeight: 1.7, mb: 4 }}>
               From a ₹20 chai to the monthly electricity bill, every expense adds up to the bigger picture.
               वित्तमंत्री helps your household capture it effortlessly, understand it clearly, and manage money
               better — together.
@@ -505,25 +505,25 @@ export default function Landing({ onGetStarted }) {
               onClick={() => onGetStarted(1)}
               sx={{
                 px: 5,
-                bgcolor: '#D89B45',
-                color: '#202421',
+                bgcolor: '#16A477',
+                color: '#17211E',
                 transition: 'transform 200ms ease, background-color 200ms ease',
-                '&:hover': { bgcolor: '#C88B38', transform: 'translateY(-2px)' },
+                '&:hover': { bgcolor: '#12885F', transform: 'translateY(-2px)' },
               }}
             >
               Create your household
             </Button>
-            <Typography sx={{ fontSize: '0.875rem', color: '#AEC2B8', mt: 2 }}>No spreadsheets required.</Typography>
+            <Typography sx={{ fontSize: '0.875rem', color: '#A9D9C4', mt: 2 }}>No spreadsheets required.</Typography>
           </Box>
         </Reveal>
       </SectionShell>
 
       {/* Footer */}
-      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 4, borderTop: '1px solid #E2DCC9', bgcolor: '#F6F1E7' }}>
+      <Box sx={{ px: { xs: 2.5, md: 6 }, py: 4, borderTop: '1px solid #E7E9E5', bgcolor: '#F7F8F5' }}>
         <Box sx={{ maxWidth: 1100, mx: 'auto', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
           <Box>
-            <Typography sx={{ fontSize: '0.9375rem', fontWeight: 700, color: '#202421' }}>वित्तमंत्री</Typography>
-            <Typography sx={{ fontSize: '0.8125rem', color: '#6B6F63' }}>
+            <Typography sx={{ fontSize: '0.9375rem', fontWeight: 700, color: '#17211E' }}>वित्तमंत्री</Typography>
+            <Typography sx={{ fontSize: '0.8125rem', color: '#737B77' }}>
               वित्तमंत्री is a personal project built to make family expense tracking simpler, faster, and more collaborative.
             </Typography>
           </Box>
@@ -533,7 +533,7 @@ export default function Landing({ onGetStarted }) {
                 key={link.label}
                 component="a"
                 href={link.href}
-                sx={{ fontSize: '0.8125rem', color: '#6B6F63', textDecoration: 'none', '&:hover': { color: '#173F35' } }}
+                sx={{ fontSize: '0.8125rem', color: '#737B77', textDecoration: 'none', '&:hover': { color: '#123F36' } }}
               >
                 {link.label}
               </Typography>
