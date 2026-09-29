@@ -79,7 +79,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
     <Box sx={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, minHeight: '100vh', bgcolor: '#FFFFFF', borderRight: '1px solid #E7E9E5', display: 'flex', flexDirection: 'column', transition: 'width 180ms ease' }}>
       <Box sx={{ height: 72, px: collapsed ? 1.5 : 2.5, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', gap: 1.5, borderBottom: '1px solid #E7E9E5' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-          <BrandMark size={40} radius="10px" />
+          <BrandMark size={40} />
           {!collapsed && (
             <Box sx={{ minWidth: 0 }}>
               <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#17211E', lineHeight: 1.2 }}>वित्तमंत्री</Typography>

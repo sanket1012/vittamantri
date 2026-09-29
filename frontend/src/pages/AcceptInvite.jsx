@@ -59,7 +59,7 @@ export default function AcceptInvite({ token, onJoined, onGoHome }) {
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#F7F8F5" px={2}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 420, width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 2 }}>
-          <BrandMark size={36} radius="9px" />
+          <BrandMark size={36} />
           <Typography variant="h5" fontWeight={600}>वित्तमंत्री</Typography>
         </Box>
 

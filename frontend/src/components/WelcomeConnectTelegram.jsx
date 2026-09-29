@@ -9,7 +9,7 @@ export default function WelcomeConnectTelegram({ displayName, onDone }) {
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#F6F1E7" px={2}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 440, width: '100%', textAlign: 'center' }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          <BrandMark size={40} radius="10px" />
+          <BrandMark size={40} />
         </Box>
         <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
           Welcome{displayName ? `, ${displayName}` : ''}!
