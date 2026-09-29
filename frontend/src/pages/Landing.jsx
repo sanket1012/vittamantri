@@ -234,6 +234,21 @@ export default function Landing({ onGetStarted }) {
         </Grid>
       </SectionShell>
 
+      {/* 1b. Product preview */}
+      <SectionShell>
+        <Reveal>
+          <Box sx={{ textAlign: 'center', maxWidth: 560, mx: 'auto', mb: 4 }}>
+            <Eyebrow>See it in action</Eyebrow>
+            <Typography sx={{ fontSize: { xs: 24, md: 28 }, fontWeight: 700, color: '#17211E', lineHeight: 1.25 }}>
+              One dashboard for your whole household's money.
+            </Typography>
+          </Box>
+        </Reveal>
+        <Reveal delay={0.1} y={24}>
+          <ProductPreviewMock />
+        </Reveal>
+      </SectionShell>
+
       {/* 2. Problem / Value proposition */}
       <SectionShell bgcolor="#FFFFFF">
         <Reveal>
