@@ -150,18 +150,143 @@ function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
   );
 }
 
+function PendingInviteRow({ invite, onCancelled }) {
+  const [cancelling, setCancelling] = useState(false);
+
+  const handleCancel = async () => {
+    setCancelling(true);
+    try {
+      await cancelMemberInvite(invite.id);
+      onCancelled(invite.id);
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Could not cancel invite');
+      setCancelling(false);
+    }
+  };
+
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 1 }}>
+      <Box sx={{ width: 36, height: 36, borderRadius: '50%', bgcolor: '#FFFBEB', color: '#B54708', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <HourglassTopIcon sx={{ fontSize: 18 }} />
+      </Box>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography sx={{ fontWeight: 600, color: '#17211E', fontSize: '0.875rem' }}>{invite.display_name}</Typography>
+        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>{invite.phone_number} · invited {invite.created_at}</Typography>
+      </Box>
+      <Chip label="Pending" size="small" sx={{ bgcolor: '#FFFBEB', color: '#B54708', fontWeight: 600, fontSize: '0.7rem', height: 22 }} />
+      <Tooltip title="Cancel invite">
+        <IconButton size="small" onClick={handleCancel} disabled={cancelling} sx={{ color: '#B54708' }}>
+          {cancelling ? <CircularProgress size={16} /> : <DeleteIcon fontSize="small" />}
+        </IconButton>
+      </Tooltip>
+    </Box>
+  );
+}
+
+function InviteByPhoneForm({ onInvited }) {
+  const [form, setForm] = useState({ displayName: '', phoneNumber: '' });
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.displayName.trim() || !form.phoneNumber.trim()) {
+      setError('Name and phone number are required.');
+      return;
+    }
+    setSaving(true);
+    setError('');
+    try {
+      const data = await createMemberInvite({ phoneNumber: form.phoneNumber.trim(), displayName: form.displayName.trim() });
+      setResult(data);
+      setForm({ displayName: '', phoneNumber: '' });
+      onInvited();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Could not create invite');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(result.invite_link);
+      toast.success('Link copied');
+    } catch {
+      toast.error('Could not copy link');
+    }
+  };
+
+  return (
+    <Box>
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 1.5 }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+          <TextField
+            size="small"
+            label="Name"
+            placeholder="Vaishnavi"
+            value={form.displayName}
+            onChange={(e) => { setForm((f) => ({ ...f, displayName: e.target.value })); setError(''); }}
+          />
+          <TextField
+            size="small"
+            label="Phone number"
+            placeholder="+91 98765 43210"
+            value={form.phoneNumber}
+            onChange={(e) => { setForm((f) => ({ ...f, phoneNumber: e.target.value })); setError(''); }}
+            error={!!error}
+            helperText={error || 'Used for your records — not verified automatically'}
+          />
+        </Box>
+        <Button type="submit" variant="contained" disabled={saving} startIcon={saving ? <CircularProgress size={16} color="inherit" /> : <AddIcon />} sx={{ justifySelf: 'flex-start' }}>
+          {saving ? 'Creating invite…' : 'Create Invite Link'}
+        </Button>
+      </Box>
+
+      {result && (
+        <Box sx={{ mt: 2, p: 2, borderRadius: '0.75rem', bgcolor: '#EAF3EF', border: '1px solid #E7E9E5' }}>
+          <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#123F36', mb: 1 }}>
+            Invite ready — share it with them
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            <Button
+              size="small"
+              variant="contained"
+              startIcon={<TelegramIcon />}
+              component="a"
+              href={result.telegram_share_url}
+              target="_blank"
+              rel="noopener"
+              sx={{ bgcolor: '#229ED9', '&:hover': { bgcolor: '#1b87ba' } }}
+            >
+              Share via Telegram
+            </Button>
+            <Button size="small" variant="outlined" startIcon={<ContentCopyIcon />} onClick={handleCopy}>
+              Copy Link
+            </Button>
+          </Box>
+        </Box>
+      )}
+    </Box>
+  );
+}
+
 export default function MembersModal({ open, onClose, currentUser }) {
+  const [tab, setTab] = useState(0); // 0 = Invite by phone, 1 = Add directly
   const [members, setMembers] = useState([]);
+  const [invites, setInvites] = useState([]);
   const [loading, setLoading] = useState(false);
   const [addForm, setAddForm] = useState({ displayName: '', username: '', password: '', role: 'member' });
   const [addError, setAddError] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const loadInvites = () => getMemberInvites().then(setInvites).catch(() => {});
+
   useEffect(() => {
     if (!open) return;
     setLoading(true);
-    getMembers()
-      .then(setMembers)
+    Promise.all([getMembers().then(setMembers), loadInvites()])
       .catch(() => toast.error('Could not load members'))
       .finally(() => setLoading(false));
   }, [open]);
