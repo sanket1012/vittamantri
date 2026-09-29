@@ -6,18 +6,19 @@ const theme = createTheme({
     fontSize: 14,
   },
   palette: {
-    primary: { main: '#173F35', dark: '#0F2A23' },
-    // Muted gold — used sparingly for highlights, active states, and important
-    // numbers, per the brand direction doc. Not a MUI-standard palette key,
-    // referenced explicitly as theme.palette.accent.main.
-    accent: { main: '#D89B45', contrastText: '#202421' },
-    background: { default: '#F6F1E7', paper: '#FFFFFF' },
-    text: { primary: '#202421', secondary: '#454940' },
-    success: { main: '#059669', light: '#E6EFEA' },
-    error: { main: '#DC2626', light: '#FEF2F2' },
+    primary: { main: '#123F36', dark: '#0B2B24' },
+    // Emerald accent — used for positive figures, active states, and
+    // highlights. Not a MUI-standard palette key, referenced explicitly as
+    // theme.palette.accent.main.
+    accent: { main: '#16A477', contrastText: '#FFFFFF' },
+    background: { default: '#F7F8F5', paper: '#FFFFFF' },
+    text: { primary: '#17211E', secondary: '#737B77' },
+    success: { main: '#16A477', light: '#E5F5EF' },
+    error: { main: '#E5534B', light: '#FDF0EF' },
     warning: { main: '#F59E0B', light: '#FFFBEB' },
+    divider: '#E7E9E5',
   },
-  shape: { borderRadius: 8 },
+  shape: { borderRadius: 12 },
   shadows: [
     'none',
     '0px 1px 2px 0px rgba(16,24,40,0.05)',
