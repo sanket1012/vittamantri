@@ -175,11 +175,13 @@ def login():
 
 @app.route("/api/register", methods=["POST"])
 def register():
-    """Public endpoint — creates a new user with their own isolated household."""
+    """Public endpoint — creates a new user, either their own isolated household,
+    or joining an existing one when an invite_token is supplied."""
     payload = request.get_json(silent=True) or {}
     username = (payload.get("username") or "").strip()
     display_name = (payload.get("display_name") or "").strip()
     password = payload.get("password") or ""
+    invite_token = (payload.get("invite_token") or "").strip()
 
     if not username or not password:
         return error_response("username and password are required.", 400)
@@ -189,7 +191,15 @@ def register():
         return error_response("Username must be at least 3 characters.", 400)
 
     try:
-        new_user, token = create_user(username, display_name, password)
+        invite = None
+        if invite_token:
+            invite = consume_member_invite(invite_token)
+            if not invite:
+                return error_response("This invite link is invalid or has expired.", 400)
+            new_user, token = create_user_in_household(username, display_name, password, invite["household_id"])
+            mark_invite_accepted_user(invite["id"], new_user["id"])
+        else:
+            new_user, token = create_user(username, display_name, password)
         ensure_data_files(new_user["household_id"])
         return jsonify({
             "token": token,
