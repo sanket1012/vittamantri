@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import { Box, Button, ButtonGroup, Card, CardContent, Skeleton, Typography } from '@mui/material';
@@ -12,19 +12,26 @@ const formatINR = (amount = 0) =>
 // ResponsiveContainer can miss the container's true size on first paint
 // inside a Grid layout (the donut would render as a tiny clipped sliver).
 // Measuring directly with ResizeObserver sidesteps that race entirely.
+//
+// The measured Box only exists once loading/empty-state branches resolve, so
+// a plain useRef + useEffect(fn, []) would find ref.current still null on
+// that first effect run and never retry. A callback ref re-fires whenever
+// the DOM node actually mounts, so the observer always attaches to the real
+// element once it exists.
 function useContainerSize() {
-  const ref = useRef(null);
+  const [node, setNode] = useState(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const ref = useCallback((el) => setNode(el), []);
 
   useEffect(() => {
-    if (!ref.current) return undefined;
+    if (!node) return undefined;
     const observer = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
       setSize({ width, height });
     });
-    observer.observe(ref.current);
+    observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [node]);
 
   return [ref, size];
 }

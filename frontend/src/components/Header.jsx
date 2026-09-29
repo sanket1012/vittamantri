@@ -18,10 +18,10 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
   };
 
   return (
-    <Box sx={{ minHeight: 76, bgcolor: '#FFFFFF', borderBottom: '1px solid #E7E9E5', px: 2.5, py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
+    <Box sx={{ minHeight: 76, bgcolor: '#FFFFFF', borderBottom: '1px solid #E7E9E5', px: 2.5, py: 1.5, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'stretch', sm: 'center' }, justifyContent: 'space-between', gap: { xs: 1.25, sm: 2 } }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
         {showMenu && (
-          <IconButton onClick={onMenuClick} sx={{ color: '#17211E', flexShrink: 0 }}>
+          <IconButton onClick={onMenuClick} sx={{ color: '#17211E', flexShrink: 0, ml: -1 }}>
             <MenuIcon />
           </IconButton>
         )}
