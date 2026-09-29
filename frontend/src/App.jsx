@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import api, { getMe } from './api/client.js';
+import AcceptInvite from './pages/AcceptInvite.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Landing from './pages/Landing.jsx';
 import LoginGate from './components/LoginGate.jsx';
 import WelcomeConnectTelegram from './components/WelcomeConnectTelegram.jsx';
+
+const inviteTokenFromUrl = () => window.location.pathname.match(/^\/join\/([^/]+)\/?$/)?.[1] || null;
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => !!localStorage.getItem('jwt_token'));
@@ -11,6 +14,7 @@ export default function App() {
   const [showAuth, setShowAuth] = useState(false);
   const [authTab, setAuthTab] = useState(0);
   const [justRegistered, setJustRegistered] = useState(false);
+  const [inviteToken, setInviteToken] = useState(inviteTokenFromUrl);
 
   useEffect(() => {
     if (!unlocked) return;
