@@ -7,7 +7,7 @@ export const tokens = {
   navy: '#20242D',
   ivory: '#F5F1E8',
   cardWhite: '#FBFAF7',
-  champagne: '#CDAA6A',
+  champagne: '#C8A76A',
   amber: '#D99A3C',
   ink: '#18191C',
   warmGray: '#77736C',
