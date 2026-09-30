@@ -1,11 +1,10 @@
-import BarChartIcon from '@mui/icons-material/BarChart';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import DownloadIcon from '@mui/icons-material/Download';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import LabelIcon from '@mui/icons-material/Label';
 import LogoutIcon from '@mui/icons-material/Logout';
-import PersonIcon from '@mui/icons-material/Person';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { Avatar, Box, Drawer, IconButton, Tooltip, Typography } from '@mui/material';
 import BrandMark from './BrandMark.jsx';
@@ -13,14 +12,11 @@ import BrandMark from './BrandMark.jsx';
 const navItems = [
   { label: 'Overview', icon: DashboardIcon, target: 'dashboard' },
   { label: 'Transactions', icon: ReceiptLongIcon, target: 'transactions' },
-  { label: 'Analytics', icon: BarChartIcon, target: 'analytics' },
+  { label: 'Insights', icon: AutoAwesomeIcon, target: 'analytics' },
   { label: 'Categories', icon: LabelIcon, target: 'categories' },
 ];
 
-const secondaryNavItems = [
-  { label: 'Export', icon: DownloadIcon, target: 'export' },
-  { label: 'Profile', icon: PersonIcon, target: 'profile' },
-];
+const secondaryNavItems = [{ label: 'Reports', icon: DescriptionOutlinedIcon, target: 'export' }];
 
 const EXPANDED_WIDTH = 260;
 const COLLAPSED_WIDTH = 80;
