@@ -354,7 +354,8 @@ export default function Dashboard({ onLogout, currentUser }) {
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Header
           title={activeSection === 'dashboard' ? greeting(currentUser?.display_name) : (PAGE_TITLES[activeSection] || 'Dashboard')}
-          caption={activeSection === 'dashboard' ? "Here's how your money is looking this month" : PAGE_CAPTIONS[activeSection]}
+          caption={activeSection === 'dashboard' ? "Here's your household financial picture." : PAGE_CAPTIONS[activeSection]}
+          greeting={activeSection === 'dashboard'}
           users={users}
           selectedUser={filters.user}
           onUserChange={handleUserChange}
