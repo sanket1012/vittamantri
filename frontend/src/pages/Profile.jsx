@@ -18,7 +18,7 @@ const ROLE_BG = { admin: '#F0EBE2', member: '#E3DDD4' };
 
 function Section({ title, children }) {
   return (
-    <Box sx={{ bgcolor: '#FFFFFF', border: '1px solid #E3DDD4', borderRadius: 2, p: 3, mb: 3 }}>
+    <Box sx={{ bgcolor: '#FCFBF8', border: '1px solid #E3DDD4', borderRadius: 2, p: 3, mb: 3 }}>
       <Typography sx={{ fontWeight: 600, color: '#20242C', fontSize: '0.95rem', mb: 2 }}>{title}</Typography>
       {children}
     </Box>

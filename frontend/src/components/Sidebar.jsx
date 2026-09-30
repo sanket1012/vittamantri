@@ -72,7 +72,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
     : '?';
 
   return (
-    <Box sx={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, minHeight: '100vh', bgcolor: '#FFFFFF', borderRight: '1px solid #E3DDD4', display: 'flex', flexDirection: 'column', transition: 'width 180ms ease' }}>
+    <Box sx={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, minHeight: '100vh', bgcolor: '#FCFBF8', borderRight: '1px solid #E3DDD4', display: 'flex', flexDirection: 'column', transition: 'width 180ms ease' }}>
       <Box sx={{ height: 72, px: collapsed ? 1.5 : 2.5, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', gap: 1.5, borderBottom: '1px solid #E3DDD4' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
           <BrandMark size={40} />

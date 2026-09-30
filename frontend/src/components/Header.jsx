@@ -18,7 +18,7 @@ export default function Header({ title, caption, greeting = false, users, select
   };
 
   return (
-    <Box sx={{ minHeight: 76, bgcolor: '#FFFFFF', borderBottom: '1px solid #E3DDD4', px: 2.5, py: 1.5, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'stretch', sm: 'center' }, justifyContent: 'space-between', gap: { xs: 1.25, sm: 2 } }}>
+    <Box sx={{ minHeight: 76, bgcolor: '#FCFBF8', borderBottom: '1px solid #E3DDD4', px: 2.5, py: 1.5, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'stretch', sm: 'center' }, justifyContent: 'space-between', gap: { xs: 1.25, sm: 2 } }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
         {showMenu && (
           <IconButton onClick={onMenuClick} sx={{ color: '#20242C', flexShrink: 0, ml: -1 }}>
