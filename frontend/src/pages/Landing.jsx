@@ -6,21 +6,23 @@ import { Box, Button, Card, Grid, Typography } from '@mui/material';
 import heroImage from '../assets/hero-family.jpg';
 import BrandMark from '../components/BrandMark.jsx';
 import Reveal from '../components/Reveal.jsx';
+import { tokens } from '../theme/theme.js';
 
-// Samvitta design tokens (see theme/theme.js `tokens` for the shared version).
+// Landing page reads its palette straight from the shared design tokens so
+// the marketing site and the application can never drift apart.
 const C = {
-  midnight: '#15171C',
-  navy: '#20242D',
-  ivory: '#F5F1E8',
-  card: '#FBFAF7',
-  champagne: '#C8A76A',
-  amber: '#D99A3C',
-  ink: '#18191C',
-  warmGray: '#77736C',
-  stone: '#DDD7CD',
-  coral: '#D96767',
-  indigo: '#6F78C9',
-  mutedBlue: '#5E83A9',
+  midnight: tokens.midnight,
+  navy: tokens.navy,
+  ivory: tokens.ivory,
+  card: tokens.cardWhite,
+  champagne: tokens.champagne,
+  amber: tokens.bronze,
+  ink: tokens.ink,
+  warmGray: tokens.warmGray,
+  stone: tokens.stone,
+  coral: tokens.coral,
+  indigo: tokens.indigo,
+  mutedBlue: tokens.mutedBlue,
 };
 
 const serif = '"Instrument Serif", Georgia, serif';
