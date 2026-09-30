@@ -1,20 +1,22 @@
 import { createTheme } from '@mui/material/styles';
 
-// Samvitta design tokens — Midnight + Champagne + Ivory.
-// Deliberately not the standard "green = money" fintech palette.
+// Samvitta design tokens — Midnight + Ivory + Champagne, shared by the
+// marketing site and the application. Deliberately not the standard
+// "green = money" fintech palette.
 export const tokens = {
-  midnight: '#15171C',
-  navy: '#20242D',
-  ivory: '#F5F1E8',
-  cardWhite: '#FBFAF7',
-  champagne: '#C8A76A',
-  amber: '#D99A3C',
-  ink: '#18191C',
-  warmGray: '#77736C',
-  stone: '#DDD7CD',
-  coral: '#D96767',
-  indigo: '#6F78C9',
-  mutedBlue: '#5E83A9',
+  midnight: '#111827',
+  navy: '#243044',
+  ivory: '#F7F3EA',
+  cardWhite: '#FCFBF8',
+  champagne: '#C7A66A',
+  bronze: '#A98252',
+  ink: '#20242C',
+  warmGray: '#77736D',
+  stone: '#E3DDD4',
+  coral: '#D96B67',
+  indigo: '#6E72AE',
+  mutedBlue: '#6583A5',
+  selectedBg: '#F0EBE2',
 };
 
 // Editorial serif for headlines/brand moments; Inter stays the UI workhorse.
@@ -26,23 +28,23 @@ const theme = createTheme({
     fontSize: 14,
   },
   palette: {
-    primary: { main: tokens.midnight, dark: '#0B0C0F' },
+    primary: { main: tokens.midnight, dark: '#0A0F1A' },
     // Champagne accent — used sparingly (3-5% of the UI) for premium moments,
     // not as a dominant color. Referenced as theme.palette.accent.main.
-    accent: { main: tokens.champagne, contrastText: tokens.ink },
+    accent: { main: tokens.champagne, dark: tokens.bronze, contrastText: tokens.midnight },
     background: { default: tokens.ivory, paper: tokens.cardWhite },
     text: { primary: tokens.ink, secondary: tokens.warmGray },
-    success: { main: '#4F9D6E', light: '#E9F2EB' },
+    success: { main: tokens.navy, light: '#EAEDF2' },
     error: { main: tokens.coral, light: '#FBEDED' },
-    warning: { main: tokens.amber, light: '#FBF1E2' },
+    warning: { main: tokens.champagne, light: '#F6EFE1' },
     info: { main: tokens.mutedBlue, light: '#EAF0F5' },
     divider: tokens.stone,
   },
   shape: { borderRadius: 12 },
   shadows: [
     'none',
-    '0px 1px 2px 0px rgba(21,23,28,0.05)',
-    '0px 4px 12px rgba(21,23,28,0.08)',
+    '0px 1px 2px 0px rgba(17,24,39,0.05)',
+    '0px 4px 12px rgba(17,24,39,0.08)',
     ...Array(23).fill('none'),
   ],
   components: {
@@ -52,14 +54,14 @@ const theme = createTheme({
           textTransform: 'capitalize',
           fontWeight: 600,
           height: '44px',
-          borderRadius: '8px',
+          borderRadius: '10px',
           boxShadow: 'none',
           '&:hover': { boxShadow: 'none' },
         },
         outlined: {
           borderColor: tokens.stone,
           color: tokens.ink,
-          '&:hover': { borderColor: tokens.midnight, backgroundColor: '#F0EEE7' },
+          '&:hover': { borderColor: tokens.midnight, backgroundColor: tokens.selectedBg },
         },
       },
     },
@@ -68,14 +70,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderColor: tokens.stone,
-          borderRadius: '1.25rem',
-          boxShadow: '0px 1px 2px 0px rgba(21,23,28,0.04)',
+          borderRadius: '18px',
+          boxShadow: 'none',
         },
       },
     },
     MuiTableHead: {
       styleOverrides: {
-        root: { backgroundColor: '#F0EEE7' },
+        root: { backgroundColor: tokens.selectedBg },
       },
     },
     MuiTableCell: {
@@ -92,6 +94,7 @@ const theme = createTheme({
           color: tokens.ink,
           padding: '6px 16px',
           height: '60px',
+          fontVariantNumeric: 'tabular-nums',
         },
       },
     },
@@ -112,10 +115,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           minHeight: '44px',
-          borderRadius: '8px',
+          borderRadius: '10px',
           '& fieldset': { borderColor: tokens.stone },
           '&:hover fieldset': { borderColor: tokens.midnight },
-          boxShadow: '0px 1px 2px 0px rgba(21,23,28,0.04)',
+          boxShadow: 'none',
         },
       },
     },
