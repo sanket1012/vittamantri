@@ -276,7 +276,7 @@ export default function Dashboard({ onLogout, currentUser }) {
     return () => clearInterval(timer);
   }, [filters.month]);
 
-  const selectedUserName = filters.user === 'All' ? 'All Users' : users.find((user) => String(user.logged_by_id) === String(filters.user))?.logged_by || 'Selected User';
+  const selectedUserName = filters.user === 'All' ? 'Everyone' : users.find((user) => String(user.logged_by_id) === String(filters.user))?.logged_by || 'Selected User';
   const invalidCount = transactions.filter(isGarbage).length;
 
   const filteredTransactions = useMemo(() => {
