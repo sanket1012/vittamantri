@@ -9,7 +9,7 @@ import { Box, Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Te
 
 const currentMonthLabel = () => new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 
-export default function Header({ title, caption, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu, currentUser, onManageMembers }) {
+export default function Header({ title, caption, greeting = false, users, selectedUser, onUserChange, onMenuClick, onExport, onClean, onAdd, invalidCount, showMenu, currentUser, onManageMembers }) {
   const [menuAnchor, setMenuAnchor] = useState(null);
 
   const handleMenuAction = (action) => {
