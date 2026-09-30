@@ -125,17 +125,24 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
       )}
 
       <Box sx={{ p: collapsed ? 1.5 : 2, borderTop: '1px solid #E3DDD4', display: 'flex', alignItems: 'center', gap: 1, justifyContent: collapsed ? 'center' : 'space-between' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-          <Avatar sx={{ width: 32, height: 32, bgcolor: '#111827', fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
-          {!collapsed && (
-            <Box sx={{ minWidth: 0 }}>
-              <Typography sx={{ fontSize: 13, fontWeight: 600, color: '#20242C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {currentUser?.display_name || 'User'}
-              </Typography>
-              <Typography sx={{ fontSize: 11, color: '#77736D', textTransform: 'capitalize' }}>{currentUser?.role || 'member'}</Typography>
-            </Box>
-          )}
-        </Box>
+        <Tooltip title="Account & settings" placement={collapsed ? 'right' : 'top'}>
+          <Box
+            component="button"
+            type="button"
+            onClick={() => onNavigate('profile')}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, border: 0, bgcolor: 'transparent', p: 0, cursor: 'pointer', borderRadius: '8px', '&:hover': { opacity: 0.8 } }}
+          >
+            <Avatar sx={{ width: 32, height: 32, bgcolor: '#111827', color: '#C7A66A', fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
+            {!collapsed && (
+              <Box sx={{ minWidth: 0, textAlign: 'left' }}>
+                <Typography sx={{ fontSize: 13, fontWeight: 600, color: '#20242C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {currentUser?.display_name || 'User'}
+                </Typography>
+                <Typography sx={{ fontSize: 11, color: '#77736D', textTransform: 'capitalize' }}>{currentUser?.role === 'admin' ? 'Household Admin' : 'Member'}</Typography>
+              </Box>
+            )}
+          </Box>
+        </Tooltip>
         <Tooltip title="Logout" placement={collapsed ? 'right' : 'top'}>
           <IconButton size="small" onClick={onLogout} sx={{ color: '#77736D', flexShrink: 0, '&:hover': { color: '#D96B67', bgcolor: '#FBEDED' } }}>
             <LogoutIcon fontSize="small" />
