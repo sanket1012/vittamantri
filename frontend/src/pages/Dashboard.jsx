@@ -35,15 +35,15 @@ const isGarbage = (item) => !item.date || !item.category || !item.type || !Numbe
 
 const PAGE_TITLES = {
   transactions: 'Transactions',
-  analytics: 'Analytics',
+  analytics: 'Insights',
   categories: 'Categories',
-  export: 'Export',
+  export: 'Reports',
   profile: 'Profile',
 };
 
 const PAGE_CAPTIONS = {
   transactions: 'Review, filter, and manage every logged transaction.',
-  analytics: 'Study category mix, monthly movement, and recent money trends.',
+  analytics: 'What Samvitta noticed in your household spending.',
   categories: 'Manage expense categories and subcategories.',
   export: 'Download a clean CSV copy of your finance records.',
   profile: 'Manage your account, Telegram link, and password.',
@@ -53,7 +53,7 @@ function greeting(displayName) {
   const hour = new Date().getHours();
   const timeOfDay = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
   const firstName = (displayName || '').split(' ')[0];
-  return `Good ${timeOfDay}${firstName ? `, ${firstName}` : ''} 👋`;
+  return `Good ${timeOfDay}${firstName ? `, ${firstName}` : ''}`;
 }
 
 const formatINR = (amount = 0) =>
