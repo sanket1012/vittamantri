@@ -64,11 +64,11 @@ function InsightMark({ color = C.champagne, size = 18 }) {
 
 function StatCell({ value, label, border = true }) {
   return (
-    <Box sx={{ borderLeft: border ? `1px solid ${C.stone}` : 'none', pl: border ? { xs: 2, sm: 3 } : 0, flex: 1 }}>
-      <Typography sx={{ fontSize: { xs: '1.5rem', sm: '1.875rem' }, fontWeight: 700, color: C.ink, lineHeight: 1.1 }}>
+    <Box sx={{ borderLeft: border ? `1px solid ${C.stone}` : 'none', pl: border ? { xs: 1.5, sm: 2.5 } : 0, flex: 1 }}>
+      <Typography sx={{ fontSize: { xs: '1.125rem', sm: '1.375rem' }, fontWeight: 700, color: C.ink, lineHeight: 1.1 }}>
         {value}
       </Typography>
-      <Typography sx={{ fontSize: '0.8125rem', color: C.warmGray, mt: 0.5 }}>{label}</Typography>
+      <Typography sx={{ fontSize: '0.6875rem', color: C.warmGray, mt: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</Typography>
     </Box>
   );
 }
@@ -79,34 +79,33 @@ function HouseholdOverviewCard() {
     <Card
       variant="outlined"
       sx={{
-        maxWidth: 620,
-        borderRadius: '1.25rem',
-        bgcolor: 'rgba(251,250,247,0.94)',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255,255,255,0.35)',
-        boxShadow: '0px 24px 60px rgba(0,0,0,0.35)',
-        p: { xs: 2.5, sm: 3.5 },
+        width: '100%',
+        maxWidth: 720,
+        borderRadius: '1.125rem',
+        bgcolor: 'rgba(250,247,240,0.94)',
+        backdropFilter: 'blur(14px)',
+        border: '1px solid rgba(255,255,255,0.4)',
+        boxShadow: '0px 20px 48px rgba(0,0,0,0.32)',
+        px: { xs: 2.5, sm: 3.5 },
+        py: { xs: 2, sm: 2.5 },
       }}
     >
-      <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 2 }}>
+      <Typography sx={{ fontSize: '0.6875rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 1.5 }}>
         Household Overview
       </Typography>
-      <Box sx={{ display: 'flex', gap: { xs: 2, sm: 3 }, mb: 2.5 }}>
+      <Box sx={{ display: 'flex', gap: { xs: 1.5, sm: 2.5 }, mb: 1.75 }}>
         <StatCell value="₹2,48,500" label="Balance" border={false} />
         <StatCell value="₹67,320" label="Spending" />
         <StatCell value="28%" label="Savings" />
       </Box>
-      <Box sx={{ borderTop: `1px solid ${C.stone}`, pt: 2, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-          <InsightMark color={C.indigo} />
-          <Box>
-            <Typography sx={{ fontSize: '0.875rem', fontWeight: 700, color: C.ink, mb: 0.25 }}>Samvitta Insight</Typography>
-            <Typography sx={{ fontSize: '0.875rem', color: C.warmGray, lineHeight: 1.5 }}>
-              Dining spending is 12% higher than your 3-month average.
-            </Typography>
-          </Box>
+      <Box sx={{ borderTop: `1px solid ${C.stone}`, pt: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <InsightMark color={C.champagne} size={15} />
+          <Typography sx={{ fontSize: '0.8125rem', color: C.ink }}>
+            <Box component="span" sx={{ fontWeight: 700 }}>Dining</Box> is 12% above your average
+          </Typography>
         </Box>
-        <ArrowForwardIcon sx={{ fontSize: 18, color: C.warmGray, mt: 0.5, flexShrink: 0 }} />
+        <ArrowForwardIcon sx={{ fontSize: 16, color: C.warmGray, flexShrink: 0 }} />
       </Box>
     </Card>
   );
