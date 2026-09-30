@@ -42,7 +42,7 @@ function NavButton({ item, active, collapsed, onNavigate }) {
         color: active ? '#111827' : '#77736D',
         bgcolor: active ? '#F0EBE2' : 'transparent',
         border: 0,
-        borderLeft: collapsed ? '3px solid transparent' : active ? '3px solid #111827' : '3px solid transparent',
+        borderLeft: collapsed ? '3px solid transparent' : active ? '3px solid #C7A66A' : '3px solid transparent',
         borderRadius: '8px',
         fontSize: 14,
         fontWeight: 500,
