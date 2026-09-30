@@ -52,7 +52,7 @@ export default function Header({ title, caption, greeting = false, users, select
         <Typography sx={{ fontSize: '0.875rem', color: '#77736D', display: { xs: 'none', sm: 'block' } }}>{currentMonthLabel()}</Typography>
 
         <TextField select size="small" value={selectedUser} onChange={(event) => onUserChange(event.target.value)} sx={{ minWidth: 150 }}>
-          <MenuItem value="All">All Users</MenuItem>
+          <MenuItem value="All">Everyone</MenuItem>
           {users.map((user) => (
             <MenuItem key={user.logged_by_id} value={String(user.logged_by_id)}>
               {user.logged_by}
@@ -61,7 +61,7 @@ export default function Header({ title, caption, greeting = false, users, select
         </TextField>
 
         <Button variant="contained" startIcon={<AddIcon />} onClick={onAdd}>
-          Add
+          Add transaction
         </Button>
 
         <Tooltip title="More options">
