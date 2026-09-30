@@ -27,7 +27,7 @@ function buildInsights(transactions, summary) {
   if (incomeChange !== null) {
     insights.push({
       icon: incomeChange >= 0 ? TrendingUpIcon : TrendingDownIcon,
-      color: incomeChange >= 0 ? '#16A477' : '#E5534B',
+      color: incomeChange >= 0 ? '#243044' : '#D96B67',
       text: `Income ${incomeChange >= 0 ? 'increased' : 'decreased'} ${Math.abs(incomeChange).toFixed(0)}% this month`,
     });
   }
@@ -39,7 +39,7 @@ function buildInsights(transactions, summary) {
     const rate = (savings / thisIncome) * 100;
     insights.push({
       icon: SavingsIcon,
-      color: '#123F36',
+      color: '#111827',
       text: `You've saved ${formatINR(savings)} — ${rate.toFixed(0)}% of this month's income`,
     });
   }
@@ -66,13 +66,13 @@ function buildInsights(transactions, summary) {
       if (diff !== null && Math.abs(diff) >= 5) {
         insights.push({
           icon: diff >= 0 ? TrendingUpIcon : TrendingDownIcon,
-          color: diff >= 0 ? '#E5534B' : '#16A477',
+          color: diff >= 0 ? '#D96B67' : '#243044',
           text: `${category} spending is ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? 'higher' : 'lower'} than your 3-month average`,
         });
       }
     }
     if (insights.length < 3) {
-      insights.push({ icon: InsightsIcon, color: '#123F36', text: `Largest spend this month: ${category} (${formatINR(amount)})` });
+      insights.push({ icon: InsightsIcon, color: '#111827', text: `Largest spend this month: ${category} (${formatINR(amount)})` });
     }
   }
 
@@ -84,9 +84,9 @@ export default function FinancialInsights({ transactions = [], summary, loading 
 
   return (
     <Card sx={{ height: '100%' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E7E9E5' }}>
-        <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#17211E' }}>Financial Insights</Typography>
-        <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>What's happening with your money</Typography>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4' }}>
+        <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#20242C' }}>Financial Insights</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>What's happening with your money</Typography>
       </Box>
       <CardContent sx={{ p: 3, display: 'grid', gap: 2 }}>
         {loading ? (
@@ -102,12 +102,12 @@ export default function FinancialInsights({ transactions = [], summary, loading 
                 <Box sx={{ width: 32, height: 32, borderRadius: '9px', bgcolor: `${insight.color}14`, color: insight.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Icon sx={{ fontSize: 18 }} />
                 </Box>
-                <Typography sx={{ fontSize: '0.875rem', color: '#17211E', lineHeight: 1.4, pt: '4px' }}>{insight.text}</Typography>
+                <Typography sx={{ fontSize: '0.875rem', color: '#20242C', lineHeight: 1.4, pt: '4px' }}>{insight.text}</Typography>
               </Box>
             );
           })
         ) : (
-          <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>
+          <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>
             Insights will show up here once you've logged a bit more activity.
           </Typography>
         )}

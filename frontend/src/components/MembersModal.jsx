@@ -35,8 +35,8 @@ import {
   resetMemberPassword,
 } from '../api/client.js';
 
-const ROLE_COLORS = { admin: '#123F36', member: '#737B77' };
-const ROLE_BG = { admin: '#EAF3EF', member: '#F0F3F1' };
+const ROLE_COLORS = { admin: '#111827', member: '#77736D' };
+const ROLE_BG = { admin: '#F0EBE2', member: '#F0EBE2' };
 
 function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -81,29 +81,29 @@ function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 1.25 }}>
-      <Avatar sx={{ width: 36, height: 36, bgcolor: ROLE_COLORS[member.role] || '#737B77', fontSize: '0.8rem', fontWeight: 700 }}>
+      <Avatar sx={{ width: 36, height: 36, bgcolor: ROLE_COLORS[member.role] || '#77736D', fontSize: '0.8rem', fontWeight: 700 }}>
         {initials}
       </Avatar>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontWeight: 600, color: '#17211E', fontSize: '0.875rem' }}>
+        <Typography sx={{ fontWeight: 600, color: '#20242C', fontSize: '0.875rem' }}>
           {member.display_name}
-          {isSelf && <Typography component="span" sx={{ ml: 0.75, fontSize: '0.75rem', color: '#737B77' }}>(you)</Typography>}
+          {isSelf && <Typography component="span" sx={{ ml: 0.75, fontSize: '0.75rem', color: '#77736D' }}>(you)</Typography>}
         </Typography>
-        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>@{member.username}</Typography>
+        <Typography sx={{ fontSize: '0.75rem', color: '#77736D' }}>@{member.username}</Typography>
       </Box>
       <Chip
         label={member.role}
         size="small"
-        sx={{ bgcolor: ROLE_BG[member.role] || '#F0F3F1', color: ROLE_COLORS[member.role] || '#737B77', fontWeight: 600, fontSize: '0.7rem', height: 22 }}
+        sx={{ bgcolor: ROLE_BG[member.role] || '#F0EBE2', color: ROLE_COLORS[member.role] || '#77736D', fontWeight: 600, fontSize: '0.7rem', height: 22 }}
       />
       <Tooltip title="Reset password">
-        <IconButton size="small" onClick={() => setResetOpen(true)} sx={{ color: '#737B77' }}>
+        <IconButton size="small" onClick={() => setResetOpen(true)} sx={{ color: '#77736D' }}>
           <KeyIcon fontSize="small" />
         </IconButton>
       </Tooltip>
       {!isSelf && (
         <Tooltip title="Remove member">
-          <IconButton size="small" onClick={() => setConfirmDelete(true)} sx={{ color: '#B54708' }}>
+          <IconButton size="small" onClick={() => setConfirmDelete(true)} sx={{ color: '#A98252' }}>
             <DeleteIcon fontSize="small" />
           </IconButton>
         </Tooltip>
@@ -113,7 +113,7 @@ function MemberRow({ member, currentUserId, onDeleted, onPasswordReset }) {
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)} maxWidth="xs" fullWidth>
         <DialogTitle sx={{ fontWeight: 600 }}>Remove {member.display_name}?</DialogTitle>
         <DialogContent>
-          <Typography sx={{ color: '#737B77', fontSize: '0.875rem' }}>
+          <Typography sx={{ color: '#77736D', fontSize: '0.875rem' }}>
             Their login will be removed. All their transactions remain in the household data.
           </Typography>
         </DialogContent>
@@ -166,16 +166,16 @@ function PendingInviteRow({ invite, onCancelled }) {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 1 }}>
-      <Box sx={{ width: 36, height: 36, borderRadius: '50%', bgcolor: '#FFFBEB', color: '#B54708', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <Box sx={{ width: 36, height: 36, borderRadius: '50%', bgcolor: '#F6EFE1', color: '#A98252', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <HourglassTopIcon sx={{ fontSize: 18 }} />
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontWeight: 600, color: '#17211E', fontSize: '0.875rem' }}>{invite.display_name}</Typography>
-        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>{invite.phone_number} · invited {invite.created_at}</Typography>
+        <Typography sx={{ fontWeight: 600, color: '#20242C', fontSize: '0.875rem' }}>{invite.display_name}</Typography>
+        <Typography sx={{ fontSize: '0.75rem', color: '#77736D' }}>{invite.phone_number} · invited {invite.created_at}</Typography>
       </Box>
-      <Chip label="Pending" size="small" sx={{ bgcolor: '#FFFBEB', color: '#B54708', fontWeight: 600, fontSize: '0.7rem', height: 22 }} />
+      <Chip label="Pending" size="small" sx={{ bgcolor: '#F6EFE1', color: '#A98252', fontWeight: 600, fontSize: '0.7rem', height: 22 }} />
       <Tooltip title="Cancel invite">
-        <IconButton size="small" onClick={handleCancel} disabled={cancelling} sx={{ color: '#B54708' }}>
+        <IconButton size="small" onClick={handleCancel} disabled={cancelling} sx={{ color: '#A98252' }}>
           {cancelling ? <CircularProgress size={16} /> : <DeleteIcon fontSize="small" />}
         </IconButton>
       </Tooltip>
@@ -245,8 +245,8 @@ function InviteByPhoneForm({ onInvited }) {
       </Box>
 
       {result && (
-        <Box sx={{ mt: 2, p: 2, borderRadius: '0.75rem', bgcolor: '#EAF3EF', border: '1px solid #E7E9E5' }}>
-          <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#123F36', mb: 1 }}>
+        <Box sx={{ mt: 2, p: 2, borderRadius: '0.75rem', bgcolor: '#F0EBE2', border: '1px solid #E3DDD4' }}>
+          <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#111827', mb: 1 }}>
             Invite ready — share it with them
           </Typography>
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
@@ -321,9 +321,9 @@ export default function MembersModal({ open, onClose, currentUser }) {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 600, color: '#17211E', borderBottom: '1px solid #E7E9E5', pb: 2 }}>
+      <DialogTitle sx={{ fontWeight: 600, color: '#20242C', borderBottom: '1px solid #E3DDD4', pb: 2 }}>
         Family Members
-        <Typography sx={{ fontSize: '0.875rem', color: '#737B77', fontWeight: 400, mt: 0.25 }}>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D', fontWeight: 400, mt: 0.25 }}>
           Manage who can log into Samvitta
         </Typography>
       </DialogTitle>
@@ -336,7 +336,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
               <CircularProgress size={28} />
             </Box>
           ) : members.length === 0 ? (
-            <Typography sx={{ color: '#737B77', fontSize: '0.875rem', py: 2 }}>No members yet.</Typography>
+            <Typography sx={{ color: '#77736D', fontSize: '0.875rem', py: 2 }}>No members yet.</Typography>
           ) : (
             members.map((m, i) => (
               <Box key={m.id}>
@@ -351,7 +351,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
         {!loading && invites.length > 0 && (
           <Box sx={{ px: 3, pt: 1 }}>
             <Divider sx={{ my: 1.5 }} />
-            <Typography sx={{ fontWeight: 600, color: '#737B77', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
+            <Typography sx={{ fontWeight: 600, color: '#77736D', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
               Pending Invites
             </Typography>
             {invites.map((inv, i) => (
@@ -364,7 +364,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
         )}
 
         {/* Add / Invite member */}
-        <Box sx={{ px: 3, pt: 1.5, pb: 3, borderTop: '1px solid #E7E9E5', mt: 2, bgcolor: '#F0F3F1' }}>
+        <Box sx={{ px: 3, pt: 1.5, pb: 3, borderTop: '1px solid #E3DDD4', mt: 2, bgcolor: '#F0EBE2' }}>
           <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2, minHeight: 36 }}>
             <Tab label="Invite by Phone" sx={{ minHeight: 36, py: 0.5 }} />
             <Tab label="Add Directly" sx={{ minHeight: 36, py: 0.5 }} />
@@ -419,7 +419,7 @@ export default function MembersModal({ open, onClose, currentUser }) {
         </Box>
       </DialogContent>
 
-      <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid #E7E9E5' }}>
+      <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid #E3DDD4' }}>
         <Button variant="outlined" onClick={onClose}>Close</Button>
       </DialogActions>
     </Dialog>

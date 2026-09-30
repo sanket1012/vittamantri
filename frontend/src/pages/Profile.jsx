@@ -13,13 +13,13 @@ import toast from 'react-hot-toast';
 import { changePassword, getMe, unlinkTelegram } from '../api/client.js';
 import ConnectTelegram from '../components/ConnectTelegram.jsx';
 
-const ROLE_COLOR = { admin: '#173F35', member: '#454940' };
-const ROLE_BG = { admin: '#E6EFEA', member: '#EDE7D8' };
+const ROLE_COLOR = { admin: '#111827', member: '#77736D' };
+const ROLE_BG = { admin: '#F0EBE2', member: '#E3DDD4' };
 
 function Section({ title, children }) {
   return (
-    <Box sx={{ bgcolor: '#FFFFFF', border: '1px solid #E2DCC9', borderRadius: 2, p: 3, mb: 3 }}>
-      <Typography sx={{ fontWeight: 600, color: '#202421', fontSize: '0.95rem', mb: 2 }}>{title}</Typography>
+    <Box sx={{ bgcolor: '#FFFFFF', border: '1px solid #E3DDD4', borderRadius: 2, p: 3, mb: 3 }}>
+      <Typography sx={{ fontWeight: 600, color: '#20242C', fontSize: '0.95rem', mb: 2 }}>{title}</Typography>
       {children}
     </Box>
   );
@@ -90,33 +90,33 @@ export default function Profile({ currentUser: initialUser }) {
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', px: 3, py: 4 }}>
-      <Typography sx={{ fontWeight: 700, fontSize: '1.5rem', color: '#202421', mb: 3 }}>Profile</Typography>
+      <Typography sx={{ fontWeight: 700, fontSize: '1.5rem', color: '#20242C', mb: 3 }}>Profile</Typography>
 
       {/* Identity card */}
       <Section title="Account">
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-          <Avatar sx={{ width: 52, height: 52, bgcolor: ROLE_COLOR[currentUser?.role] || '#454940', fontWeight: 700, fontSize: '1.1rem' }}>
+          <Avatar sx={{ width: 52, height: 52, bgcolor: ROLE_COLOR[currentUser?.role] || '#77736D', fontWeight: 700, fontSize: '1.1rem' }}>
             {initials}
           </Avatar>
           <Box>
-            <Typography sx={{ fontWeight: 600, color: '#202421' }}>{currentUser?.display_name}</Typography>
-            <Typography sx={{ color: '#6B6F63', fontSize: '0.875rem' }}>@{currentUser?.username}</Typography>
+            <Typography sx={{ fontWeight: 600, color: '#20242C' }}>{currentUser?.display_name}</Typography>
+            <Typography sx={{ color: '#77736D', fontSize: '0.875rem' }}>@{currentUser?.username}</Typography>
           </Box>
           <Chip
             label={currentUser?.role}
             size="small"
-            sx={{ ml: 'auto', bgcolor: ROLE_BG[currentUser?.role] || '#EDE7D8', color: ROLE_COLOR[currentUser?.role] || '#454940', fontWeight: 600, fontSize: '0.7rem' }}
+            sx={{ ml: 'auto', bgcolor: ROLE_BG[currentUser?.role] || '#E3DDD4', color: ROLE_COLOR[currentUser?.role] || '#77736D', fontWeight: 600, fontSize: '0.7rem' }}
           />
         </Box>
         <Divider />
         <Box sx={{ mt: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
           <Box>
-            <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63', mb: 0.25 }}>Username</Typography>
-            <Typography sx={{ fontWeight: 500, color: '#202421' }}>{currentUser?.username}</Typography>
+            <Typography sx={{ fontSize: '0.75rem', color: '#77736D', mb: 0.25 }}>Username</Typography>
+            <Typography sx={{ fontWeight: 500, color: '#20242C' }}>{currentUser?.username}</Typography>
           </Box>
           <Box>
-            <Typography sx={{ fontSize: '0.75rem', color: '#6B6F63', mb: 0.25 }}>Household</Typography>
-            <Typography sx={{ fontWeight: 500, color: '#202421' }}>#{currentUser?.household_id}</Typography>
+            <Typography sx={{ fontSize: '0.75rem', color: '#77736D', mb: 0.25 }}>Household</Typography>
+            <Typography sx={{ fontWeight: 500, color: '#20242C' }}>#{currentUser?.household_id}</Typography>
           </Box>
         </Box>
       </Section>
@@ -125,7 +125,7 @@ export default function Profile({ currentUser: initialUser }) {
       <Section title="Telegram">
         {currentUser?.telegram_id ? (
           <Box>
-            <Typography sx={{ color: '#454940', fontSize: '0.875rem', mb: 1.5 }}>
+            <Typography sx={{ color: '#77736D', fontSize: '0.875rem', mb: 1.5 }}>
               Linked to Telegram ID <strong>{currentUser.telegram_id}</strong>. Bot messages from this account are routed to your household.
             </Typography>
             <Button variant="outlined" color="error" onClick={handleUnlinkTelegram} disabled={telegramSaving}>
@@ -134,7 +134,7 @@ export default function Profile({ currentUser: initialUser }) {
           </Box>
         ) : (
           <>
-            <Typography sx={{ color: '#454940', fontSize: '0.875rem', mb: 1.5 }}>
+            <Typography sx={{ color: '#77736D', fontSize: '0.875rem', mb: 1.5 }}>
               Connect your Telegram account so the bot routes messages to your household — one tap, no ID to look up.
             </Typography>
             <ConnectTelegram onLinked={refreshProfile} />

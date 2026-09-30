@@ -1,7 +1,7 @@
 import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
 /** Tiny trend chart for stat cards — no axes/grid/tooltip, just the shape. */
-export default function Sparkline({ data, dataKey = 'value', color = '#16A477', height = 40 }) {
+export default function Sparkline({ data, dataKey = 'value', color = '#243044', height = 40 }) {
   if (!data?.length) return null;
   const gradientId = `spark-${dataKey}-${color.replace('#', '')}`;
 

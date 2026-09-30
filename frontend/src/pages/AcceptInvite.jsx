@@ -56,7 +56,7 @@ export default function AcceptInvite({ token, onJoined, onGoHome }) {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#F7F8F5" px={2}>
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#F7F3EA" px={2}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 420, width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 2 }}>
           <BrandMark size={36} />
@@ -71,8 +71,8 @@ export default function AcceptInvite({ token, onJoined, onGoHome }) {
 
         {status === 'invalid' && (
           <Box sx={{ textAlign: 'center', py: 2 }}>
-            <Typography sx={{ fontWeight: 600, color: '#17211E', mb: 1 }}>This invite link is invalid or has expired.</Typography>
-            <Typography sx={{ color: '#737B77', fontSize: '0.875rem', mb: 3 }}>
+            <Typography sx={{ fontWeight: 600, color: '#20242C', mb: 1 }}>This invite link is invalid or has expired.</Typography>
+            <Typography sx={{ color: '#77736D', fontSize: '0.875rem', mb: 3 }}>
               Ask whoever invited you to send a new link, or create your own household instead.
             </Typography>
             <Button variant="contained" onClick={onGoHome}>Go to Samvitta</Button>
@@ -81,8 +81,8 @@ export default function AcceptInvite({ token, onJoined, onGoHome }) {
 
         {status === 'valid' && (
           <>
-            <Typography sx={{ color: '#737B77', fontSize: '0.9375rem', mb: 3 }}>
-              <Box component="span" sx={{ fontWeight: 600, color: '#17211E' }}>{preview.inviter_name}</Box> invited you to join their household on Samvitta.
+            <Typography sx={{ color: '#77736D', fontSize: '0.9375rem', mb: 3 }}>
+              <Box component="span" sx={{ fontWeight: 600, color: '#20242C' }}>{preview.inviter_name}</Box> invited you to join their household on Samvitta.
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
               <TextField fullWidth label="Display Name" value={form.displayName} onChange={update('displayName')} sx={{ mb: 2 }} />

@@ -61,10 +61,10 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
 
   return (
     <Card sx={{ height: '100%' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E7E9E5', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
         <Box>
-          <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#17211E' }}>Spending</Typography>
-          <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>{selectedUser}</Typography>
+          <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#20242C' }}>Spending</Typography>
+          <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>{selectedUser}</Typography>
         </Box>
         <ButtonGroup size="small">
           <Button variant={mode === 'category' ? 'contained' : 'outlined'} onClick={() => setMode('category')}>Category</Button>
@@ -98,8 +98,8 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
                 </PieChart>
               )}
               <Box sx={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
-                <Typography sx={{ fontSize: '1.25rem', fontWeight: 700, color: '#17211E' }}>{formatINR(total)}</Typography>
-                <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>spent</Typography>
+                <Typography sx={{ fontSize: '1.25rem', fontWeight: 700, color: '#20242C' }}>{formatINR(total)}</Typography>
+                <Typography sx={{ fontSize: '0.75rem', color: '#77736D' }}>spent</Typography>
               </Box>
             </Box>
             <Box sx={{ display: 'grid', gap: 1, mt: 1 }}>
@@ -109,11 +109,11 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
                   <Box key={item.name} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
                       <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: getCategoryColor(item.name), flexShrink: 0 }} />
-                      <Typography sx={{ fontSize: '0.875rem', color: '#17211E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</Typography>
+                      <Typography sx={{ fontSize: '0.875rem', color: '#20242C', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-                      <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#17211E' }}>{formatINR(item.value)}</Typography>
-                      <Typography sx={{ fontSize: '0.75rem', color: '#737B77', minWidth: 38, textAlign: 'right' }}>{pct}%</Typography>
+                      <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#20242C' }}>{formatINR(item.value)}</Typography>
+                      <Typography sx={{ fontSize: '0.75rem', color: '#77736D', minWidth: 38, textAlign: 'right' }}>{pct}%</Typography>
                     </Box>
                   </Box>
                 );
@@ -122,11 +122,11 @@ export default function SpendingPieChart({ transactions = [], loading, selectedU
           </>
         ) : (
           <Box sx={{ height: 280, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1.5, textAlign: 'center' }}>
-            <Box sx={{ width: 52, height: 52, borderRadius: '50%', bgcolor: '#F0F3F1', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ width: 52, height: 52, borderRadius: '50%', bgcolor: '#F0EBE2', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <DonutLargeIcon sx={{ fontSize: 26 }} />
             </Box>
-            <Typography sx={{ fontWeight: 600, color: '#17211E' }}>No spending yet</Typography>
-            <Typography sx={{ fontSize: '0.875rem', color: '#737B77', maxWidth: 220 }}>
+            <Typography sx={{ fontWeight: 600, color: '#20242C' }}>No spending yet</Typography>
+            <Typography sx={{ fontSize: '0.875rem', color: '#77736D', maxWidth: 220 }}>
               Add your first expense to start seeing category insights.
             </Typography>
             {onAddExpense && (

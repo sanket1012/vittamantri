@@ -21,7 +21,7 @@ export default function FilterBar({ filters, setFilters, categories = [], subcat
   const selectSx = { minWidth: 110 };
 
   return (
-    <Card variant="outlined" sx={{ px: 2, py: 1, borderRadius: '0.75rem', border: '1px solid #E2DCC9' }}>
+    <Card variant="outlined" sx={{ px: 2, py: 1, borderRadius: '0.75rem', border: '1px solid #E3DDD4' }}>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
         <TextField select size="small" label="Category" value={filters.category}
           onChange={(e) => updateFilter('category', e.target.value)} sx={{ minWidth: 140 }}>
@@ -48,10 +48,10 @@ export default function FilterBar({ filters, setFilters, categories = [], subcat
 
         <TextField size="small" placeholder="Search…" value={filters.search}
           onChange={(e) => updateFilter('search', e.target.value)}
-          InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ fontSize: 16, color: '#9A9C90' }} /></InputAdornment> }}
+          InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ fontSize: 16, color: '#77736D' }} /></InputAdornment> }}
           sx={{ minWidth: 180, flex: '1 1 180px' }} />
 
-        <Button variant="text" size="small" onClick={clearFilters} sx={{ whiteSpace: 'nowrap', color: '#6B6F63' }}>
+        <Button variant="text" size="small" onClick={clearFilters} sx={{ whiteSpace: 'nowrap', color: '#77736D' }}>
           Clear
         </Button>
       </Box>

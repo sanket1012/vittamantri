@@ -13,12 +13,12 @@ export default function MonthlyBarChart({ transactions = [], loading, selectedUs
 
   return (
     <Card sx={{ height: '100%' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E7E9E5', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
         <Box>
-          <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#17211E' }}>Cash Flow</Typography>
-          <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>{selectedUser}</Typography>
+          <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#20242C' }}>Cash Flow</Typography>
+          <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>{selectedUser}</Typography>
         </Box>
-        <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>{currentMonth}</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>{currentMonth}</Typography>
       </Box>
       <CardContent sx={{ p: 3 }}>
         {loading ? (
@@ -29,21 +29,21 @@ export default function MonthlyBarChart({ transactions = [], loading, selectedUs
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="cashflowIncome" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#16A477" stopOpacity={0.28} />
-                    <stop offset="100%" stopColor="#16A477" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#243044" stopOpacity={0.28} />
+                    <stop offset="100%" stopColor="#243044" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="cashflowExpense" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#E5534B" stopOpacity={0.22} />
-                    <stop offset="100%" stopColor="#E5534B" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#D96B67" stopOpacity={0.22} />
+                    <stop offset="100%" stopColor="#D96B67" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="#E7E9E5" vertical={false} />
-                <XAxis dataKey="month" stroke="#737B77" tickLine={false} axisLine={false} />
-                <YAxis stroke="#737B77" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
-                <Tooltip formatter={(value) => formatINR(value)} contentStyle={{ borderRadius: 10, border: '1px solid #E7E9E5' }} />
+                <CartesianGrid stroke="#E3DDD4" vertical={false} />
+                <XAxis dataKey="month" stroke="#77736D" tickLine={false} axisLine={false} />
+                <YAxis stroke="#77736D" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
+                <Tooltip formatter={(value) => formatINR(value)} contentStyle={{ borderRadius: 10, border: '1px solid #E3DDD4' }} />
                 <Legend />
-                <Area type="monotone" dataKey="income" name="Income" stroke="#16A477" strokeWidth={2.5} fill="url(#cashflowIncome)" />
-                <Area type="monotone" dataKey="expense" name="Expense" stroke="#E5534B" strokeWidth={2.5} fill="url(#cashflowExpense)" />
+                <Area type="monotone" dataKey="income" name="Income" stroke="#243044" strokeWidth={2.5} fill="url(#cashflowIncome)" />
+                <Area type="monotone" dataKey="expense" name="Expense" stroke="#D96B67" strokeWidth={2.5} fill="url(#cashflowExpense)" />
               </AreaChart>
             </ResponsiveContainer>
           </Box>

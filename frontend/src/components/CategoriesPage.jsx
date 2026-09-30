@@ -101,7 +101,7 @@ export default function CategoriesPage() {
     <Box sx={{ display: 'grid', gap: 2 }}>
       {/* Top row */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>
           {loading ? <Skeleton width={80} sx={{ display: 'inline-block' }} /> : `${categories.length} categories`}
         </Typography>
         <Button variant="contained" startIcon={<AddIcon />}
@@ -132,10 +132,10 @@ export default function CategoriesPage() {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', flex: 1, minWidth: 0 }}>
                         <Typography sx={{ fontSize: '1.4rem', lineHeight: 1 }}>{cat.emoji}</Typography>
-                        <Typography sx={{ fontWeight: 700, color: '#202421', fontSize: '0.9rem' }}>{cat.name}</Typography>
+                        <Typography sx={{ fontWeight: 700, color: '#20242C', fontSize: '0.9rem' }}>{cat.name}</Typography>
                         {cat.is_custom && (
                           <Chip label="custom" size="small"
-                            sx={{ height: 18, fontSize: '0.68rem', bgcolor: '#E6EFEA', color: '#173F35', fontWeight: 600 }} />
+                            sx={{ height: 18, fontSize: '0.68rem', bgcolor: '#F0EBE2', color: '#111827', fontWeight: 600 }} />
                         )}
                       </Box>
 
@@ -144,8 +144,8 @@ export default function CategoriesPage() {
                         <Tooltip title="Add subcategory">
                           <IconButton size="small"
                             onClick={() => { setNewSubName(''); setAddSubOpen(cat.name); }}
-                            sx={{ color: '#6B6F63', border: '1px solid #E2DCC9', borderRadius: '6px', p: '3px',
-                              '&:hover': { bgcolor: '#EDE7D8', color: '#454940' } }}>
+                            sx={{ color: '#77736D', border: '1px solid #E3DDD4', borderRadius: '6px', p: '3px',
+                              '&:hover': { bgcolor: '#E3DDD4', color: '#77736D' } }}>
                             <AddIcon sx={{ fontSize: 16 }} />
                           </IconButton>
                         </Tooltip>
@@ -153,8 +153,8 @@ export default function CategoriesPage() {
                         <Tooltip title="Delete category">
                           <IconButton size="small"
                             onClick={() => setConfirmDeleteCat(cat.name)}
-                            sx={{ color: '#9A9C90', border: '1px solid #E2DCC9', borderRadius: '6px', p: '3px',
-                              '&:hover': { color: '#DC2626', bgcolor: '#FEF2F2', borderColor: '#FCA5A5' } }}>
+                            sx={{ color: '#77736D', border: '1px solid #E3DDD4', borderRadius: '6px', p: '3px',
+                              '&:hover': { color: '#D96B67', bgcolor: '#FBEDED', borderColor: '#E9A6A3' } }}>
                             <DeleteOutlineIcon sx={{ fontSize: 16 }} />
                           </IconButton>
                         </Tooltip>
@@ -170,14 +170,14 @@ export default function CategoriesPage() {
                             onDelete={() => setConfirmDeleteSub({ category: cat.name, subcategory: sub })}
                             sx={{ bgcolor: `${accent}15`, color: accent, border: `1px solid ${accent}35`,
                                   fontSize: '0.72rem', height: 22,
-                              '& .MuiChip-deleteIcon': { fontSize: 14, color: `${accent}80`, '&:hover': { color: '#DC2626' } } }} />
+                              '& .MuiChip-deleteIcon': { fontSize: 14, color: `${accent}80`, '&:hover': { color: '#D96B67' } } }} />
                         ) : (
                           <Chip key={sub} label={sub} size="small"
                             sx={{ bgcolor: `${accent}0D`, color: accent, border: `1px solid ${accent}22`,
                                   fontSize: '0.72rem', height: 22 }} />
                         );
                       }) : (
-                        <Typography sx={{ fontSize: '0.8rem', color: '#9A9C90', fontStyle: 'italic' }}>
+                        <Typography sx={{ fontSize: '0.8rem', color: '#77736D', fontStyle: 'italic' }}>
                           No subcategories
                         </Typography>
                       )}
@@ -185,7 +185,7 @@ export default function CategoriesPage() {
 
                     {/* Legend for custom subcategories */}
                     {cat.custom_subcategories?.length > 0 && (
-                      <Typography sx={{ mt: 1, fontSize: '0.7rem', color: '#9A9C90' }}>
+                      <Typography sx={{ mt: 1, fontSize: '0.7rem', color: '#77736D' }}>
                         Darker border = custom (click × to remove)
                       </Typography>
                     )}
@@ -199,7 +199,7 @@ export default function CategoriesPage() {
 
       {/* ── Add Category dialog ──────────────────────────────────────────── */}
       <Dialog open={addCatOpen} onClose={() => setAddCatOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700, color: '#202421' }}>Add Category</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#20242C' }}>Add Category</DialogTitle>
         <DialogContent sx={{ pt: '8px !important' }}>
           <Box sx={{ display: 'flex', gap: 1.5 }}>
             <TextField size="small" label="Emoji" value={newCatEmoji}
@@ -221,10 +221,10 @@ export default function CategoriesPage() {
 
       {/* ── Add Subcategory dialog ───────────────────────────────────────── */}
       <Dialog open={Boolean(addSubOpen)} onClose={() => setAddSubOpen(null)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700, color: '#202421' }}>Add Subcategory</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#20242C' }}>Add Subcategory</DialogTitle>
         <DialogContent sx={{ pt: '4px !important' }}>
-          <Typography sx={{ mb: 1.5, fontSize: '0.875rem', color: '#6B6F63' }}>
-            Adding to: <strong style={{ color: '#454940' }}>{addSubOpen}</strong>
+          <Typography sx={{ mb: 1.5, fontSize: '0.875rem', color: '#77736D' }}>
+            Adding to: <strong style={{ color: '#77736D' }}>{addSubOpen}</strong>
           </Typography>
           <TextField size="small" label="Subcategory Name" value={newSubName} autoFocus fullWidth
             onChange={(e) => setNewSubName(e.target.value)}
@@ -240,9 +240,9 @@ export default function CategoriesPage() {
 
       {/* ── Delete Category confirmation ─────────────────────────────────── */}
       <Dialog open={Boolean(confirmDeleteCat)} onClose={() => setConfirmDeleteCat(null)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700, color: '#202421' }}>Delete category?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#20242C' }}>Delete category?</DialogTitle>
         <DialogContent>
-          <Typography sx={{ color: '#454940' }}>
+          <Typography sx={{ color: '#77736D' }}>
             Delete <strong>"{confirmDeleteCat}"</strong>? It will be removed from all dropdowns and the categories
             list. Existing transactions that use this category keep their value — you can reassign them via bulk edit.
           </Typography>
@@ -257,9 +257,9 @@ export default function CategoriesPage() {
 
       {/* ── Delete Subcategory confirmation ──────────────────────────────── */}
       <Dialog open={Boolean(confirmDeleteSub)} onClose={() => setConfirmDeleteSub(null)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700, color: '#202421' }}>Remove subcategory?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#20242C' }}>Remove subcategory?</DialogTitle>
         <DialogContent>
-          <Typography sx={{ color: '#454940' }}>
+          <Typography sx={{ color: '#77736D' }}>
             Remove <strong>"{confirmDeleteSub?.subcategory}"</strong> from{' '}
             <strong>"{confirmDeleteSub?.category}"</strong>? Transactions with this subcategory keep their value.
           </Typography>

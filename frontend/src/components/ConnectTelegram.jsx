@@ -40,7 +40,7 @@ export default function ConnectTelegram({ onLinked }) {
   return (
     <Box>
       <Box ref={containerRef} sx={{ display: 'flex', justifyContent: 'center', minHeight: 40 }} />
-      <Typography sx={{ color: '#6B6F63', fontSize: '0.75rem', mt: 1, textAlign: 'center' }}>
+      <Typography sx={{ color: '#77736D', fontSize: '0.75rem', mt: 1, textAlign: 'center' }}>
         Verified directly by Telegram — you'll get a welcome message as soon as you approve.
       </Typography>
     </Box>

@@ -40,7 +40,7 @@ function Eyebrow({ children, dark = false }) {
       sx={{
         fontSize: '0.8125rem',
         fontWeight: 600,
-        color: dark ? C.champagne : '#9A8452',
+        color: dark ? C.champagne : C.amber,
         textTransform: 'uppercase',
         letterSpacing: '0.14em',
         mb: 1.5,
@@ -182,7 +182,7 @@ function TrendChart() {
           <Typography key={m} sx={{ fontSize: '0.75rem', color: C.warmGray }}>{m}</Typography>
         ))}
       </Box>
-      <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: '#4F9D6E' }}>↑ 8.2% vs last month</Typography>
+      <Typography sx={{ fontSize: '0.9375rem', fontWeight: 600, color: C.navy }}>↑ 8.2% vs last month</Typography>
     </Box>
   );
 }
@@ -263,7 +263,7 @@ export default function Landing({ onGetStarted }) {
             <Button
               variant="contained"
               onClick={() => onGetStarted(1)}
-              sx={{ bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#B79457' } }}
+              sx={{ bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: C.amber } }}
             >
               Get started
             </Button>
@@ -309,7 +309,7 @@ export default function Landing({ onGetStarted }) {
               variant="contained"
               size="large"
               onClick={() => onGetStarted(1)}
-              sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#B79457' } }}
+              sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: C.amber } }}
             >
               Explore Samvitta
             </Button>
@@ -508,7 +508,7 @@ export default function Landing({ onGetStarted }) {
                         justifyContent: 'center',
                         fontWeight: 700,
                         ml: i === 0 ? 0 : -1.25,
-                        border: '2px solid #FBFAF7',
+                        border: `2px solid ${C.card}`,
                       }}
                     >
                       {initial}
@@ -607,7 +607,7 @@ export default function Landing({ onGetStarted }) {
               variant="contained"
               size="large"
               onClick={() => onGetStarted(1)}
-              sx={{ px: 5, bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: '#BE9A5A' } }}
+              sx={{ px: 5, bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: C.amber } }}
             >
               Create your household
             </Button>

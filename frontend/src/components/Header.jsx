@@ -18,17 +18,17 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
   };
 
   return (
-    <Box sx={{ minHeight: 76, bgcolor: '#FFFFFF', borderBottom: '1px solid #E7E9E5', px: 2.5, py: 1.5, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'stretch', sm: 'center' }, justifyContent: 'space-between', gap: { xs: 1.25, sm: 2 } }}>
+    <Box sx={{ minHeight: 76, bgcolor: '#FFFFFF', borderBottom: '1px solid #E3DDD4', px: 2.5, py: 1.5, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'stretch', sm: 'center' }, justifyContent: 'space-between', gap: { xs: 1.25, sm: 2 } }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
         {showMenu && (
-          <IconButton onClick={onMenuClick} sx={{ color: '#17211E', flexShrink: 0, ml: -1 }}>
+          <IconButton onClick={onMenuClick} sx={{ color: '#20242C', flexShrink: 0, ml: -1 }}>
             <MenuIcon />
           </IconButton>
         )}
         <Box sx={{ minWidth: 0 }}>
-          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#17211E', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Typography>
+          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#20242C', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Typography>
           {caption && (
-            <Typography sx={{ fontSize: '0.9375rem', fontWeight: 400, color: '#737B77', mt: 0.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <Typography sx={{ fontSize: '0.9375rem', fontWeight: 400, color: '#77736D', mt: 0.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {caption}
             </Typography>
           )}
@@ -36,7 +36,7 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0 }}>
-        <Typography sx={{ fontSize: '0.875rem', color: '#737B77', display: { xs: 'none', sm: 'block' } }}>{currentMonthLabel()}</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D', display: { xs: 'none', sm: 'block' } }}>{currentMonthLabel()}</Typography>
 
         <TextField select size="small" value={selectedUser} onChange={(event) => onUserChange(event.target.value)} sx={{ minWidth: 150 }}>
           <MenuItem value="All">All Users</MenuItem>
@@ -52,7 +52,7 @@ export default function Header({ title, caption, users, selectedUser, onUserChan
         </Button>
 
         <Tooltip title="More options">
-          <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)} sx={{ color: '#17211E' }}>
+          <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)} sx={{ color: '#20242C' }}>
             <MoreVertIcon />
           </IconButton>
         </Tooltip>

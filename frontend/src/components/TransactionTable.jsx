@@ -14,7 +14,7 @@ import { bulkUpdateTransactions } from '../api/client.js';
 import { getCategoryColor } from '../utils/categoryColors.js';
 import EditTransactionModal from './EditTransactionModal.jsx';
 
-const USER_COLORS = ['#173F35', '#7C3AED', '#059669', '#DC2626', '#F59E0B', '#0891B2', '#DB2777', '#65A30D'];
+const USER_COLORS = ['#111827', '#7C3AED', '#243044', '#D96B67', '#A98252', '#0891B2', '#DB2777', '#65A30D'];
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
@@ -59,10 +59,10 @@ function BulkEditBar({ selectedIds, categoriesFull, onApply, onClear }) {
   return (
     <Box sx={{
       mx: 3, my: 1.5, p: 2,
-      bgcolor: '#E6EFEA', border: '1px solid #BFDBFE', borderRadius: '0.5rem',
+      bgcolor: '#F0EBE2', border: '1px solid #F0EBE2', borderRadius: '0.5rem',
       display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap',
     }}>
-      <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#173F35', minWidth: 110 }}>
+      <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', minWidth: 110 }}>
         {count} selected
       </Typography>
 
@@ -70,7 +70,7 @@ function BulkEditBar({ selectedIds, categoriesFull, onApply, onClear }) {
         size="small" displayEmpty value={bulkCategory}
         onChange={(e) => { setBulkCategory(e.target.value); setBulkSubcategory(''); }}
         sx={{ minWidth: 180, bgcolor: '#fff' }}
-        renderValue={(v) => v || <span style={{ color: '#6B6F63' }}>Set Category…</span>}
+        renderValue={(v) => v || <span style={{ color: '#77736D' }}>Set Category…</span>}
       >
         {categoriesFull.map((cat) => (
           <MenuItem key={cat.name} value={cat.name}>{cat.emoji} {cat.name}</MenuItem>
@@ -82,7 +82,7 @@ function BulkEditBar({ selectedIds, categoriesFull, onApply, onClear }) {
         onChange={(e) => setBulkSubcategory(e.target.value)}
         disabled={!bulkCategory || subcategories.length === 0}
         sx={{ minWidth: 150, bgcolor: '#fff' }}
-        renderValue={(v) => v || <span style={{ color: '#6B6F63' }}>Subcategory…</span>}
+        renderValue={(v) => v || <span style={{ color: '#77736D' }}>Subcategory…</span>}
       >
         <MenuItem value="">None</MenuItem>
         {subcategories.map((sub) => <MenuItem key={sub} value={sub}>{sub}</MenuItem>)}
@@ -109,7 +109,7 @@ function SortHeader({ label, field, sortConfig, onSort, align = 'left' }) {
     <Button variant="text" size="small" endIcon={<Icon sx={{ fontSize: '1rem !important' }} />}
       onClick={() => onSort(field)}
       sx={{ height: 28, p: 0, minWidth: 0, justifyContent: align === 'right' ? 'flex-end' : 'flex-start',
-            color: active ? '#173F35' : '#5B5F54', fontWeight: active ? 600 : 500, fontSize: '0.875rem' }}>
+            color: active ? '#111827' : '#77736D', fontWeight: active ? 600 : 500, fontSize: '0.875rem' }}>
       {label}
     </Button>
   );
@@ -171,9 +171,9 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
   return (
     <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
       {/* Header */}
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E2DCC9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#202421' }}>Transactions</Typography>
-        <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>{sortedRows.length} records</Typography>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#20242C' }}>Transactions</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>{sortedRows.length} records</Typography>
       </Box>
 
       {/* Bulk-edit bar — visible when ≥1 row selected */}
@@ -225,13 +225,13 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
                 const isSelected = selectedIds.has(row.id);
                 return (
                   <TableRow key={row.id} selected={isSelected}
-                    sx={{ '&.Mui-selected': { bgcolor: '#E6EFEA' }, '&.Mui-selected:hover': { bgcolor: '#DBEAFE' } }}>
+                    sx={{ '&.Mui-selected': { bgcolor: '#F0EBE2' }, '&.Mui-selected:hover': { bgcolor: '#E3DDD4' } }}>
                     <TableCell padding="checkbox">
                       <Checkbox size="small" checked={isSelected} onChange={() => toggleRow(row.id)} />
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ fontSize: '0.875rem', color: '#202421' }}>{formatDate(row.date)}</Typography>
-                      <Typography sx={{ fontSize: 12, color: '#6B6F63' }}>{row.time || ''}</Typography>
+                      <Typography sx={{ fontSize: '0.875rem', color: '#20242C' }}>{formatDate(row.date)}</Typography>
+                      <Typography sx={{ fontSize: 12, color: '#77736D' }}>{row.time || ''}</Typography>
                     </TableCell>
                     <TableCell>
                       <Chip label={row.logged_by || 'Unknown'} size="small"
@@ -243,7 +243,7 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
                           sx={{ bgcolor: `${getCategoryColor(row.category)}18`, color: getCategoryColor(row.category),
                                 border: `1px solid ${getCategoryColor(row.category)}40`, fontWeight: 600, fontSize: '0.78rem' }} />
                       ) : (
-                        <Typography sx={{ fontSize: '0.875rem', color: '#9A9C90' }}>-</Typography>
+                        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>-</Typography>
                       )}
                       {row.subcategory && (
                         <Chip label={row.subcategory} size="small"
@@ -253,15 +253,15 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
                       )}
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ color: '#454940', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      <Typography sx={{ color: '#77736D', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                         {row.description || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ color: '#6B6F63' }}>{row.source || '-'}</Typography>
+                      <Typography sx={{ color: '#77736D' }}>{row.source || '-'}</Typography>
                     </TableCell>
                     <TableCell align="right">
-                      <Typography sx={{ fontWeight: 600, color: isIncome ? '#059669' : '#DC2626' }}>
+                      <Typography sx={{ fontWeight: 600, color: isIncome ? '#243044' : '#D96B67' }}>
                         {isIncome ? '+' : '-'}{formatINR(row.amount)}
                       </Typography>
                     </TableCell>
@@ -269,21 +269,21 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
                       <Chip
                         label={isIncome ? 'INCOME' : 'EXPENSE'} size="small"
                         sx={isIncome
-                          ? { bgcolor: '#ECFDF3', color: '#067647', border: '1px solid #ABEFC6' }
-                          : { bgcolor: '#FEF2F2', color: '#D92D20' }}
+                          ? { bgcolor: '#F0EBE2', color: '#243044', border: '1px solid #F0EBE2' }
+                          : { bgcolor: '#FBEDED', color: '#D96B67' }}
                       />
                     </TableCell>
                     <TableCell align="center">
                       <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'center' }}>
                         <Tooltip title="Edit transaction">
                           <IconButton size="small" onClick={() => setEditRow(row)}
-                            sx={{ color: '#6B6F63', '&:hover': { color: '#173F35', bgcolor: '#E6EFEA' } }}>
+                            sx={{ color: '#77736D', '&:hover': { color: '#111827', bgcolor: '#F0EBE2' } }}>
                             <EditOutlinedIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete transaction">
                           <IconButton size="small" onClick={() => setConfirmRow(row)}
-                            sx={{ color: '#9A9C90', '&:hover': { color: '#DC2626', bgcolor: '#FEF2F2' } }}>
+                            sx={{ color: '#77736D', '&:hover': { color: '#D96B67', bgcolor: '#FBEDED' } }}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
@@ -295,9 +295,9 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
             ) : (
               <TableRow>
                 <TableCell colSpan={9}>
-                  <Box sx={{ py: 7, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, color: '#6B6F63' }}>
+                  <Box sx={{ py: 7, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, color: '#77736D' }}>
                     <Typography sx={{ fontSize: 42 }}>₹</Typography>
-                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#454940' }}>No transactions found</Typography>
+                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#77736D' }}>No transactions found</Typography>
                     <Typography sx={{ fontSize: '0.875rem' }}>Try changing filters or add a new transaction.</Typography>
                   </Box>
                 </TableCell>
@@ -308,8 +308,8 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
       </TableContainer>
 
       {/* Footer */}
-      <Box sx={{ px: 3, py: 2, borderTop: '1px solid #E2DCC9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-        <Typography sx={{ fontSize: '0.875rem', color: '#6B6F63' }}>
+      <Box sx={{ px: 3, py: 2, borderTop: '1px solid #E3DDD4', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>
           {selectedIds.size > 0 ? `${selectedIds.size} selected · ` : ''}
           Showing {Math.min(page * rowsPerPage + pageRows.length, sortedRows.length)} of {sortedRows.length}
         </Typography>
@@ -326,9 +326,9 @@ export default function TransactionTable({ transactions = [], loading, onDelete,
 
       {/* Delete confirm */}
       <Dialog open={Boolean(confirmRow)} onClose={() => setConfirmRow(null)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 600, color: '#202421' }}>Delete this transaction?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600, color: '#20242C' }}>Delete this transaction?</DialogTitle>
         <DialogContent>
-          <Typography sx={{ color: '#454940' }}>
+          <Typography sx={{ color: '#77736D' }}>
             {confirmRow ? `${formatINR(confirmRow.amount)} · ${confirmRow.category || '-'} · ${confirmRow.description || '-'}` : ''}
           </Typography>
         </DialogContent>

@@ -49,7 +49,7 @@ function DeltaBadge({ direction, label }) {
   if (direction === null) return null;
   const positive = direction === 'up';
   const Icon = positive ? ArrowUpwardIcon : ArrowDownwardIcon;
-  const color = positive ? '#16A477' : '#E5534B';
+  const color = positive ? '#243044' : '#D96B67';
   return (
     <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25, color, fontSize: '0.8125rem', fontWeight: 600 }}>
       <Icon sx={{ fontSize: 15 }} />
@@ -63,7 +63,7 @@ function HeroBalanceCard({ balance, prevTotals, trend, loading }) {
   const delta = prevBalance !== null ? balance - prevBalance : null;
 
   return (
-    <Card sx={{ height: '100%', bgcolor: '#123F36', color: '#FFFFFF', border: 'none' }}>
+    <Card sx={{ height: '100%', bgcolor: '#111827', color: '#FFFFFF', border: 'none' }}>
       <CardContent sx={{ p: '1.75rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
         <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
           Available Balance
@@ -77,7 +77,7 @@ function HeroBalanceCard({ balance, prevTotals, trend, loading }) {
           <DeltaBadgeLight direction={delta >= 0 ? 'up' : 'down'} label={`${formatINR(Math.abs(delta))} vs last month`} />
         )}
         <Box sx={{ mt: 'auto', pt: 2, mx: -1 }}>
-          <Sparkline data={trend} dataKey="balance" color="#7CE8C3" height={56} />
+          <Sparkline data={trend} dataKey="balance" color="#C7A66A" height={56} />
         </Box>
       </CardContent>
     </Card>
@@ -88,7 +88,7 @@ function DeltaBadgeLight({ direction, label }) {
   const positive = direction === 'up';
   const Icon = positive ? ArrowUpwardIcon : ArrowDownwardIcon;
   return (
-    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25, color: positive ? '#7CE8C3' : '#F5B7B2', fontSize: '0.8125rem', fontWeight: 600 }}>
+    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25, color: positive ? '#C7A66A' : '#E9A6A3', fontSize: '0.8125rem', fontWeight: 600 }}>
       <Icon sx={{ fontSize: 15 }} />
       {label}
     </Box>
@@ -102,13 +102,13 @@ function MetricCard({ title, value, trendKey, trend, color, deltaPct, favorableW
   return (
     <Card sx={{ height: '100%' }}>
       <CardContent sx={{ p: '1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#737B77', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
+        <Typography sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#77736D', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 1 }}>
           {title}
         </Typography>
         {loading ? (
           <Skeleton width={110} height={34} />
         ) : (
-          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#17211E', lineHeight: 1.15, mb: 0.75 }}>{formatINR(value)}</Typography>
+          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#20242C', lineHeight: 1.15, mb: 0.75 }}>{formatINR(value)}</Typography>
         )}
         {deltaPct !== null && (
           <DeltaBadge direction={favorable ? 'up' : 'down'} label={`${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(1)}%`} />
@@ -140,19 +140,19 @@ export default function StatsCards({ summary, transactions = [], selectedUserId 
         <HeroBalanceCard balance={stats.balance} prevTotals={prevTotals} trend={trend} loading={loading} />
       </Grid>
       <Grid item xs={6} md={3}>
-        <MetricCard title="Income" value={stats.income} trendKey="income" trend={trend} color="#16A477" deltaPct={incomeDeltaPct} favorableWhenUp loading={loading} />
+        <MetricCard title="Income" value={stats.income} trendKey="income" trend={trend} color="#243044" deltaPct={incomeDeltaPct} favorableWhenUp loading={loading} />
       </Grid>
       <Grid item xs={6} md={3}>
-        <MetricCard title="Expense" value={stats.expense} trendKey="expense" trend={trend} color="#E5534B" deltaPct={expenseDeltaPct} favorableWhenUp={false} loading={loading} />
+        <MetricCard title="Expense" value={stats.expense} trendKey="expense" trend={trend} color="#D96B67" deltaPct={expenseDeltaPct} favorableWhenUp={false} loading={loading} />
       </Grid>
       <Grid item xs={12}>
         <Card>
           <CardContent sx={{ p: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ width: 36, height: 36, borderRadius: '10px', bgcolor: '#F0F3F1', color: '#123F36', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Box sx={{ width: 36, height: 36, borderRadius: '10px', bgcolor: '#F0EBE2', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <ReceiptLongIcon sx={{ fontSize: 19 }} />
             </Box>
-            <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>
-              <Box component="span" sx={{ fontWeight: 700, color: '#17211E' }}>{stats.count}</Box> transaction{stats.count === 1 ? '' : 's'} {activeMonth ? `in ${activeMonth}` : 'recorded all time'}
+            <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>
+              <Box component="span" sx={{ fontWeight: 700, color: '#20242C' }}>{stats.count}</Box> transaction{stats.count === 1 ? '' : 's'} {activeMonth ? `in ${activeMonth}` : 'recorded all time'}
             </Typography>
           </CardContent>
         </Card>

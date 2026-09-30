@@ -88,9 +88,9 @@ function TrendPlot({ transactions, loading, selectedUser }) {
 
   return (
     <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E7E9E5' }}>
-        <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#17211E' }}>14-Day Money Trend</Typography>
-        <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>{selectedUser}</Typography>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4' }}>
+        <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#20242C' }}>14-Day Money Trend</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>{selectedUser}</Typography>
       </Box>
       <CardContent sx={{ p: 3 }}>
         {loading ? (
@@ -99,13 +99,13 @@ function TrendPlot({ transactions, loading, selectedUser }) {
           <Box sx={{ height: 320 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data}>
-                <CartesianGrid stroke="#E7E9E5" vertical={false} />
-                <XAxis dataKey="label" stroke="#737B77" tickLine={false} axisLine={false} />
-                <YAxis stroke="#737B77" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
+                <CartesianGrid stroke="#E3DDD4" vertical={false} />
+                <XAxis dataKey="label" stroke="#77736D" tickLine={false} axisLine={false} />
+                <YAxis stroke="#77736D" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
                 <Tooltip formatter={(value) => formatINR(value)} />
                 <Legend />
-                <Line type="monotone" dataKey="income" name="Income" stroke="#059669" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="expense" name="Expense" stroke="#DC2626" strokeWidth={3} dot={false} />
+                <Line type="monotone" dataKey="income" name="Income" stroke="#243044" strokeWidth={3} dot={false} />
+                <Line type="monotone" dataKey="expense" name="Expense" stroke="#D96B67" strokeWidth={3} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </Box>
@@ -115,16 +115,16 @@ function TrendPlot({ transactions, loading, selectedUser }) {
   );
 }
 
-const USER_COLORS = ['#173F35', '#7C3AED', '#059669', '#DC2626', '#D97706', '#0891B2'];
+const USER_COLORS = ['#111827', '#7C3AED', '#243044', '#D96B67', '#D97706', '#0891B2'];
 
 function UserBreakdownSection({ transactions, users, loading }) {
   if (!users || users.length < 2) return null;
 
   return (
     <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E7E9E5' }}>
-        <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#17211E' }}>Per User Breakdown</Typography>
-        <Typography sx={{ fontSize: '0.875rem', color: '#737B77' }}>Income, expense, and balance per member</Typography>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4' }}>
+        <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#20242C' }}>Per User Breakdown</Typography>
+        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>Income, expense, and balance per member</Typography>
       </Box>
       <CardContent sx={{ p: 3 }}>
         {loading ? (
@@ -146,22 +146,22 @@ function UserBreakdownSection({ transactions, users, loading }) {
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Avatar sx={{ width: 32, height: 32, bgcolor: color, fontSize: '0.75rem', fontWeight: 700 }}>{initials}</Avatar>
-                          <Typography sx={{ fontWeight: 600, color: '#17211E' }}>{user.logged_by}</Typography>
+                          <Typography sx={{ fontWeight: 600, color: '#20242C' }}>{user.logged_by}</Typography>
                         </Box>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#737B77' }}>{userTxns.length} txns</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#77736D' }}>{userTxns.length} txns</Typography>
                       </Box>
                       <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1 }}>
                         <Box>
-                          <Typography sx={{ fontSize: '0.71rem', color: '#737B77', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Income</Typography>
-                          <Typography sx={{ fontWeight: 600, color: '#059669', fontSize: '0.875rem' }}>{formatINR(income)}</Typography>
+                          <Typography sx={{ fontSize: '0.71rem', color: '#77736D', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Income</Typography>
+                          <Typography sx={{ fontWeight: 600, color: '#243044', fontSize: '0.875rem' }}>{formatINR(income)}</Typography>
                         </Box>
                         <Box>
-                          <Typography sx={{ fontSize: '0.71rem', color: '#737B77', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Expense</Typography>
-                          <Typography sx={{ fontWeight: 600, color: '#DC2626', fontSize: '0.875rem' }}>{formatINR(expense)}</Typography>
+                          <Typography sx={{ fontSize: '0.71rem', color: '#77736D', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Expense</Typography>
+                          <Typography sx={{ fontWeight: 600, color: '#D96B67', fontSize: '0.875rem' }}>{formatINR(expense)}</Typography>
                         </Box>
                         <Box>
-                          <Typography sx={{ fontSize: '0.71rem', color: '#737B77', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Balance</Typography>
-                          <Typography sx={{ fontWeight: 600, color: balance >= 0 ? '#173F35' : '#DC2626', fontSize: '0.875rem' }}>{formatINR(balance)}</Typography>
+                          <Typography sx={{ fontSize: '0.71rem', color: '#77736D', mb: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Balance</Typography>
+                          <Typography sx={{ fontWeight: 600, color: balance >= 0 ? '#111827' : '#D96B67', fontSize: '0.875rem' }}>{formatINR(balance)}</Typography>
                         </Box>
                       </Box>
                     </CardContent>
@@ -186,8 +186,8 @@ function ExportView({ onExport, transactions, selectedUser }) {
         <CardContent sx={{ p: 3, '&:last-child': { pb: 3 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
             <Box>
-              <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#17211E' }}>Export Transactions</Typography>
-              <Typography sx={{ mt: 0.5, fontSize: '0.875rem', color: '#737B77' }}>
+              <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#20242C' }}>Export Transactions</Typography>
+              <Typography sx={{ mt: 0.5, fontSize: '0.875rem', color: '#77736D' }}>
                 Download the complete CSV file for {selectedUser}. It includes date, user, category, source, and raw input.
               </Typography>
             </Box>
@@ -202,24 +202,24 @@ function ExportView({ onExport, transactions, selectedUser }) {
         <Grid item xs={12} md={4}>
           <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
             <CardContent sx={{ p: 3 }}>
-              <Typography sx={{ color: '#737B77', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.857rem' }}>Records Ready</Typography>
-              <Typography sx={{ mt: 1, fontSize: '1.714rem', fontWeight: 700, color: '#17211E' }}>{transactions.length}</Typography>
+              <Typography sx={{ color: '#77736D', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.857rem' }}>Records Ready</Typography>
+              <Typography sx={{ mt: 1, fontSize: '1.714rem', fontWeight: 700, color: '#20242C' }}>{transactions.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
           <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
             <CardContent sx={{ p: 3 }}>
-              <Typography sx={{ color: '#737B77', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.857rem' }}>Income</Typography>
-              <Typography sx={{ mt: 1, fontSize: '1.714rem', fontWeight: 700, color: '#059669' }}>{formatINR(income)}</Typography>
+              <Typography sx={{ color: '#77736D', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.857rem' }}>Income</Typography>
+              <Typography sx={{ mt: 1, fontSize: '1.714rem', fontWeight: 700, color: '#243044' }}>{formatINR(income)}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
           <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
             <CardContent sx={{ p: 3 }}>
-              <Typography sx={{ color: '#737B77', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.857rem' }}>Expense</Typography>
-              <Typography sx={{ mt: 1, fontSize: '1.714rem', fontWeight: 700, color: '#DC2626' }}>{formatINR(expense)}</Typography>
+              <Typography sx={{ color: '#77736D', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.857rem' }}>Expense</Typography>
+              <Typography sx={{ mt: 1, fontSize: '1.714rem', fontWeight: 700, color: '#D96B67' }}>{formatINR(expense)}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -339,7 +339,7 @@ export default function Dashboard({ onLogout, currentUser }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F7F8F5' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F7F3EA' }}>
       <Sidebar
         userCount={users.length}
         mobileOpen={mobileOpen}
@@ -436,12 +436,12 @@ export default function Dashboard({ onLogout, currentUser }) {
       <MembersModal open={membersOpen} onClose={() => setMembersOpen(false)} currentUser={currentUser} />
 
       <Dialog open={cleanOpen} onClose={() => setCleanOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 600, color: '#17211E' }}>🧹 Clean Invalid Transactions</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600, color: '#20242C' }}>🧹 Clean Invalid Transactions</DialogTitle>
         <DialogContent sx={{ display: 'grid', gap: 2 }}>
-          <Typography sx={{ color: '#737B77' }}>
+          <Typography sx={{ color: '#77736D' }}>
             This will permanently remove all transactions with missing amount, zero value, or empty category. This cannot be undone.
           </Typography>
-          <Chip label={`${invalidCount} invalid transactions found`} sx={{ justifySelf: 'flex-start', bgcolor: '#FFFBEB', color: '#B54708' }} />
+          <Chip label={`${invalidCount} invalid transactions found`} sx={{ justifySelf: 'flex-start', bgcolor: '#F6EFE1', color: '#A98252' }} />
         </DialogContent>
         <DialogActions sx={{ p: 2.5 }}>
           <Button variant="outlined" onClick={() => setCleanOpen(false)}>Cancel</Button>
