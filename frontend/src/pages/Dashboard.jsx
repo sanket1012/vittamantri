@@ -115,7 +115,7 @@ function TrendPlot({ transactions, loading, selectedUser }) {
   );
 }
 
-const USER_COLORS = ['#111827', '#7C3AED', '#243044', '#D96B67', '#D97706', '#0891B2'];
+const USER_COLORS = ['#111827', '#C7A66A', '#6E72AE', '#D96B67', '#6583A5', '#243044'];
 
 function UserBreakdownSection({ transactions, users, loading }) {
   if (!users || users.length < 2) return null;
