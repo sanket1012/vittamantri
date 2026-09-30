@@ -14,7 +14,7 @@ import { bulkUpdateTransactions } from '../api/client.js';
 import { getCategoryColor } from '../utils/categoryColors.js';
 import EditTransactionModal from './EditTransactionModal.jsx';
 
-const USER_COLORS = ['#111827', '#7C3AED', '#243044', '#D96B67', '#A98252', '#0891B2', '#DB2777', '#65A30D'];
+const USER_COLORS = ['#111827', '#C7A66A', '#6E72AE', '#D96B67', '#A98252', '#6583A5', '#243044', '#948A78'];
 
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
