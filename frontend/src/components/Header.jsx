@@ -26,7 +26,20 @@ export default function Header({ title, caption, greeting = false, users, select
           </IconButton>
         )}
         <Box sx={{ minWidth: 0 }}>
-          <Typography sx={{ fontSize: '1.5rem', fontWeight: 700, color: '#20242C', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Typography>
+          <Typography
+            sx={{
+              fontFamily: greeting ? '"Instrument Serif", Georgia, serif' : 'inherit',
+              fontSize: greeting ? '1.75rem' : '1.5rem',
+              fontWeight: greeting ? 400 : 700,
+              color: '#20242C',
+              lineHeight: 1.2,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {title}
+          </Typography>
           {caption && (
             <Typography sx={{ fontSize: '0.9375rem', fontWeight: 400, color: '#77736D', mt: 0.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {caption}
