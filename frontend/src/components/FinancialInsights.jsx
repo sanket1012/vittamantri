@@ -84,9 +84,12 @@ export default function FinancialInsights({ transactions = [], summary, loading 
 
   return (
     <Card sx={{ height: '100%' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4' }}>
-        <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#20242C' }}>Financial Insights</Typography>
-        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>What's happening with your money</Typography>
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4', display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box component="span" sx={{ color: '#6E72AE', fontSize: 16, lineHeight: 1 }}>✦</Box>
+        <Box>
+          <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, color: '#20242C' }}>Samvitta Insight</Typography>
+          <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>What Samvitta noticed in your household activity</Typography>
+        </Box>
       </Box>
       <CardContent sx={{ p: 3, display: 'grid', gap: 2 }}>
         {loading ? (
@@ -107,9 +110,12 @@ export default function FinancialInsights({ transactions = [], summary, loading 
             );
           })
         ) : (
-          <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>
-            Insights will show up here once you've logged a bit more activity.
-          </Typography>
+          <Box>
+            <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: '#20242C', mb: 0.5 }}>No insights yet</Typography>
+            <Typography sx={{ fontSize: '0.875rem', color: '#77736D', lineHeight: 1.5 }}>
+              Once Samvitta has enough transaction history, it will start identifying trends and unusual changes.
+            </Typography>
+          </Box>
         )}
       </CardContent>
     </Card>
