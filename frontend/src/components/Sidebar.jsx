@@ -79,7 +79,7 @@ function SidebarContent({ userCount, activeSection, onNavigate, collapsed, onTog
           {!collapsed && (
             <Box sx={{ minWidth: 0 }}>
               <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#20242C', lineHeight: 1.2 }}>Samvitta</Typography>
-              <Typography sx={{ fontSize: 12, color: '#77736D' }}>Finance Tracker</Typography>
+              <Typography sx={{ fontSize: 12, color: '#77736D' }}>Smart Financial Analytics</Typography>
             </Box>
           )}
         </Box>
