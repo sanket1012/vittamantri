@@ -59,60 +59,6 @@ function SectionShell({ id, bgcolor, children, py }) {
   );
 }
 
-// ── Intelligence mark — distinguishes Samvitta's interpretation from raw data.
-function InsightMark({ color = C.champagne, size = 18 }) {
-  return <Box component="span" sx={{ color, fontSize: size, lineHeight: 1, mr: 1 }}>✦</Box>;
-}
-
-function StatCell({ value, label, border = true }) {
-  return (
-    <Box sx={{ borderLeft: border ? `1px solid ${C.stone}` : 'none', pl: border ? { xs: 1.5, sm: 2.5 } : 0, flex: 1 }}>
-      <Typography sx={{ fontSize: { xs: '1.125rem', sm: '1.375rem' }, fontWeight: 700, color: C.ink, lineHeight: 1.1 }}>
-        {value}
-      </Typography>
-      <Typography sx={{ fontSize: '0.6875rem', color: C.warmGray, mt: 0.25, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</Typography>
-    </Box>
-  );
-}
-
-// ── The one floating card in the hero — Household Overview + a single insight.
-function HouseholdOverviewCard() {
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        width: '100%',
-        maxWidth: 720,
-        borderRadius: '1.125rem',
-        bgcolor: 'rgba(250,247,240,0.94)',
-        backdropFilter: 'blur(14px)',
-        border: '1px solid rgba(255,255,255,0.4)',
-        boxShadow: '0px 20px 48px rgba(0,0,0,0.32)',
-        px: { xs: 2.5, sm: 3.5 },
-        py: { xs: 2, sm: 2.5 },
-      }}
-    >
-      <Typography sx={{ fontSize: '0.6875rem', fontWeight: 700, color: C.warmGray, textTransform: 'uppercase', letterSpacing: '0.1em', mb: 1.5 }}>
-        Household Overview
-      </Typography>
-      <Box sx={{ display: 'flex', gap: { xs: 1.5, sm: 2.5 }, mb: 1.75 }}>
-        <StatCell value="₹2,48,500" label="Balance" border={false} />
-        <StatCell value="₹67,320" label="Spending" />
-        <StatCell value="28%" label="Savings" />
-      </Box>
-      <Box sx={{ borderTop: `1px solid ${C.stone}`, pt: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <InsightMark color={C.champagne} size={15} />
-          <Typography sx={{ fontSize: '0.8125rem', color: C.ink }}>
-            <Box component="span" sx={{ fontWeight: 700 }}>Dining</Box> is 12% above your average
-          </Typography>
-        </Box>
-        <ArrowForwardIcon sx={{ fontSize: 16, color: C.warmGray, flexShrink: 0 }} />
-      </Box>
-    </Card>
-  );
-}
-
 function IntelligenceCard({ eyebrow, title, value, sub, delay = 0 }) {
   return (
     <Reveal delay={delay} y={20}>
