@@ -190,27 +190,29 @@ function TrendChart() {
 export default function Landing({ onGetStarted }) {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: C.ivory, display: 'flex', flexDirection: 'column' }}>
-      {/* ── Hero — full-bleed cinematic photo, transparent nav, centered
-          wordmark, one floating card near the bottom edge. */}
+      {/* ── Hero — full-bleed cinematic photo, used exactly as provided (no
+          crop/blur/edit). The photo already contains its own floating UI
+          mockup baked into the pixels, roughly in the horizontal center —
+          so hero copy stays left-aligned and narrow to stay clear of it,
+          and there's no second, separate floating card competing with it. */}
       <Box sx={{ position: 'relative', minHeight: { xs: '100vh', md: '92vh' }, display: 'flex', flexDirection: 'column', overflow: 'hidden', bgcolor: '#08111C' }}>
-        {/* The hero photo, used exactly as provided — no crop/blur/edit. */}
         <Box
           sx={{
             position: 'absolute',
             inset: 0,
             backgroundImage: `url(${heroImage})`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundPosition: { xs: '15% center', md: 'center' },
           }}
         />
         <Box
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(100deg, rgba(8,15,27,0.68) 0%, rgba(8,15,27,0.45) 45%, rgba(8,15,27,0.2) 100%)',
+            background: 'linear-gradient(100deg, rgba(8,15,27,0.82) 0%, rgba(8,15,27,0.55) 38%, rgba(8,15,27,0.15) 60%, rgba(8,15,27,0.1) 100%)',
           }}
         />
-        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,15,27,0.75) 0%, rgba(8,15,27,0.1) 30%, rgba(8,15,27,0.15) 70%, rgba(8,15,27,0.5) 100%)' }} />
+        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,15,27,0.55) 0%, rgba(8,15,27,0.05) 25%, rgba(8,15,27,0.05) 80%, rgba(8,15,27,0.4) 100%)' }} />
 
         {/* Nav — transparent, floats directly over the photo */}
         <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2.5, md: 6 }, py: { xs: 2.5, md: 3.5 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -248,13 +250,14 @@ export default function Landing({ onGetStarted }) {
           </Box>
         </Box>
 
-        {/* Hero copy — centered, minimal, lets the image and wordmark carry it */}
-        <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', px: { xs: 2.5, md: 6 } }}>
+        {/* Hero copy — left-aligned and kept narrow so it stays clear of the
+            UI mockup already baked into the photo. */}
+        <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', px: { xs: 2.5, md: 6 }, pb: { xs: 6, md: 0 } }}>
           <Reveal>
             <Typography
               sx={{
                 fontFamily: serif,
-                fontSize: { xs: 64, sm: 88, md: 112 },
+                fontSize: { xs: 56, sm: 76, md: 96 },
                 lineHeight: 1,
                 color: '#FFFFFF',
                 mb: { xs: 2, md: 2.5 },
@@ -270,7 +273,7 @@ export default function Landing({ onGetStarted }) {
                 fontWeight: 500,
                 lineHeight: 1.4,
                 color: 'rgba(255,255,255,0.9)',
-                maxWidth: 560,
+                maxWidth: 400,
                 mb: 1.5,
               }}
             >
@@ -278,7 +281,7 @@ export default function Landing({ onGetStarted }) {
             </Typography>
           </Reveal>
           <Reveal delay={0.18}>
-            <Typography sx={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, maxWidth: 460, mb: 4 }}>
+            <Typography sx={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, maxWidth: 400, mb: 4 }}>
               Understand your household money. Know what changed. See what comes next.
             </Typography>
           </Reveal>
@@ -287,17 +290,10 @@ export default function Landing({ onGetStarted }) {
               variant="contained"
               size="large"
               onClick={() => onGetStarted(1)}
-              sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, '&:hover': { bgcolor: C.amber } }}
+              sx={{ px: 4.5, bgcolor: C.champagne, color: C.ink, alignSelf: 'flex-start', '&:hover': { bgcolor: C.amber } }}
             >
               Explore Samvitta
             </Button>
-          </Reveal>
-        </Box>
-
-        {/* The one floating card */}
-        <Box sx={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', px: 2.5, pb: { xs: 4, md: 5.5 } }}>
-          <Reveal delay={0.35} y={24}>
-            <HouseholdOverviewCard />
           </Reveal>
         </Box>
       </Box>
