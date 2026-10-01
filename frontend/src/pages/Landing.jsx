@@ -193,46 +193,24 @@ export default function Landing({ onGetStarted }) {
       {/* ── Hero — full-bleed cinematic photo, transparent nav, centered
           wordmark, one floating card near the bottom edge. */}
       <Box sx={{ position: 'relative', minHeight: { xs: '100vh', md: '92vh' }, display: 'flex', flexDirection: 'column', overflow: 'hidden', bgcolor: '#08111C' }}>
-        {/* Blurred, darkened backdrop — the same photo stretched full-bleed so
-            there's no empty margin, but blurred enough that the distortion
-            from stretching a portrait crop this wide doesn't read. */}
+        {/* The hero photo, used exactly as provided — no crop/blur/edit. */}
         <Box
           sx={{
             position: 'absolute',
-            inset: -40,
+            inset: 0,
             backgroundImage: `url(${heroImage})`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center 20%',
-            filter: 'blur(50px) brightness(0.5) saturate(0.85)',
-            transform: 'scale(1.1)',
-          }}
-        />
-        {/* The real, undistorted photo — centered at its natural aspect
-            ratio so the family reads clearly, not stretched to fill width. */}
-        <Box
-          component="img"
-          src={heroImage}
-          alt=""
-          sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            height: '100%',
-            width: 'auto',
-            maxWidth: 'none',
-            objectFit: 'cover',
+            backgroundPosition: 'center',
           }}
         />
         <Box
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(180deg, rgba(8,15,27,0.55) 0%, rgba(8,15,27,0.15) 22%, rgba(8,15,27,0.15) 60%, rgba(8,15,27,0.7) 100%)',
+            background: 'linear-gradient(100deg, rgba(8,15,27,0.68) 0%, rgba(8,15,27,0.45) 45%, rgba(8,15,27,0.2) 100%)',
           }}
         />
-        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 55% at 50% 40%, rgba(8,15,27,0.45) 0%, rgba(8,15,27,0.72) 100%)' }} />
+        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,15,27,0.75) 0%, rgba(8,15,27,0.1) 30%, rgba(8,15,27,0.15) 70%, rgba(8,15,27,0.5) 100%)' }} />
 
         {/* Nav — transparent, floats directly over the photo */}
         <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2.5, md: 6 }, py: { xs: 2.5, md: 3.5 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
