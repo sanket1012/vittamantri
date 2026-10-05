@@ -46,7 +46,7 @@ function NavButton({ item, active, collapsed, onNavigate }) {
         borderRadius: '8px',
         fontSize: 14,
         fontWeight: 500,
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: '"Manrope", sans-serif',
         textAlign: 'left',
         cursor: 'pointer',
         transition: 'all 150ms ease',
