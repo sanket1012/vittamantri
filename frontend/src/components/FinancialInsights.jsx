@@ -1,9 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import InsightsIcon from '@mui/icons-material/Insights';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import { Box, Card, CardContent, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, Skeleton, Typography } from '@mui/material';
+import toast from 'react-hot-toast';
+import { generateMonthlyInsight } from '../api/client.js';
 import { percentChange } from '../utils/trends.js';
 
 const formatINR = (amount = 0) =>
