@@ -156,6 +156,17 @@ export const getInvitePreview = async (token) => {
   return data;
 };
 
+// Insight agent (chat Q&A + on-demand monthly narrative)
+export const askInsightAgent = async (question, history = []) => {
+  const { data } = await api.post('/insights/ask', { question, history });
+  return data.answer;
+};
+
+export const generateMonthlyInsight = async () => {
+  const { data } = await api.post('/insights/generate');
+  return data.insight;
+};
+
 export const csvExportUrl = '/api/export/csv';
 
 export default api;
