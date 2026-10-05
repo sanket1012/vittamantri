@@ -612,7 +612,11 @@ async def _handle_llm_message(update: Update, context: ContextTypes.DEFAULT_TYPE
                 _track_last(chat_id, txn_id)
 
     if not saved_items:
-        await update.message.reply_text(AMOUNT_NOT_FOUND_REPLY)
+        # No transaction or fixed-command query recognized — fall through to the
+        # open-ended chat agent so natural questions ("how much did I spend on
+        # food?") get a real answer instead of a generic "no amount found".
+        answer = await ask_insight_with_retry(text, headers)
+        await update.message.reply_text(answer or AMOUNT_NOT_FOUND_REPLY)
     elif len(saved_items) == 1:
         item = saved_items[0]
         txn = item.get("transaction") or item
