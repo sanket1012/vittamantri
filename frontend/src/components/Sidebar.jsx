@@ -13,6 +13,7 @@ import BrandMark from './BrandMark.jsx';
 const navItems = [
   { label: 'Overview', icon: DashboardIcon, target: 'dashboard' },
   { label: 'Transactions', icon: ReceiptLongIcon, target: 'transactions' },
+  { label: 'Ask Samvitta', icon: ChatBubbleOutlineIcon, target: 'chat' },
   { label: 'Insights', icon: AutoAwesomeIcon, target: 'analytics' },
   { label: 'Categories', icon: LabelIcon, target: 'categories' },
 ];
