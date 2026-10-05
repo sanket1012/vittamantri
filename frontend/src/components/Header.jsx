@@ -28,9 +28,8 @@ export default function Header({ title, caption, greeting = false, users, select
         <Box sx={{ minWidth: 0 }}>
           <Typography
             sx={{
-              fontFamily: greeting ? '"Instrument Serif", Georgia, serif' : 'inherit',
               fontSize: greeting ? '1.75rem' : '1.5rem',
-              fontWeight: greeting ? 400 : 700,
+              fontWeight: 700,
               color: '#20242C',
               lineHeight: 1.2,
               whiteSpace: 'nowrap',
