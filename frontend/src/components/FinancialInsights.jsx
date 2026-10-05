@@ -134,6 +134,25 @@ export default function FinancialInsights({ transactions = [], summary, loading 
             </Typography>
           </Box>
         )}
+
+        {narrative && (
+          <Box sx={{ p: 2, borderRadius: '10px', bgcolor: '#F7F3EA', border: '1px solid #E3DDD4' }}>
+            <Typography sx={{ fontSize: '0.875rem', color: '#20242C', lineHeight: 1.6 }}>{narrative}</Typography>
+          </Box>
+        )}
+
+        {!loading && (
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleGenerate}
+            disabled={generating}
+            startIcon={generating ? <CircularProgress size={14} /> : <AutoAwesomeIcon sx={{ fontSize: 16 }} />}
+            sx={{ justifySelf: 'flex-start' }}
+          >
+            {generating ? 'Analyzing…' : narrative ? 'Regenerate summary' : 'Generate AI summary'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
