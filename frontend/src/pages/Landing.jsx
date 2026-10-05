@@ -24,7 +24,7 @@ const C = {
   mutedBlue: tokens.mutedBlue,
 };
 
-const serif = '"Instrument Serif", Georgia, serif';
+const serif = '"Playfair Display", Georgia, serif';
 
 const NAV_LINKS = [
   { label: 'Product', href: '#household' },
