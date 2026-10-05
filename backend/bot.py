@@ -266,6 +266,18 @@ async def parse_text_with_retry(message: str, headers: dict) -> dict | None:
     return None
 
 
+async def ask_insight_with_retry(question: str, headers: dict) -> str | None:
+    for attempt in range(2):
+        try:
+            result = api_post("/api/insights/ask", {"question": question}, headers=headers)
+            return result.get("answer")
+        except Exception as exc:
+            logger.warning("Insight agent call failed on attempt %s for %r: %s", attempt + 1, question, exc)
+            if attempt == 0:
+                await asyncio.sleep(2)
+    return None
+
+
 def save_extracted(transaction: dict, raw_input: str, input_method: str = "text", user_info: dict | None = None, headers: dict | None = None) -> dict | None:
     if not transaction or not transaction.get("amount"):
         return None
