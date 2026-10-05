@@ -90,8 +90,6 @@ export default function Profile({ currentUser: initialUser }) {
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', px: 3, py: 4 }}>
-      <Typography sx={{ fontWeight: 700, fontSize: '1.5rem', color: '#20242C', mb: 3 }}>Profile</Typography>
-
       {/* Identity card */}
       <Section title="Account">
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
