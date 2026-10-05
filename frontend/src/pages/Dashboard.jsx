@@ -36,6 +36,7 @@ const isGarbage = (item) => !item.date || !item.category || !item.type || !Numbe
 
 const PAGE_TITLES = {
   transactions: 'Transactions',
+  chat: 'Ask Samvitta',
   analytics: 'Insights',
   categories: 'Categories',
   export: 'Reports',
@@ -44,6 +45,7 @@ const PAGE_TITLES = {
 
 const PAGE_CAPTIONS = {
   transactions: 'Review, filter, and manage every logged transaction.',
+  chat: 'Ask questions about this month\'s household finances.',
   analytics: 'What Samvitta noticed in your household spending.',
   categories: 'Manage expense categories and subcategories.',
   export: 'Download a clean CSV copy of your finance records.',
