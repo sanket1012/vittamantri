@@ -10,6 +10,7 @@ import CategoriesPage from '../components/CategoriesPage.jsx';
 import FilterBar from '../components/FilterBar.jsx';
 import FinancialInsights from '../components/FinancialInsights.jsx';
 import Header from '../components/Header.jsx';
+import InsightChat from '../components/InsightChat.jsx';
 import MembersModal from '../components/MembersModal.jsx';
 import MonthlyBarChart from '../components/MonthlyBarChart.jsx';
 import RecentTransactions from '../components/RecentTransactions.jsx';
