@@ -821,6 +821,41 @@ def parse_pdf():
         return _internal_error()
 
 
+# ── Insight agent (chat Q&A + on-demand monthly narrative) ────────────────────
+
+@app.route("/api/insights/ask", methods=["POST"])
+@require_auth
+def insights_ask():
+    try:
+        payload = request.get_json(silent=True) or {}
+        question = (payload.get("question") or "").strip()
+        if not question:
+            return error_response("question is required.", 400)
+        history = payload.get("history") if isinstance(payload.get("history"), list) else None
+        answer = ask_insight_agent(_hid(), question, history)
+        return jsonify({"answer": answer})
+    except GroqUnavailableError:
+        logger.exception("insights_ask: Groq service unavailable")
+        return error_response("Service is currently down or under maintenance. Please try again shortly.", 503)
+    except Exception:
+        logger.exception("insights_ask failed")
+        return _internal_error()
+
+
+@app.route("/api/insights/generate", methods=["POST"])
+@require_auth
+def insights_generate():
+    try:
+        insight = generate_monthly_insight(_hid())
+        return jsonify({"insight": insight})
+    except GroqUnavailableError:
+        logger.exception("insights_generate: Groq service unavailable")
+        return error_response("Service is currently down or under maintenance. Please try again shortly.", 503)
+    except Exception:
+        logger.exception("insights_generate failed")
+        return _internal_error()
+
+
 # ── React frontend (production) ───────────────────────────────────────────────
 
 @app.route("/", defaults={"path": ""})
