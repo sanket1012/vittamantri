@@ -202,8 +202,10 @@ export default function Landing({ onGetStarted }) {
             <Typography
               sx={{
                 fontFamily: serif,
-                fontSize: { xs: 56, sm: 76, md: 96 },
-                lineHeight: 1,
+                fontWeight: 500,
+                fontSize: { xs: 56, sm: 76, md: 108, lg: 132 },
+                lineHeight: 0.95,
+                letterSpacing: '-0.035em',
                 color: '#FFFFFF',
                 mb: { xs: 2, md: 2.5 },
               }}
@@ -214,9 +216,10 @@ export default function Landing({ onGetStarted }) {
           <Reveal delay={0.1}>
             <Typography
               sx={{
-                fontSize: { xs: 17, sm: 19, md: 21 },
-                fontWeight: 500,
-                lineHeight: 1.4,
+                fontFamily: serif,
+                fontWeight: 400,
+                fontSize: { xs: 22, sm: 26, md: 30 },
+                lineHeight: 1.25,
                 color: 'rgba(255,255,255,0.9)',
                 maxWidth: 400,
                 mb: 1.5,
@@ -226,7 +229,7 @@ export default function Landing({ onGetStarted }) {
             </Typography>
           </Reveal>
           <Reveal delay={0.18}>
-            <Typography sx={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, maxWidth: 400, mb: 4 }}>
+            <Typography sx={{ fontSize: { xs: 16, md: 17.5 }, fontWeight: 400, color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, maxWidth: 400, mb: 4 }}>
               Understand your household money. Know what changed. See what comes next.
             </Typography>
           </Reveal>
