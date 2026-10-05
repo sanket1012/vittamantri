@@ -53,6 +53,7 @@ from data_manager import (
 )
 from gemini_parser import extract_from_image, extract_from_pdf
 from groq_parser import GroqUnavailableError, extract_from_text
+from insight_agent import ask as ask_insight_agent, generate_monthly_insight
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
