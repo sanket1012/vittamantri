@@ -416,7 +416,6 @@ export default function Dashboard({ onLogout, currentUser }) {
           {activeSection === 'analytics' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <FilterBar filters={filters} setFilters={setFilters} categories={categories} subcategoryOptions={SUBCATEGORY_OPTIONS} transactions={transactions} />
-              <TrendPlot transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} />
               <Grid container spacing={2}>
                 <Grid item xs={12} md={5}>
                   <SpendingPieChart transactions={filteredTransactions} loading={loading} selectedUser={selectedUserName} />
