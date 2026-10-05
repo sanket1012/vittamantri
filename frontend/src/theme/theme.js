@@ -19,12 +19,16 @@ export const tokens = {
   selectedBg: '#F0EBE2',
 };
 
-// Editorial serif for headlines/brand moments; Inter stays the UI workhorse.
-export const displayFontFamily = '"Instrument Serif", Georgia, serif';
+// Playfair Display carries the Samvitta brand voice (hero title, marketing
+// headlines, the wordmark). Manrope is the product voice — nav, body copy,
+// buttons, dashboard data, everything else. Don't substitute another serif
+// for displayFontFamily based on availability; a different font's metrics
+// read as compressed/condensed where Playfair is meant to feel broad.
+export const displayFontFamily = '"Playfair Display", Georgia, serif';
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: '"Manrope", sans-serif',
     fontSize: 14,
   },
   palette: {
