@@ -84,6 +84,20 @@ function buildInsights(transactions, summary) {
 
 export default function FinancialInsights({ transactions = [], summary, loading }) {
   const insights = useMemo(() => buildInsights(transactions, summary), [transactions, summary]);
+  const [narrative, setNarrative] = useState('');
+  const [generating, setGenerating] = useState(false);
+
+  const handleGenerate = async () => {
+    setGenerating(true);
+    try {
+      const insight = await generateMonthlyInsight();
+      setNarrative(insight);
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Could not generate insight right now.');
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   return (
     <Card sx={{ height: '100%' }}>
