@@ -396,6 +396,8 @@ export default function Dashboard({ onLogout, currentUser }) {
             </Box>
           )}
 
+          {activeSection === 'chat' && <InsightChat />}
+
           {activeSection === 'transactions' && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <FilterBar filters={filters} setFilters={setFilters} categories={categories} subcategoryOptions={SUBCATEGORY_OPTIONS} transactions={transactions} />
