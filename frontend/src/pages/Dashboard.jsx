@@ -60,62 +60,6 @@ function greeting(displayName) {
 const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: Number(amount) % 1 === 0 ? 0 : 2 }).format(Number(amount || 0));
 
-function buildTrendData(transactions) {
-  const today = new Date();
-  const days = Array.from({ length: 14 }, (_, index) => {
-    const date = new Date(today);
-    date.setDate(today.getDate() - (13 - index));
-    const key = date.toISOString().slice(0, 10);
-    return {
-      key,
-      label: date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
-      income: 0,
-      expense: 0,
-      balance: 0,
-    };
-  });
-  const byDate = Object.fromEntries(days.map((day) => [day.key, day]));
-  transactions.forEach((item) => {
-    const bucket = byDate[item.date];
-    if (!bucket) return;
-    if (item.type === 'income') bucket.income += Number(item.amount || 0);
-    if (item.type === 'expense') bucket.expense += Number(item.amount || 0);
-  });
-  return days.map((day) => ({ ...day, balance: day.income - day.expense }));
-}
-
-function TrendPlot({ transactions, loading, selectedUser }) {
-  const data = useMemo(() => buildTrendData(transactions), [transactions]);
-
-  return (
-    <Card variant="outlined" sx={{ borderRadius: '0.75rem' }}>
-      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #E3DDD4' }}>
-        <Typography sx={{ fontSize: '1.25rem', fontWeight: 600, color: '#20242C' }}>14-Day Money Trend</Typography>
-        <Typography sx={{ fontSize: '0.875rem', color: '#77736D' }}>{selectedUser}</Typography>
-      </Box>
-      <CardContent sx={{ p: 3 }}>
-        {loading ? (
-          <Skeleton variant="rounded" height={320} />
-        ) : (
-          <Box sx={{ height: 320 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data}>
-                <CartesianGrid stroke="#E3DDD4" vertical={false} />
-                <XAxis dataKey="label" stroke="#77736D" tickLine={false} axisLine={false} />
-                <YAxis stroke="#77736D" tickLine={false} axisLine={false} width={64} tickFormatter={formatCompactINR} />
-                <Tooltip formatter={(value) => formatINR(value)} />
-                <Legend />
-                <Line type="monotone" dataKey="income" name="Income" stroke="#243044" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="expense" name="Expense" stroke="#D96B67" strokeWidth={3} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </Box>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
 const USER_COLORS = ['#111827', '#C7A66A', '#6E72AE', '#D96B67', '#6583A5', '#243044'];
 
 function UserBreakdownSection({ transactions, users, loading }) {
